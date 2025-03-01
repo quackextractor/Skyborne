@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 4940058943335164135}
   - component: {fileID: 7123251341324582551}
   - component: {fileID: 1742117841623774758}
-  - component: {fileID: 312414372249597705}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -217,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6
-  mouseSensitivity: 100
+  mouseSensitivity: 10
 --- !u!54 &1742117841623774758
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -245,20 +244,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &312414372249597705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6217976504377816740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51f2ece869a9ae1409f7bc217eec6557, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseKnockback: 10
-  baseDamage: 5
 --- !u!1 &6798286850158778121
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,6 +254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3396312864505351918}
   - component: {fileID: 6252215407728526599}
+  - component: {fileID: 5904975389431568968}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -306,9 +292,25 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5904975389431568968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6798286850158778121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f2ece869a9ae1409f7bc217eec6557, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseKnockback: 10
+  baseDamage: 5
+  attackDuration: 0.5
+  weaponCollider: {fileID: 6252215407728526599}
