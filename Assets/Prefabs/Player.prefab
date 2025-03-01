@@ -105,7 +105,6 @@ GameObject:
   - component: {fileID: 2870618624492184015}
   - component: {fileID: 4940058943335164135}
   - component: {fileID: 7123251341324582551}
-  - component: {fileID: 408816782795146288}
   - component: {fileID: 1742117841623774758}
   - component: {fileID: 312414372249597705}
   m_Layer: 0
@@ -219,32 +218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 6
   mouseSensitivity: 100
---- !u!143 &408816782795146288
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6217976504377816740}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1742117841623774758
 Rigidbody:
   m_ObjectHideFlags: 0
