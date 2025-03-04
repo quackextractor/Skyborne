@@ -20,17 +20,13 @@ public class Target : MonoBehaviour
 
     public void TakeAttack(Attack attack)
     {
-        // Calculate knockback direction
         Vector3 knockbackDirection = (transform.position - attack.originPosition).normalized;
-        
-        
         
         float totalKnockback = attack.knockbackValue * _accumulatedKnockback;
         totalKnockback *= knockbackMultiplier;
         
-        _accumulatedKnockback += attack.knockbackValue;
-    
-        // Apply knockback force
+        _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + Mathf.Log(attack.damageValue + 1, 2));
+        
         ApplyKnockbackForce(knockbackDirection, totalKnockback);
     }
 
@@ -41,8 +37,7 @@ public class Target : MonoBehaviour
             _rb.AddForce(direction * force, ForceMode.Impulse);
         }
     }
-
-    // For external access if needed
+    
     public float GetAccumulatedKnockback() => _accumulatedKnockback;
     public void SetKnockbackMultiplier(float multiplier) => knockbackMultiplier = multiplier;
 }

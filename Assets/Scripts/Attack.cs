@@ -5,13 +5,13 @@ using UnityEngine;
 public class Attack
 {
     public float knockbackValue;
-    public float damageValue; // Added field
+    public float damageValue;
     public Vector3 originPosition;
 
     public Attack(float knockback, float damage, Vector3 origin)
     {
         knockbackValue = knockback;
-        damageValue = damage; // Assign damage
+        damageValue = damage;
         originPosition = origin;
     }
 }
