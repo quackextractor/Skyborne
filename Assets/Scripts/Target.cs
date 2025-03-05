@@ -25,7 +25,7 @@ public class Target : MonoBehaviour
         float totalKnockback = attack.knockbackValue * _accumulatedKnockback;
         totalKnockback *= knockbackMultiplier;
         
-        _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + Mathf.Log(attack.damageValue + 1, 2));
+        _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + attack.damageValue/100);
         
         ApplyKnockbackForce(knockbackDirection, totalKnockback);
     }
