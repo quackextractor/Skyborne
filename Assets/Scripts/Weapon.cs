@@ -7,21 +7,35 @@ public class Weapon : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] private float knockback = 10f;
     [SerializeField] private float damage = 5f;
-    [SerializeField] private float attackTime = 0.5f;
+    [SerializeField] private float windUpTime = 0.3f;
+    [SerializeField] private float activationTime = 0.2f;
     [SerializeField] private Collider weaponCollider;
 
+    public float Knockback
+    {
+        get => knockback;
+        set => knockback = value;
+    }
+
+    public float Damage
+    {
+        get => damage;
+        set => damage = value;
+    }
+
+    private Transform _attacker;
     private bool _isAttacking = false;
-    // HashSet to store targets hit during the current attack.
     private HashSet<Target> _hitTargets = new HashSet<Target>();
 
     private void Start()
     {
         weaponCollider.enabled = false;
+        _attacker = transform.parent; // Assuming weapon is direct child of attacker
     }
 
-    private void Update()
+    public void StartAttack()
     {
-        if (Input.GetMouseButtonDown(0) && !_isAttacking)
+        if (!_isAttacking)
         {
             StartCoroutine(Attack());
         }
@@ -30,12 +44,14 @@ public class Weapon : MonoBehaviour
     private IEnumerator Attack()
     {
         _isAttacking = true;
-        // Clear previous attack's hit targets.
         _hitTargets.Clear();
 
+        yield return new WaitForSeconds(windUpTime);
+        
         weaponCollider.enabled = true;
-        yield return new WaitForSeconds(attackTime);
+        yield return new WaitForSeconds(activationTime);
         weaponCollider.enabled = false;
+        
         _isAttacking = false;
     }
 
@@ -45,13 +61,10 @@ public class Weapon : MonoBehaviour
 
         if (other.TryGetComponent(out Target target))
         {
-            // If the target has already been hit during this attack, do nothing.
-            if (_hitTargets.Contains(target))
-                return;
-
-            // Record this target so it won't be hit again during the same attack.
+            if (_hitTargets.Contains(target)) return;
+            
             _hitTargets.Add(target);
-            target.TakeAttack(new Attack(knockback, damage, transform.position));
+            target.TakeAttack(new Attack(knockback, damage, _attacker.position));
         }
     }
 }
