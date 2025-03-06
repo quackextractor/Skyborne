@@ -513,7 +513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7123251341324582551, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
       propertyPath: cooldown
-      value: 2.79
+      value: 1.12
       objectReference: {fileID: 0}
     - target: {fileID: 7123251341324582551, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
       propertyPath: DashForce
@@ -521,7 +521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7123251341324582551, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
       propertyPath: dashForce
-      value: 10
+      value: 18.4
       objectReference: {fileID: 0}
     - target: {fileID: 7123251341324582551, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
       propertyPath: mouseSensitivity
