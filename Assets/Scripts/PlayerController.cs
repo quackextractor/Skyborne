@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     float _timestamp = 0f;
     float _moveTimestamp = 0f;
     public float cooldown = 0.5f;
-
+    public float moveLock = 0.5f;
+    public int amountDash = 3;
 
     void Start()
     {
@@ -60,20 +61,21 @@ public class PlayerController : MonoBehaviour
         }
 		*/
 
-
-        if (_timestamp < Time.time)
+        if (_timestamp < Time.time && amountDash < 3)
+        {
+            amountDash += 1;
+            _timestamp = Time.time + cooldown + moveLock;
+        }
+        if (amountDash > 0 && _moveTimestamp < Time.time)
         {
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 Dash();
-                _timestamp = Time.time + cooldown;
-                _moveTimestamp = Time.time + cooldown;
+                
+                _moveTimestamp = Time.time + moveLock;
 
             }
-
         }
-       
-     
 
     }
 
@@ -86,15 +88,15 @@ public class PlayerController : MonoBehaviour
         if (inputDirection.magnitude > 0.1f) // If player is moving
         {
             dashDirection = transform.TransformDirection(inputDirection.normalized);
+            amountDash -= 1;
         }
         else
         {
             dashDirection = transform.forward; 
         }
 
-        //dashDirection.Normalize();
 
-      //  rb.velocity = Vector3.zero; // Reset velocity to avoid sliding
+        _rb.velocity = Vector3.zero; // Reset velocity to avoid sliding
         _rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
         Debug.Log("Dashing in: " + dashDirection);
     
