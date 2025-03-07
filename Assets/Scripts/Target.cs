@@ -16,7 +16,7 @@ public class Target : MonoBehaviour
     {
         if (_isPlayer && playerHealthText != null)
         {
-            playerHealthText.text = "Current Knockback: " + _accumulatedKnockback.ToString("0");
+            playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
         }
     }
 
