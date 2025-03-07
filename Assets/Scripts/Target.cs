@@ -54,17 +54,25 @@ public class Target : MonoBehaviour
         {
             if (CheckForFallOff(direction, force))
             {
-                
+                EnableRagdoll(direction, force);
             }
-            _rb.AddForce(direction * force, ForceMode.Impulse);
+            else
+            {
+                _rb.AddForce(direction * force, ForceMode.Impulse);
+            }
         }
     }
 
     private bool CheckForFallOff(Vector3 knockbackDirection, float force)
     {
-        if (!Physics.Raycast(transform.position, knockbackDirection, 2f, platformEdgeLayer))
+        float rayLength = force;
+        Vector3 rayOrigin = transform.position;
+
+        Debug.DrawRay(rayOrigin, knockbackDirection * rayLength, Color.red, 1f);
+
+        if (Physics.Raycast(rayOrigin, knockbackDirection, out RaycastHit hit, rayLength, platformEdgeLayer))
         {
-            EnableRagdoll(knockbackDirection, force);
+            Debug.Log("Platform edge detected within knockback range. Initiating fall-off behavior.");
             return true;
         }
         return false;
