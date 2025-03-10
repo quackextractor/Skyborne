@@ -80,20 +80,40 @@ public class Target : MonoBehaviour
 
     private void EnableRagdoll(Vector3 knockbackDirection, float force)
     {
-        _rb.isKinematic = false;
-        _rb.AddForce(knockbackDirection * force, ForceMode.Impulse);
-        
         // Add additional ragdoll components/force application here
         _rb.constraints = RigidbodyConstraints.None;
-            
+        if (_isPlayer)
+        {
+            this.GetComponent<PlayerController>().enabled = false;
+        }
         Debug.Log("Ragdoll enabled");
-        
+
+        _rb.isKinematic = false;
+    
+        // Increase force to be more impactful
+        force *= 1.5f;
+        // Apply the knockback force
+        _rb.AddForce(knockbackDirection * force, ForceMode.Impulse);
+
+        // Apply random rotational force (torque)
+        Vector3 randomTorque = new Vector3(
+            Random.Range(-10f, 10f),
+            Random.Range(5f, 15f),  
+            Random.Range(-10f, 10f)
+        );
+
+        // Ensure that the rotation is 45° upwards (so a small Y-component is added to randomTorque)
+        randomTorque.y = Mathf.Abs(randomTorque.y); // Positive upward rotational force
+    
+        _rb.AddTorque(randomTorque, ForceMode.Impulse);
+    
         if (GetComponent<Enemy>() != null)
         {
             // Disable AI
             GetComponent<Enemy>().enabled = false; 
         }
     }
+
 
     public float GetAccumulatedKnockback() => _accumulatedKnockback;
     public void SetKnockbackMultiplier(float multiplier) => knockbackMultiplier = multiplier;
