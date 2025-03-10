@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Target : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class Target : MonoBehaviour
     [SerializeField] private float knockbackMultiplier = 1f; // 100% default
     [SerializeField] private LayerMask platformEdgeLayer;
     [SerializeField] private TextMeshProUGUI playerHealthText;
+    [SerializeField] private LayerMask ragdollLayer;
 
     private float _accumulatedKnockback = 1f;
     private Rigidbody _rb;  
@@ -80,38 +82,41 @@ public class Target : MonoBehaviour
 
     private void EnableRagdoll(Vector3 knockbackDirection, float force)
     {
-        // Add additional ragdoll components/force application here
+        // Remove any rigidbody constraints
         _rb.constraints = RigidbodyConstraints.None;
+
+        // Disable controlling components
         if (_isPlayer)
         {
-            this.GetComponent<PlayerController>().enabled = false;
+            GetComponent<PlayerController>().enabled = false;
+        }
+        else
+        {
+            GetComponent<NavMeshAgent>().enabled = false;
+            GetComponent<Enemy>().enabled = false; 
         }
         Debug.Log("Ragdoll enabled");
 
+        // Enable physics simulation on the rigidbody
         _rb.isKinematic = false;
-    
-        // Increase force to be more impactful
+        
+        // set to ragdoll layer to disable collision with other objects
+        gameObject.layer = (int)Mathf.Log(ragdollLayer.value, 2);
+        
+        // Increase force impact and apply the knockback force
         force *= 1.5f;
-        // Apply the knockback force
         _rb.AddForce(knockbackDirection * force, ForceMode.Impulse);
 
-        // Apply random rotational force (torque)
+        // Apply a random rotational force for added effect
         Vector3 randomTorque = new Vector3(
             Random.Range(-10f, 10f),
-            Random.Range(5f, 15f),  
+            Random.Range(5f, 15f),
             Random.Range(-10f, 10f)
         );
 
-        // Ensure that the rotation is 45° upwards (so a small Y-component is added to randomTorque)
-        randomTorque.y = Mathf.Abs(randomTorque.y); // Positive upward rotational force
-    
+        // Ensure upward rotation by making the Y-component positive
+        randomTorque.y = Mathf.Abs(randomTorque.y);
         _rb.AddTorque(randomTorque, ForceMode.Impulse);
-    
-        if (GetComponent<Enemy>() != null)
-        {
-            // Disable AI
-            GetComponent<Enemy>().enabled = false; 
-        }
     }
 
 

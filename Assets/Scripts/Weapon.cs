@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float damage = 5f;
     [SerializeField] private float windUpTime = 0.3f;
     [SerializeField] private float activationTime = 0.2f;
+    [SerializeField] private float cooldownTime = 0.5f;
     [SerializeField] private Collider weaponCollider;
 
     public float Knockback
@@ -51,7 +52,7 @@ public class Weapon : MonoBehaviour
         weaponCollider.enabled = true;
         yield return new WaitForSeconds(activationTime);
         weaponCollider.enabled = false;
-        
+        yield return new WaitForSeconds(cooldownTime);
         _isAttacking = false;
     }
 

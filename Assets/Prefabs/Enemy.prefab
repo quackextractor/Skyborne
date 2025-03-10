@@ -155,6 +155,10 @@ MonoBehaviour:
   platformEdgeLayer:
     serializedVersion: 2
     m_Bits: 128
+  playerHealthText: {fileID: 0}
+  ragdollLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &4730293328926982561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,4 +265,5 @@ MonoBehaviour:
   damage: 5
   windUpTime: 0.3
   activationTime: 0.2
+  cooldownTime: 0.5
   weaponCollider: {fileID: 2418176216582080397}
