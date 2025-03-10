@@ -82,8 +82,10 @@ public class Target : MonoBehaviour
     {
         _rb.isKinematic = false;
         _rb.AddForce(knockbackDirection * force, ForceMode.Impulse);
+        
         // Add additional ragdoll components/force application here
-
+        _rb.constraints = RigidbodyConstraints.None;
+            
         Debug.Log("Ragdoll enabled");
         
         if (GetComponent<Enemy>() != null)
