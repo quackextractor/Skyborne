@@ -139,6 +139,12 @@ public class Target : MonoBehaviour
         // Ensure upward rotation by making the Y-component positive
         randomTorque.y = Mathf.Abs(randomTorque.y);
         _rb.AddTorque(randomTorque, ForceMode.Impulse);
+
+        // Change color when ragdolled
+        if (!_isPlayer)
+        {
+            // TODO!!! ADD A FLAG TO FIX THIS 
+        }
     }
 
     public float GetAccumulatedKnockback() => _accumulatedKnockback;
