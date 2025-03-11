@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b6154549f75983f468a1ef3cac70d0da, type: 2}
+  - {fileID: 2100000, guid: a8aa021ba2921494ca91d6e3afe7d20b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -159,6 +159,10 @@ MonoBehaviour:
   ragdollLayer:
     serializedVersion: 2
     m_Bits: 256
+  flashDuration: 0.1
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 0.03
 --- !u!114 &4730293328926982561
 MonoBehaviour:
   m_ObjectHideFlags: 0
