@@ -1,9 +1,12 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class Target : MonoBehaviour
 {
+    private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
+
     [Header("Knockback Settings")]
     [SerializeField] private float knockbackMultiplier = 1f; // 100% default
     [SerializeField] private LayerMask platformEdgeLayer;
@@ -13,6 +16,8 @@ public class Target : MonoBehaviour
     private float _accumulatedKnockback = 1f;
     private Rigidbody _rb;  
     private bool _isPlayer;
+    private Renderer _renderer;
+    private Enemy _enemy;
 
     void Update()
     {
@@ -25,12 +30,14 @@ public class Target : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _renderer = GetComponent<Renderer>();
+        _enemy = GetComponent<Enemy>();
+        _isPlayer = gameObject.CompareTag("Player");
+
         if (_rb == null)
         {
             Debug.LogError("Target requires a Rigidbody component!");
         }
-
-        _isPlayer = gameObject.CompareTag("Player");
 
         if (_isPlayer && playerHealthText == null)
         {
@@ -48,6 +55,21 @@ public class Target : MonoBehaviour
         _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + attack.damageValue / 100);
         
         ApplyKnockbackForce(knockbackDirection, totalKnockback);
+
+        if (!_isPlayer) // Only flash if it's an enemy
+        {
+            StartCoroutine(FlashEffect());
+        }
+    }
+
+    private IEnumerator FlashEffect()
+    {
+        if (_enemy != null)
+        {
+            _renderer.material.SetColor(BaseColor, Color.white);
+            yield return new WaitForSeconds(0.1f); // Flash duration
+            _renderer.material.SetColor(BaseColor, _enemy.BaseColor);
+        }
     }
 
     private void ApplyKnockbackForce(Vector3 direction, float force)
@@ -100,7 +122,7 @@ public class Target : MonoBehaviour
         // Enable physics simulation on the rigidbody
         _rb.isKinematic = false;
         
-        // set to ragdoll layer to disable collision with other objects
+        // Set to ragdoll layer to disable collision with other objects
         gameObject.layer = (int)Mathf.Log(ragdollLayer.value, 2);
         
         // Increase force impact and apply the knockback force
@@ -118,7 +140,6 @@ public class Target : MonoBehaviour
         randomTorque.y = Mathf.Abs(randomTorque.y);
         _rb.AddTorque(randomTorque, ForceMode.Impulse);
     }
-
 
     public float GetAccumulatedKnockback() => _accumulatedKnockback;
     public void SetKnockbackMultiplier(float multiplier) => knockbackMultiplier = multiplier;

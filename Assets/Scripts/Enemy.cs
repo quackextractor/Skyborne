@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent _agent;
     private float _attackCooldown;
 
+    public Color BaseColor { get; private set; } // Expose the base color
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -22,7 +24,10 @@ public class Enemy : MonoBehaviour
         _agent.speed = stats.movementSpeed;
         weapon.Damage = stats.weaponDamage;
         weapon.Knockback = stats.weaponKnockback;
-        GetComponent<Renderer>().material.color = stats.variantColor;
+        
+        Renderer renderer = GetComponent<Renderer>();
+        renderer.material.SetColor("_BaseColor", stats.variantColor); // Set shader's base color
+        BaseColor = stats.variantColor; // Store the initial color
     }
 
     private void Update()
