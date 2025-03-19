@@ -24,9 +24,9 @@ public class Weapon : MonoBehaviour
         set => damage = value;
     }
 
-    private Transform _attacker;
-    private bool _isAttacking = false;
-    private HashSet<Target> _hitTargets = new HashSet<Target>();
+    protected Transform _attacker;
+    protected bool _isAttacking = false;
+    protected HashSet<Target> _hitTargets = new HashSet<Target>();
 
     private void Start()
     {
@@ -34,7 +34,7 @@ public class Weapon : MonoBehaviour
         _attacker = transform.parent; // Assuming weapon is direct child of attacker
     }
 
-    public void StartAttack()
+    public virtual void StartAttack()
     {
         if (!_isAttacking)
         {
@@ -42,11 +42,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private IEnumerator Attack()
+    protected IEnumerator Attack()
     {
         _isAttacking = true;
         _hitTargets.Clear();
-
+        Debug.Log("hit" + _hitTargets);
         yield return new WaitForSeconds(windUpTime);
         
         weaponCollider.enabled = true;
@@ -56,16 +56,18 @@ public class Weapon : MonoBehaviour
         _isAttacking = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
         if (!_isAttacking) return;
 
         if (other.TryGetComponent(out Target target))
         {
             if (_hitTargets.Contains(target)) return;
-            
+
             _hitTargets.Add(target);
+            Debug.Log("enter");
             target.TakeAttack(new Attack(knockback, damage, _attacker.position));
         }
     }
+    public virtual void SpecialEffect() { }
 }
