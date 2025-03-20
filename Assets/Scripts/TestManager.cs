@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TestManager : MonoBehaviour
 {
@@ -39,10 +40,6 @@ public class TestManager : MonoBehaviour
 
     void ResetScene()
     {
-        foreach (Target enemy in FindObjectsOfType<Target>())
-        {
-            Destroy(enemy.gameObject);
-        }
-        SpawnEnemies(initialEnemies);
+        SceneManager.LoadScene(0);
     }
 }

@@ -46,7 +46,7 @@ public class Weapon : MonoBehaviour
     {
         _isAttacking = true;
         _hitTargets.Clear();
-        Debug.Log("hit" + _hitTargets);
+    //  Debug.Log("hit" + _hitTargets);
         yield return new WaitForSeconds(windUpTime);
         
         weaponCollider.enabled = true;

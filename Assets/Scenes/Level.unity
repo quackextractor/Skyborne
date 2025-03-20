@@ -1420,6 +1420,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2681955019227778022, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
+      propertyPath: far clip plane
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 4113935995574795295, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.695398
@@ -1502,7 +1506,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7123251341324582551, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
       propertyPath: dashForce
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7123251341324582551, guid: bf07f89724e87c042bccb29171fa00c6, type: 3}
       propertyPath: mouseSensitivity

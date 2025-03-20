@@ -18,10 +18,12 @@ public class Target : MonoBehaviour
     private bool _isPlayer;
     private Renderer _renderer;
     private Enemy _enemy;
+    private bool _hasHealthText;
+    private bool _hasEnemyScript;
 
     void Update()
     {
-        if (_isPlayer && playerHealthText != null)
+        if (_isPlayer && _hasHealthText)
         {
             playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
         }
@@ -33,6 +35,8 @@ public class Target : MonoBehaviour
         _renderer = GetComponent<Renderer>();
         _enemy = GetComponent<Enemy>();
         _isPlayer = gameObject.CompareTag("Player");
+        _hasHealthText = playerHealthText != null;
+        _hasEnemyScript = _enemy != null;
 
         if (_rb == null)
         {
@@ -64,7 +68,7 @@ public class Target : MonoBehaviour
 
     private IEnumerator FlashEffect()
     {
-        if (_enemy != null)
+        if (_hasEnemyScript)
         {
             _renderer.material.SetColor(BaseColor, Color.white);
             yield return new WaitForSeconds(0.1f); // Flash duration

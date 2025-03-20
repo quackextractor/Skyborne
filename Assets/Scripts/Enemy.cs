@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    private static readonly int BaseColor1 = Shader.PropertyToID("_BaseColor");
     [SerializeField] private EnemyStats stats;
     [SerializeField] private Weapon weapon;
     
@@ -26,7 +27,7 @@ public class Enemy : MonoBehaviour
         weapon.Knockback = stats.weaponKnockback;
         
         Renderer renderer = GetComponent<Renderer>();
-        renderer.material.SetColor("_BaseColor", stats.variantColor); // Set shader's base color
+        renderer.material.SetColor(BaseColor1, stats.variantColor); // Set shader's base color
         BaseColor = stats.variantColor; // Store the initial color
     }
 
