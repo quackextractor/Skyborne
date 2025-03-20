@@ -44,7 +44,6 @@ public class Weapon : MonoBehaviour
             if (_hitTargets.Contains(target)) return;
 
             _hitTargets.Add(target);
-            Debug.Log("enter");
             target.TakeAttack(new Attack(knockback, damage, _attacker.position));
         }
     }

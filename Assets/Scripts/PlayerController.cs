@@ -95,6 +95,5 @@ public class PlayerController : MonoBehaviour
 
         _rb.velocity = Vector3.zero; // Reset velocity to avoid sliding
         _rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
-        Debug.Log("Dashing in: " + dashDirection);
     }
 }
