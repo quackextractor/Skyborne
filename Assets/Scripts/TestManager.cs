@@ -5,31 +5,25 @@ public class TestManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private int initialEnemies = 3;
-    [SerializeField] private Vector3 spawnArea = new Vector3(5, 0, 5);
+    [SerializeField] private Vector3 spawnArea = new(5, 0, 5);
 
-    void Start()
+    private void Start()
     {
         SpawnEnemies(initialEnemies);
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            SpawnEnemies(1);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetScene();
-        }
+        if (Input.GetKeyDown(KeyCode.T)) SpawnEnemies(1);
+
+        if (Input.GetKeyDown(KeyCode.R)) ResetScene();
     }
 
-    void SpawnEnemies(int count)
+    private void SpawnEnemies(int count)
     {
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
-            Vector3 pos = new Vector3(
+            var pos = new Vector3(
                 Random.Range(-spawnArea.x, spawnArea.x),
                 0,
                 Random.Range(-spawnArea.z, spawnArea.z)
@@ -38,7 +32,7 @@ public class TestManager : MonoBehaviour
         }
     }
 
-    void ResetScene()
+    private void ResetScene()
     {
         SceneManager.LoadScene(0);
     }

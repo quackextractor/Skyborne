@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [Header("Attack Settings")]
-    [SerializeField] private float knockback = 10f;
+    [Header("Attack Settings")] [SerializeField]
+    private float knockback = 10f;
+
     [SerializeField] private float damage = 5f;
     [SerializeField] private float windUpTime = 0.3f;
     [SerializeField] private float activationTime = 0.2f;
     [SerializeField] private float cooldownTime = 0.5f;
     [SerializeField] private Collider weaponCollider;
+
+    protected Transform _attacker;
+    protected HashSet<Target> _hitTargets = new();
+    protected bool _isAttacking;
 
     public float Knockback
     {
@@ -24,36 +29,10 @@ public class Weapon : MonoBehaviour
         set => damage = value;
     }
 
-    protected Transform _attacker;
-    protected bool _isAttacking = false;
-    protected HashSet<Target> _hitTargets = new HashSet<Target>();
-
     private void Start()
     {
         weaponCollider.enabled = false;
         _attacker = transform.parent; // Assuming weapon is direct child of attacker
-    }
-
-    public virtual void StartAttack()
-    {
-        if (!_isAttacking)
-        {
-            StartCoroutine(Attack());
-        }
-    }
-
-    protected IEnumerator Attack()
-    {
-        _isAttacking = true;
-        _hitTargets.Clear();
-    //  Debug.Log("hit" + _hitTargets);
-        yield return new WaitForSeconds(windUpTime);
-        
-        weaponCollider.enabled = true;
-        yield return new WaitForSeconds(activationTime);
-        weaponCollider.enabled = false;
-        yield return new WaitForSeconds(cooldownTime);
-        _isAttacking = false;
     }
 
     protected void OnTriggerEnter(Collider other)
@@ -69,5 +48,27 @@ public class Weapon : MonoBehaviour
             target.TakeAttack(new Attack(knockback, damage, _attacker.position));
         }
     }
-    public virtual void SpecialEffect() { }
+
+    public virtual void StartAttack()
+    {
+        if (!_isAttacking) StartCoroutine(Attack());
+    }
+
+    protected IEnumerator Attack()
+    {
+        _isAttacking = true;
+        _hitTargets.Clear();
+        //  Debug.Log("hit" + _hitTargets);
+        yield return new WaitForSeconds(windUpTime);
+
+        weaponCollider.enabled = true;
+        yield return new WaitForSeconds(activationTime);
+        weaponCollider.enabled = false;
+        yield return new WaitForSeconds(cooldownTime);
+        _isAttacking = false;
+    }
+
+    public virtual void SpecialEffect()
+    {
+    }
 }

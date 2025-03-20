@@ -2,10 +2,18 @@ using UnityEngine;
 
 public class EnemyWeapon : Weapon
 {
-    [Header("Enemy Specific")]
-    [SerializeField] private bool canBeParried = true;
-    [SerializeField] private bool isRanged = false;
+    [Header("Enemy Specific")] [SerializeField]
+    private bool canBeParried = true;
 
-    public void SetDamage(float damage) => this.Damage = damage;
-    public void SetKnockback(float knockback) => this.Knockback = knockback;
+    [SerializeField] private bool isRanged;
+
+    public void SetDamage(float damage)
+    {
+        Damage = damage;
+    }
+
+    public void SetKnockback(float knockback)
+    {
+        Knockback = knockback;
+    }
 }

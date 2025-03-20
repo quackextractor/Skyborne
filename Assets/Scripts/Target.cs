@@ -1,33 +1,26 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
 public class Target : MonoBehaviour
 {
     private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
-    [Header("Knockback Settings")]
-    [SerializeField] private float knockbackMultiplier = 1f; // 100% default
+    [Header("Knockback Settings")] [SerializeField]
+    private float knockbackMultiplier = 1f; // 100% default
+
     [SerializeField] private LayerMask platformEdgeLayer;
     [SerializeField] private TextMeshProUGUI playerHealthText;
     [SerializeField] private LayerMask ragdollLayer;
 
     private float _accumulatedKnockback = 1f;
-    private Rigidbody _rb;  
-    private bool _isPlayer;
-    private Renderer _renderer;
     private Enemy _enemy;
-    private bool _hasHealthText;
     private bool _hasEnemyScript;
-
-    void Update()
-    {
-        if (_isPlayer && _hasHealthText)
-        {
-            playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
-        }
-    }
+    private bool _hasHealthText;
+    private bool _isPlayer;
+    private Rigidbody _rb;
+    private Renderer _renderer;
 
     private void Awake()
     {
@@ -38,32 +31,30 @@ public class Target : MonoBehaviour
         _hasHealthText = playerHealthText != null;
         _hasEnemyScript = _enemy != null;
 
-        if (_rb == null)
-        {
-            Debug.LogError("Target requires a Rigidbody component!");
-        }
+        if (_rb == null) Debug.LogError("Target requires a Rigidbody component!");
 
         if (_isPlayer && playerHealthText == null)
-        {
             Debug.LogWarning("Player Target has an unassigned playerHealthText!");
-        }
+    }
+
+    private void Update()
+    {
+        if (_isPlayer && _hasHealthText) playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
     }
 
     public void TakeAttack(Attack attack)
     {
-        Vector3 knockbackDirection = (transform.position - attack.originPosition).normalized;
-        
-        float totalKnockback = attack.knockbackValue * _accumulatedKnockback;
+        var knockbackDirection = (transform.position - attack.originPosition).normalized;
+
+        var totalKnockback = attack.knockbackValue * _accumulatedKnockback;
         totalKnockback *= knockbackMultiplier;
-        
+
         _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + attack.damageValue / 100);
-        
+
         ApplyKnockbackForce(knockbackDirection, totalKnockback);
 
         if (!_isPlayer) // Only flash if it's an enemy
-        {
             StartCoroutine(FlashEffect());
-        }
     }
 
     private IEnumerator FlashEffect()
@@ -81,28 +72,25 @@ public class Target : MonoBehaviour
         if (_rb != null)
         {
             if (CheckForFallOff(direction, force))
-            {
                 EnableRagdoll(direction, force);
-            }
             else
-            {
                 _rb.AddForce(direction * force, ForceMode.Impulse);
-            }
         }
     }
 
     private bool CheckForFallOff(Vector3 knockbackDirection, float force)
     {
-        float rayLength = force;
-        Vector3 rayOrigin = transform.position;
+        var rayLength = force;
+        var rayOrigin = transform.position;
 
         Debug.DrawRay(rayOrigin, knockbackDirection * rayLength, Color.red, 1f);
 
-        if (Physics.Raycast(rayOrigin, knockbackDirection, out RaycastHit hit, rayLength, platformEdgeLayer))
+        if (Physics.Raycast(rayOrigin, knockbackDirection, out var hit, rayLength, platformEdgeLayer))
         {
             Debug.Log("Platform edge detected within knockback range. Initiating fall-off behavior.");
             return true;
         }
+
         return false;
     }
 
@@ -119,22 +107,23 @@ public class Target : MonoBehaviour
         else
         {
             GetComponent<NavMeshAgent>().enabled = false;
-            GetComponent<Enemy>().enabled = false; 
+            GetComponent<Enemy>().enabled = false;
         }
+
         Debug.Log("Ragdoll enabled");
 
         // Enable physics simulation on the rigidbody
         _rb.isKinematic = false;
-        
+
         // Set to ragdoll layer to disable collision with other objects
         gameObject.layer = (int)Mathf.Log(ragdollLayer.value, 2);
-        
+
         // Increase force impact and apply the knockback force
         force *= 1.5f;
         _rb.AddForce(knockbackDirection * force, ForceMode.Impulse);
 
         // Apply a random rotational force for added effect
-        Vector3 randomTorque = new Vector3(
+        var randomTorque = new Vector3(
             Random.Range(-10f, 10f),
             Random.Range(5f, 15f),
             Random.Range(-10f, 10f)
@@ -145,6 +134,13 @@ public class Target : MonoBehaviour
         _rb.AddTorque(randomTorque, ForceMode.Impulse);
     }
 
-    public float GetAccumulatedKnockback() => _accumulatedKnockback;
-    public void SetKnockbackMultiplier(float multiplier) => knockbackMultiplier = multiplier;
+    public float GetAccumulatedKnockback()
+    {
+        return _accumulatedKnockback;
+    }
+
+    public void SetKnockbackMultiplier(float multiplier)
+    {
+        knockbackMultiplier = multiplier;
+    }
 }
