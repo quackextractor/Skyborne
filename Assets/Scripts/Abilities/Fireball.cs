@@ -19,4 +19,9 @@ public class Fireball : Ability
     {
         Instantiate(go);
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+        if (!_isAttacking) StartCoroutine(Attack());
+    }
 }
