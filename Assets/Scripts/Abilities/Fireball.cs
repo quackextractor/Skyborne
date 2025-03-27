@@ -12,13 +12,11 @@ public class Fireball : Ability
 
     private void Update()
     {
-        _rb.AddForce(go.transform.forward * 10, ForceMode.Impulse);
+        
     }
 
     public override void SpecialEffect()
     {
         Instantiate(go);
-        _rb = go.GetComponent<Rigidbody>();
-        _rb.AddForce(go.transform.forward * 10, ForceMode.Impulse);
     }
 }
