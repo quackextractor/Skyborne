@@ -1,6 +1,6 @@
 public abstract class Ability : Weapon
 {
-    public abstract override void SpecialEffect();
+    public abstract override void AttackEffect();
 
     public override void StartAttack()
     {

@@ -15,7 +15,7 @@ public class Fireball : Ability
         _rb.AddForce(go.transform.forward * 10, ForceMode.Impulse);
     }
 
-    public override void SpecialEffect()
+    public override void AttackEffect()
     {
         Instantiate(go);
         _rb = go.GetComponent<Rigidbody>();

@@ -22,7 +22,7 @@ public class PlayerAttackScript : MonoBehaviour
             if (_weapon != null)
                 _weapon.StartAttack();
 
-        if (Input.GetKeyDown(KeyCode.Q)) _ability[0].SpecialEffect();
-        if (Input.GetKeyDown(KeyCode.E)) _ability[1].SpecialEffect();
+        if (Input.GetKeyDown(KeyCode.Q)) _ability[0].AttackEffect();
+        if (Input.GetKeyDown(KeyCode.E)) _ability[1].AttackEffect();
     }
 }

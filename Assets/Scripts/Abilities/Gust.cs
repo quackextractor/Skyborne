@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Gust : Ability
 {
-    public override void SpecialEffect()
+    public override void AttackEffect()
     {
         if (!_isAttacking) StartCoroutine(Attack());
     }
