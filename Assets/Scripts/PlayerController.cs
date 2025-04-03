@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [FormerlySerializedAs("DashForce")] [SerializeField]
     private float dashForce = 60f;
 
-    public TextMeshProUGUI dash;
+   
     public float cooldown = 0.5f;
     public float moveLock = 0.5f;
     public int amountDash = 3;
@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
             var movement = new Vector3(horizontal, 0, vertical) * (moveSpeed * Time.deltaTime);
             transform.Translate(movement);
         }
-        dash.text = "Dash count:" + amountDash;
         // Mouse Look
         var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
