@@ -411,4 +411,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitEffectPrefab: {fileID: 5238538877814813142, guid: 47096eff328e11a418ace7db2d72aa97, type: 3}
   hitSound: {fileID: 8300000, guid: 8cdcb9f9d0aeb8e458ef01551d9656a5, type: 3}
-  audioSource: {fileID: 1978544112769110487}
+  hitSoundVolume: 1

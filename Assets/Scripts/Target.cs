@@ -53,8 +53,9 @@ public class Target : MonoBehaviour
 
         ApplyKnockbackForce(knockbackDirection, totalKnockback);
 
-        if (!_isPlayer) // Only flash if it's an enemy
+        if (!_isPlayer){
             StartCoroutine(FlashEffect());
+        }
     }
 
     private IEnumerator FlashEffect()

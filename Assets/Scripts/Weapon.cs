@@ -34,10 +34,10 @@ public class Weapon : MonoBehaviour
     private void Start()
     {
         weaponCollider.enabled = false;
-        _attacker = transform.parent; // weapon is direct child of attacker
-        if (TryGetComponent(out EnemyWeapon enemyWeapon))
+        _attacker = transform.parent;
+    
+        if (TryGetComponent(out _hitEffectSpawner))
         {
-            _hitEffectSpawner = enemyWeapon.GetComponent<HitEffectSpawner>();
             _hasHitEffectSpawner = true;
         }
     }
