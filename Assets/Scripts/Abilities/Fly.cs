@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -26,18 +27,12 @@ public class Fly : Fireball
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other);
-
-        if (other.TryGetComponent(out Target target))
+        Debug.Log(other.name);
+        if (other.name != "Player")
         {
-            if (_hitTargets.Contains(target)) return;
-
-            _hitTargets.Add(target);
-            target.TakeAttack(
-                new Attack(Knockback, Damage, _attacker.position
-                ));
+            Target target = other.GetComponent<Target>();
+            target.TakeAttack(new Attack(10, 10, _position));
+            Destroy(this.gameObject);
         }
-        if (!_isAttacking) StartCoroutine(Attack());
-        Destroy(go);
     }
 }
