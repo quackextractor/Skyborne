@@ -4,26 +4,34 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     private static readonly int BaseColor1 = Shader.PropertyToID("_BaseColor");
+
     [SerializeField] private EnemyStats stats;
     [SerializeField] private Weapon weapon;
+
     private NavMeshAgent _agent;
     private float _attackCooldown;
-
     private Transform _player;
 
-    public Color BaseColor { get; private set; } // Expose the base color
+    public Color BaseColor { get; private set; }
+
+    public void Setup(EnemyStats newStats, Weapon newWeapon) // Changed EnemyWeapon to Weapon
+    {
+        stats = newStats;
+        weapon = newWeapon;
+        InitializeStats();
+    }
 
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        InitializeStats();
     }
 
     private void Update()
     {
-        if (_attackCooldown > 0) _attackCooldown -= Time.deltaTime;
-
+        if (_attackCooldown > 0){
+            _attackCooldown -= Time.deltaTime;
+        }
         var distanceToPlayer = Vector3.Distance(transform.position, _player.position);
 
         if (distanceToPlayer <= stats.range)
@@ -45,8 +53,11 @@ public class Enemy : MonoBehaviour
         weapon.Knockback = stats.weaponKnockback;
 
         var renderer = GetComponent<Renderer>();
-        renderer.material.SetColor(BaseColor1, stats.variantColor); // Set shader's base color
-        BaseColor = stats.variantColor; // Store the initial color
+        if (renderer != null)
+        {
+            renderer.material.SetColor(BaseColor1, stats.variantColor);
+        }
+        BaseColor = stats.variantColor;
     }
 
     private void TryAttack()
