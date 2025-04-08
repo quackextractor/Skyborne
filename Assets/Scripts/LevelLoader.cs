@@ -37,7 +37,7 @@ public class LevelLoader : MonoBehaviour
 
             // IMPORTANT: Use a Setup method on your Enemy script to assign stats and weapon.
             // This method should override the defaults that are set in Awake.
-            enemyInstance.Setup(entry.enemyStats, entry.enemyWeapon);
+            enemyInstance.Setup(entry.enemyStats);
         }
     }
 }

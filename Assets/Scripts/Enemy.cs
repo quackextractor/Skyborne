@@ -14,10 +14,9 @@ public class Enemy : MonoBehaviour
 
     public Color BaseColor { get; private set; }
 
-    public void Setup(EnemyStats newStats, Weapon newWeapon) // Changed EnemyWeapon to Weapon
+    public void Setup(EnemyStats newStats)
     {
         stats = newStats;
-        weapon = newWeapon;
         InitializeStats();
     }
 

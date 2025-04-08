@@ -18,7 +18,6 @@ public class EnemyStats : ScriptableObject
     [Header("Combat Stats")] public float range = 1.5f;
 
     public float attackSpeed = 1f;
-    public float damage = 5f;
     public float resistance = 1f;
     public float movementSpeed = 3f;
 
