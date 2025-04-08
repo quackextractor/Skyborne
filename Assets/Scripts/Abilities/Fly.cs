@@ -1,6 +1,7 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
-public class Fly : MonoBehaviour
+public class Fly : Fireball
 {
     private Rigidbody _rb;
     public GameObject player;
@@ -13,6 +14,8 @@ public class Fly : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         _position = player.transform.forward;
         transform.position = player.transform.position+ player.transform.forward;
+        Debug.Log("yaaay");
+
 
     }
 
@@ -20,5 +23,21 @@ public class Fly : MonoBehaviour
     private void Update()
     {
         _rb.AddForce(_position, ForceMode.Impulse);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other);
+
+        if (other.TryGetComponent(out Target target))
+        {
+            if (_hitTargets.Contains(target)) return;
+
+            _hitTargets.Add(target);
+            target.TakeAttack(
+                new Attack(Knockback, Damage, _attacker.position
+                ));
+        }
+        if (!_isAttacking) StartCoroutine(Attack());
+        Destroy(go);
     }
 }
