@@ -34,6 +34,6 @@ public class TestManager : MonoBehaviour
 
     private void ResetScene()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }
