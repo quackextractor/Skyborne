@@ -2,37 +2,43 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class Fly : Fireball
+public class Fly:MonoBehaviour
 {
-    private Rigidbody _rb;
-    public GameObject player;
+ 
+    private GameObject player;
     private Vector3 _position;
-
+    [SerializeField] private float _timestamp = 4 ;
     // Start is called before the first frame update
     private void Start()
     {
-        _rb = GetComponent<Rigidbody>();
+        
         player = GameObject.FindGameObjectWithTag("Player");
         _position = player.transform.forward;
-        transform.position = player.transform.position+ player.transform.forward;
+        transform.position = player.transform.position + player.transform.forward;
         Debug.Log("yaaay");
-
-
+        _timestamp += Time.time;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        _rb.AddForce(_position, ForceMode.Impulse);
+        if (_timestamp < Time.time)
+        {
+            Destroy(this.gameObject);
+        }
+        transform.position += _position;
     }
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.name);
-        if (other.name != "Player")
+        if (other.name != "Player" && other.TryGetComponent<Target>(out Target target))
         {
-            Target target = other.GetComponent<Target>();
             target.TakeAttack(new Attack(10, 10, _position));
             Destroy(this.gameObject);
+        }
+        else
+        {
+            return;
         }
     }
 }
