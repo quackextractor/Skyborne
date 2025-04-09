@@ -47,7 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0774ac6171b8e1746b7503eccafa7151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timestamp: 0.66
+  _timestamp: 1.32
+  _attack: 4
+  _knockback: 4
 --- !u!135 &6109171938175508676
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -450,7 +452,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.26
+      scalar: 0.4
       minScalar: 1
       maxCurve:
         serializedVersion: 2

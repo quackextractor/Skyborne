@@ -8,6 +8,8 @@ public class Fly:MonoBehaviour
     private GameObject player;
     private Vector3 _position;
     [SerializeField] private float _timestamp = 4 ;
+    [SerializeField] private float _attack = 4 ;
+    [SerializeField] private float _knockback = 4 ;
     // Start is called before the first frame update
     private void Start()
     {
