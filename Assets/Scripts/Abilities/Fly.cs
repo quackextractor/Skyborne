@@ -28,7 +28,7 @@ public class Fly:MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        transform.position += _position * speed;
+        transform.position += _position * speed * Time.deltaTime;
     }
     private void OnTriggerEnter(Collider other)
     {
