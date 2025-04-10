@@ -50,7 +50,7 @@ MonoBehaviour:
   _timestamp: 1.32
   _attack: 4
   _knockback: 4
-  speed: 0.85
+  speed: 0.17
 --- !u!135 &6109171938175508676
 SphereCollider:
   m_ObjectHideFlags: 0
