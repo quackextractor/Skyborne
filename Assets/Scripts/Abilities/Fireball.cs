@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Fireball : Ability
 {
-    public GameObject go;
+    public GameObject firePrefab;
     
     protected void Start()
     {
-        Debug.Log("uh oh");
+       
     }
 
     private void Update()
@@ -16,6 +16,6 @@ public class Fireball : Ability
 
     public override void AttackEffect()
     {
-        Instantiate(go);
+        Instantiate(firePrefab);
     }
 }

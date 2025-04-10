@@ -34,10 +34,11 @@ public class PlayerAttackScript : MonoBehaviour
     public void ChangeAnimationState(string newState)
     {
         // STOP THE SAME ANIMATION FROM INTERRUPTING WITH ITSELF //
-       // if (currentAnimationState == newState) return;
+       if (currentAnimationState == newState) return;
         Debug.Log("meow");
         // PLAY THE ANIMATION //
         currentAnimationState = newState;
         animator.CrossFadeInFixedTime(currentAnimationState, 0.2f);
+        currentAnimationState = null;
     }
 }

@@ -17,7 +17,6 @@ public class Fly:MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         _position = player.transform.forward;
         transform.position = player.transform.position + player.transform.forward;
-        Debug.Log("yaaay");
         _timestamp += Time.time;
     }
 

@@ -924,7 +924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 6
   mouseSensitivity: 10
-  dashForce: 60
+  dashForce: 20
   cooldown: 0.5
   moveLock: 0.5
   amountDash: 3
