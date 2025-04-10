@@ -10,12 +10,13 @@ public class Fly:MonoBehaviour
     [SerializeField] private float _timestamp = 4 ;
     [SerializeField] private float _attack = 4 ;
     [SerializeField] private float _knockback = 4 ;
+    [SerializeField] private float speed = 0.1f ;
     // Start is called before the first frame update
     private void Start()
     {
         
         player = GameObject.FindGameObjectWithTag("Player");
-        _position = player.transform.forward;
+        _position = player.transform.forward.normalized;
         transform.position = player.transform.position + player.transform.forward;
         _timestamp += Time.time;
     }
@@ -27,14 +28,14 @@ public class Fly:MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        transform.position += _position;
+        transform.position += _position * speed;
     }
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.name);
         if (other.name != "Player" && other.TryGetComponent<Target>(out Target target))
         {
-            target.TakeAttack(new Attack(10, 10, _position));
+            target.TakeAttack(new Attack(10, 10, transform.forward));
             Destroy(this.gameObject);
         }
         else

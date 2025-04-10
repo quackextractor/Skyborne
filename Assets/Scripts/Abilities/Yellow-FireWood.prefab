@@ -50,6 +50,7 @@ MonoBehaviour:
   _timestamp: 1.32
   _attack: 4
   _knockback: 4
+  speed: 0.85
 --- !u!135 &6109171938175508676
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -206,7 +207,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7641375123429852163}
   serializedVersion: 8
-  lengthInSec: 0.89
+  lengthInSec: 4.25
   simulationSpeed: 1.46
   stopAction: 0
   cullingMode: 3
@@ -214,14 +215,14 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.12
+    scalar: 0
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -281,7 +282,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 1.32
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -452,7 +453,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.4
+      scalar: 0.43
       minScalar: 1
       maxCurve:
         serializedVersion: 2
