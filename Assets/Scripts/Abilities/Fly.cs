@@ -35,7 +35,7 @@ public class Fly:MonoBehaviour
         Debug.Log(other.name);
         if (other.name != "Player" && other.TryGetComponent<Target>(out Target target))
         {
-            target.TakeAttack(new Attack(10, 10, transform.position));
+            target.TakeAttack(new Attack(_attack, _knockback, transform.position));
             Destroy(this.gameObject);
         }
         else
