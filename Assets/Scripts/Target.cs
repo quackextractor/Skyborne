@@ -12,7 +12,9 @@ public class Target : MonoBehaviour
 
     [SerializeField] private LayerMask platformEdgeLayer;
     [SerializeField] private TextMeshProUGUI playerHealthText;
-    [SerializeField] private LayerMask ragdollLayer;
+    [SerializeField]
+    [Tooltip("Select exactly one layer here.")]
+    private int ragdollLayerIndex = 6;
 
     private float _accumulatedKnockback = 1f;
     private Enemy _enemy;
@@ -117,7 +119,7 @@ public class Target : MonoBehaviour
         _rb.isKinematic = false;
 
         // Set to ragdoll layer to disable collision with other objects
-        gameObject.layer = (int)Mathf.Log(ragdollLayer.value, 2);
+        gameObject.layer = ragdollLayerIndex;
 
         // Increase force impact and apply the knockback force
         force *= 1.5f;

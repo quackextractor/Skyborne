@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - spawnpoint
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -12,8 +13,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Ragdoll
+  - Edge
   - 
   - 
   - 
