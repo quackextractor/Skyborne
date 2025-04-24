@@ -3,7 +3,17 @@ guid: e42dc48fbc5bbdb43bb2f897793f45bc
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: deadbranches
+    second: {fileID: 2100000, guid: d2fe13d692a892e46929cd642c1a301d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tree3
+    second: {fileID: 2100000, guid: 3196188cec723ff4092c1a19562f9e0d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
