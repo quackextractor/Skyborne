@@ -16,7 +16,8 @@ public class Target : MonoBehaviour
     [Tooltip("Select exactly one layer here.")]
     private int ragdollLayerIndex = 6;
 
-    private float _accumulatedKnockback = 1f;
+    private const float InitialAccumulatedKnockback = 1f;
+    private float _accumulatedKnockback = InitialAccumulatedKnockback;
     private Enemy _enemy;
     private bool _hasEnemyScript;
     private bool _hasHealthText;
@@ -41,7 +42,8 @@ public class Target : MonoBehaviour
 
     private void Update()
     {
-        if (_isPlayer && _hasHealthText) playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
+        if (_isPlayer && _hasHealthText)
+            playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
     }
 
     public void TakeAttack(Attack attack)
@@ -55,7 +57,8 @@ public class Target : MonoBehaviour
 
         ApplyKnockbackForce(knockbackDirection, totalKnockback);
 
-        if (!_isPlayer){
+        if (!_isPlayer)
+        {
             StartCoroutine(FlashEffect());
         }
     }
@@ -65,7 +68,7 @@ public class Target : MonoBehaviour
         if (_hasEnemyScript)
         {
             _renderer.material.SetColor(BaseColor, Color.white);
-            yield return new WaitForSeconds(0.1f); // Flash duration
+            yield return new WaitForSeconds(0.1f);
             _renderer.material.SetColor(BaseColor, _enemy.BaseColor);
         }
     }
@@ -111,6 +114,9 @@ public class Target : MonoBehaviour
         {
             GetComponent<NavMeshAgent>().enabled = false;
             GetComponent<Enemy>().enabled = false;
+
+            // Destroy enemy after 10 seconds of ragdolling
+            Destroy(gameObject, 10f);
         }
 
         Debug.Log("Ragdoll enabled");
@@ -122,7 +128,7 @@ public class Target : MonoBehaviour
         gameObject.layer = ragdollLayerIndex;
 
         // Increase force impact and apply the knockback force
-        force *= 1.5f;
+        force *= 2f;
         _rb.AddForce(knockbackDirection * force, ForceMode.Impulse);
 
         // Apply a random rotational force for added effect
@@ -135,6 +141,19 @@ public class Target : MonoBehaviour
         // Ensure upward rotation by making the Y-component positive
         randomTorque.y = Mathf.Abs(randomTorque.y);
         _rb.AddTorque(randomTorque, ForceMode.Impulse);
+    }
+
+
+    /// <summary>
+    /// Resets the accumulated knockback back to its starting value.
+    /// </summary>
+    public void ResetAccumulatedKnockback()
+    {
+        _accumulatedKnockback = InitialAccumulatedKnockback;
+
+        // If this is the player, update the UI text immediately.
+        if (_isPlayer && _hasHealthText)
+            playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
     }
 
     public float GetAccumulatedKnockback()

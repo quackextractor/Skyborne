@@ -28,16 +28,51 @@ public class Respawn : MonoBehaviour
     {
         if (transform.position.y <= -15f && _spawnPoint)
         {
+            // Reset position
             transform.position = _spawnPoint.position;
 
+            // Reset rotation
+            transform.rotation = Quaternion.identity;
+
+            // Reset velocity and dampen as needed
             var velocity = _rb.velocity;
-            // Preserve downward velocity, dampen others
             var downward = Mathf.Min(velocity.y, 0);
             velocity.x *= dampenFactor;
             velocity.z *= dampenFactor;
             velocity.y = downward;
-
             _rb.velocity = velocity;
+
+            // Clear angular velocity
+            _rb.angularVelocity = Vector3.zero;
+
+            // Reset accumulated knockback
+            var targetComponent = GetComponent<Target>();
+            if (targetComponent != null)
+                targetComponent.ResetAccumulatedKnockback();
+
+            // Re-freeze constraints if needed (adjust as appropriate)
+            _rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+            // Optionally re-enable any previously disabled components
+            var target = GetComponent<Target>();
+            if (target != null && target.CompareTag("Player"))
+            {
+                GetComponent<PlayerController>().enabled = true;
+            }
+            else
+            {
+                var enemy = GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.enabled = true;
+                    var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+                    if (agent != null)
+                        agent.enabled = true;
+                }
+            }
+
+            // Set layer back if it was changed
+            gameObject.layer = 0;
         }
     }
 }
