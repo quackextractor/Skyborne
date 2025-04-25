@@ -15,10 +15,10 @@ public class Weapon : MonoBehaviour
 
     protected Transform _attacker;
     protected HashSet<Target> _hitTargets = new();
-    protected bool _isAttacking;
+    public bool _isAttacking;
     private HitEffectSpawner _hitEffectSpawner;
     private bool _hasHitEffectSpawner = false;
-
+    
     public float Knockback
     {
         get => knockback;
