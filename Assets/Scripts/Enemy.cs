@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     private Transform _player;
 
     public Color BaseColor { get; private set; }
+    public EnemyStats Stats => stats;
 
     private void Awake()
     {
