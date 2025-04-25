@@ -69,7 +69,7 @@ public class Target : MonoBehaviour
         _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + damage / 100);
         var totalKnockback = knockback * _accumulatedKnockback;
         totalKnockback *= knockbackMultiplier;
-        ApplyKnockbackForce(attack, knockback);
+        ApplyKnockbackForce(attack, totalKnockback);
 
         if (!_isPlayer)
         {
