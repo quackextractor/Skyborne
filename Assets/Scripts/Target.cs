@@ -17,13 +17,15 @@ public class Target : MonoBehaviour
     private int ragdollLayerIndex = 6;
 
     private const float InitialAccumulatedKnockback = 1f;
-    private float _accumulatedKnockback = InitialAccumulatedKnockback;
+    public float _accumulatedKnockback = InitialAccumulatedKnockback;
     private Enemy _enemy;
     private bool _hasEnemyScript;
     private bool _hasHealthText;
     private bool _isPlayer;
     private Rigidbody _rb;
     private Renderer _renderer;
+
+    public float AccumulatedKnockback { get => _accumulatedKnockback; set => _accumulatedKnockback = value; }
 
     private void Awake()
     {
@@ -62,6 +64,18 @@ public class Target : MonoBehaviour
             StartCoroutine(FlashEffect());
         }
     }
+    public void TakeAttack(Vector3 attack, float damage, float knockback)
+    {
+        _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + damage / 100);
+        var totalKnockback = knockback * _accumulatedKnockback;
+        totalKnockback *= knockbackMultiplier;
+        ApplyKnockbackForce(attack, totalKnockback);
+
+        if (!_isPlayer)
+        {
+            StartCoroutine(FlashEffect());
+        }
+    }
 
     private IEnumerator FlashEffect()
     {
@@ -73,7 +87,7 @@ public class Target : MonoBehaviour
         }
     }
 
-    private void ApplyKnockbackForce(Vector3 direction, float force)
+    public void ApplyKnockbackForce(Vector3 direction, float force)
     {
         if (_rb != null)
         {

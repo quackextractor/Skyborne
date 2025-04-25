@@ -1897,6 +1897,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2810739908340704951, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: windUpTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810739908340704951, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: cooldownTime
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 2860730014833929527, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: m_Layer
       value: 0

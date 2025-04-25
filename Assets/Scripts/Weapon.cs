@@ -8,17 +8,17 @@ public class Weapon : MonoBehaviour
     private float knockback = 10f;
 
     [SerializeField] private float damage = 5f;
-    [SerializeField] private float windUpTime = 0.3f;
+    [SerializeField] public float windUpTime = 0.3f;
     [SerializeField] private float activationTime = 0.2f;
     [SerializeField] private float cooldownTime = 0.5f;
     [SerializeField] private Collider weaponCollider;
 
     protected Transform _attacker;
     protected HashSet<Target> _hitTargets = new();
-    protected bool _isAttacking;
+    public bool _isAttacking;
     private HitEffectSpawner _hitEffectSpawner;
     private bool _hasHitEffectSpawner = false;
-
+    
     public float Knockback
     {
         get => knockback;

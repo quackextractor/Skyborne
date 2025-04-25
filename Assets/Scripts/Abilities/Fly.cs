@@ -8,8 +8,8 @@ public class Fly:MonoBehaviour
     private GameObject player;
     private Vector3 _position;
     [SerializeField] private float _timestamp = 4 ;
-    [SerializeField] private float _attack = 4 ;
-    [SerializeField] private float _knockback = 4 ;
+    [SerializeField] private float _attack = 10 ;
+    [SerializeField] private float _knockback = 30;
     [SerializeField] private float speed = 0.1f ;
     // Start is called before the first frame update
     private void Start()
@@ -35,7 +35,8 @@ public class Fly:MonoBehaviour
         Debug.Log(other.name);
         if (other.name != "Player" && other.TryGetComponent<Target>(out Target target))
         {
-            target.TakeAttack(new Attack(_attack, _knockback, transform.position));
+            target.TakeAttack(_position,_attack, _knockback);
+           // target.ApplyKnockbackForce(_position, _knockback*2);
             Destroy(this.gameObject);
         }
         else
