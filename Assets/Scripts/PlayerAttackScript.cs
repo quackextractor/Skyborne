@@ -58,7 +58,7 @@ public class PlayerAttackScript : MonoBehaviour
         {
             // PLAY THE ANIMATION //
             currentAnimationState = newState;
-            animator.CrossFadeInFixedTime(currentAnimationState, 0.2f);
+            animator.CrossFadeInFixedTime(currentAnimationState, _weapon.windUpTime);
             currentAnimationState = null;
         }
     }
