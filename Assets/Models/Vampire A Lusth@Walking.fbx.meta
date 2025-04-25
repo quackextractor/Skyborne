@@ -3,17 +3,7 @@ guid: 65b38a7bb377152428ad4a8bae8e6029
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Vampire_MAT1
-    second: {fileID: 2100000, guid: b3ee70d06a2a84b40b2c87f4eca114c2, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Vampire_MAT_Transparent
-    second: {fileID: 2100000, guid: 5e79bfedadc429c41a375d3b19c1ba97, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
