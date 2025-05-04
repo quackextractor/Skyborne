@@ -5,9 +5,9 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator), typeof(NavMeshAgent))]
 public class EnemyAnimationController : MonoBehaviour
 {
-    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
-    private static readonly int MeleeAttack = Animator.StringToHash("MeleeAttack");
-    private static readonly int Taunt = Animator.StringToHash("Taunt");
+    private static readonly int IsWalking    = Animator.StringToHash("IsWalking");
+    private static readonly int MeleeAttack  = Animator.StringToHash("MeleeAttack");
+    private static readonly int Taunt        = Animator.StringToHash("Taunt");
 
     private enum State { Idle, Walking, MeleeAttack, Taunt }
     private State _currentState;
@@ -24,63 +24,57 @@ public class EnemyAnimationController : MonoBehaviour
 
     private void Awake()
     {
-        _anim   = GetComponent<Animator>();
-        _agent  = GetComponent<NavMeshAgent>();
-        _enemy  = GetComponent<Enemy>();
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _currentState = State.Idle;
+        _anim          = GetComponent<Animator>();
+        _agent         = GetComponent<NavMeshAgent>();
+        _enemy         = GetComponent<Enemy>();
+        _player        = GameObject.FindGameObjectWithTag("Player").transform;
+        _currentState  = State.Idle;
+
+        _agent.updateRotation = false; // prevent Animator from fighting our manual rotation
     }
 
     private void Update()
     {
-        // 1) decide what state we should be in
         float dist = Vector3.Distance(transform.position, _player.position);
-
         State targetState;
-        if (dist <= _enemy.Stats.range) targetState = State.MeleeAttack;
-        else if (_agent.velocity.magnitude > 0.1f) targetState = State.Walking;
-        else targetState = State.Idle;
+        if (dist <= _enemy.Stats.range)
+            targetState = State.MeleeAttack;
+        else if (_agent.velocity.magnitude > 0.1f)
+            targetState = State.Walking;
+        else
+            targetState = State.Idle;
 
-        // Occasionally taunt when idle or walking
         if (Time.time >= _nextTauntTime && targetState != State.MeleeAttack)
         {
             targetState = State.Taunt;
             _nextTauntTime = Time.time + tauntCooldown;
         }
 
-        // 2) if state changed, handle exit/enter
         if (targetState != _currentState)
             SwitchState(targetState);
     }
 
     private void SwitchState(State newState)
     {
-        // Exit logic (if needed)
-        // e.g. Stop coroutines, reset triggers
         _anim.ResetTrigger("MeleeAttack");
         _anim.ResetTrigger("Taunt");
         StopAllCoroutines();
 
         _currentState = newState;
-
-        // Enter logic
         switch (_currentState)
         {
             case State.Idle:
                 _anim.SetBool(IsWalking, false);
                 break;
-
             case State.Walking:
                 _anim.SetBool(IsWalking, true);
                 break;
-
             case State.MeleeAttack:
                 _agent.isStopped = true;
                 _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(MeleeAttack);
                 StartCoroutine(ReturnToWalkAfter(_anim.GetCurrentAnimatorStateInfo(0).length));
                 break;
-
             case State.Taunt:
                 _agent.isStopped = true;
                 _anim.SetBool(IsWalking, false);
@@ -94,6 +88,5 @@ public class EnemyAnimationController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         _agent.isStopped = false;
-        // next Update() will pick up Walking or Idle automatically
     }
 }

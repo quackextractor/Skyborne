@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _agent.updateRotation = false;           // disable built-in turning
         _player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
@@ -26,18 +27,13 @@ public class Enemy : MonoBehaviour
         stats = newStats;
         InitializeStats();
 
-        // After initialization, ensure the enemy's NavMeshAgent is on a valid NavMesh.
+        // Warp onto NavMesh if needed
         if (_agent != null)
         {
-            // Check for a valid nearby NavMesh position within a small radius.
             if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
-            {
                 _agent.Warp(hit.position);
-            }
             else
-            {
                 Debug.LogWarning("Enemy not near a valid NavMesh area after spawn. Warp failed.");
-            }
         }
     }
 
@@ -50,27 +46,52 @@ public class Enemy : MonoBehaviour
         if (distanceToPlayer <= stats.range)
         {
             _agent.isStopped = true;
+            RotateTowardsPlayer();                  // manual rotation when stopped
             TryAttack();
         }
         else
         {
             _agent.isStopped = false;
             _agent.SetDestination(_player.position);
+
+            // manual rotation while moving
+            if (_agent.velocity.sqrMagnitude > 0.1f)
+                RotateTowardsVelocity();
         }
     }
 
     private void InitializeStats()
     {
-        _agent.speed = stats.movementSpeed;
-        weapon.Damage = stats.weaponDamage;
-        weapon.Knockback = stats.weaponKnockback;
+        _agent.speed        = stats.movementSpeed;
+        _agent.angularSpeed = stats.turnSpeed;     // degrees per second
+        _agent.acceleration = stats.acceleration;  // units per second²
+
+        weapon.Damage       = stats.weaponDamage;
+        weapon.Knockback    = stats.weaponKnockback;
 
         Renderer renderer = GetComponent<Renderer>();
         if (renderer != null)
-        {
             renderer.material.SetColor(BaseColor1, stats.variantColor);
-        }
+
         BaseColor = stats.variantColor;
+    }
+
+    private void RotateTowardsPlayer()
+    {
+        Vector3 dir = _player.position - transform.position;
+        dir.y = 0;
+        Quaternion target = Quaternion.LookRotation(dir);
+        float maxDelta = stats.turnSpeed * Time.deltaTime;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, target, maxDelta);
+    }
+
+    private void RotateTowardsVelocity()
+    {
+        Vector3 dir = _agent.velocity;
+        dir.y = 0;
+        Quaternion target = Quaternion.LookRotation(dir.normalized);
+        float maxDelta = stats.turnSpeed * Time.deltaTime;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, target, maxDelta);
     }
 
     private void TryAttack()

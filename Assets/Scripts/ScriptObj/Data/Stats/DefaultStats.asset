@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b82180b4cea416da6bec3f208d1ebf0, type: 3}
   m_Name: DefaultStats
   m_EditorClassIdentifier: 
-  enemyType: 0
   variantColor: {r: 1, g: 0, b: 0, a: 1}
   range: 1.5
   attackSpeed: 1
-  damage: 5
   resistance: 1
-  movementSpeed: 3
+  movementSpeed: 5
+  turnSpeed: 720
+  acceleration: 20
   weaponKnockback: 10
   weaponDamage: 5
