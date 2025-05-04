@@ -61,28 +61,47 @@ public class EnemyAnimationController : MonoBehaviour
         StopAllCoroutines();
 
         _currentState = newState;
+
         switch (_currentState)
         {
             case State.Idle:
                 _anim.SetBool(IsWalking, false);
                 break;
+
             case State.Walking:
                 _anim.SetBool(IsWalking, true);
                 break;
+
             case State.MeleeAttack:
-                _agent.isStopped = true;
+                if (_agent != null && _agent.isOnNavMesh)
+                {
+                    _agent.isStopped = true;
+                }
+                else
+                {
+                    Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
+                }
                 _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(MeleeAttack);
                 StartCoroutine(ReturnToWalkAfter(_anim.GetCurrentAnimatorStateInfo(0).length));
                 break;
+
             case State.Taunt:
-                _agent.isStopped = true;
+                if (_agent != null && _agent.isOnNavMesh)
+                {
+                    _agent.isStopped = true;
+                }
+                else
+                {
+                    Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
+                }
                 _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(Taunt);
                 StartCoroutine(ReturnToWalkAfter(_anim.GetCurrentAnimatorStateInfo(0).length));
                 break;
         }
     }
+
 
     private IEnumerator ReturnToWalkAfter(float delay)
     {
