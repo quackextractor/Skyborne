@@ -1,0 +1,285 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &761375717940326204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4586854402691288142}
+  m_Layer: 0
+  m_Name: Cloud Mega Gargantuar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4586854402691288142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761375717940326204}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -45.1, y: -13, z: 23.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4599080860531954195}
+  - {fileID: 1132699310143680922}
+  - {fileID: 4815854796059193218}
+  - {fileID: 3504388596022555929}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &3045319227212914640
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4586854402691288142}
+    m_Modifications:
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.9582557
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.28591257
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 326.773
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804851598318838546, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_Name
+      value: Cloud Gargantuar (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+--- !u!4 &4815854796059193218 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+  m_PrefabInstance: {fileID: 3045319227212914640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6288512121437643329
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4586854402691288142}
+    m_Modifications:
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 54.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -42
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.042398103
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9991008
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 184.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804851598318838546, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_Name
+      value: Cloud Gargantuar (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+--- !u!4 &4599080860531954195 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+  m_PrefabInstance: {fileID: 6288512121437643329}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6355820441261819211
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4586854402691288142}
+    m_Modifications:
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 39.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 22.087141
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804851598318838546, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_Name
+      value: Cloud Gargantuar
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+--- !u!4 &3504388596022555929 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+  m_PrefabInstance: {fileID: 6355820441261819211}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7434976642997993928
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4586854402691288142}
+    m_Modifications:
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 95.899994
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -25.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.3219504
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.94675654
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 142.438
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804851598318838546, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+      propertyPath: m_Name
+      value: Cloud Gargantuar (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+--- !u!4 &1132699310143680922 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7536351592766337106, guid: de14e314f0a988145b6ad672a3beb691, type: 3}
+  m_PrefabInstance: {fileID: 7434976642997993928}
+  m_PrefabAsset: {fileID: 0}
