@@ -1,44 +1,28 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
-[RequireComponent(typeof(Renderer))]
 public class CloudBehavior : MonoBehaviour
 {
-    private Vector3 center;
     private Vector3 direction;
     private float speed;
-    private float fadeDistance;
-    private float sizeMod;
-
-    private Renderer rend;
-    private Material mat;
-    private Color baseColor;
-    private float travelSign;
-
+    private float lifetime;
+    private float timer;
     private bool initialized;
 
-    public void Initialize(Vector3 center, Vector3 dir, float speed, float fadeDistance, float sizeMod)
+    /// <summary>
+    /// Initializes cloud movement, size, direction, and lifetime.
+    /// </summary>
+    public void Initialize(Vector3 dir, float speed, float sizeMod, bool reverseDirection, float lifetime)
     {
-        this.center = center;
-        this.direction = dir.normalized;
+        // Apply movement direction
+        this.direction = ((reverseDirection ? -dir : dir)).normalized;
         this.speed = speed;
-        this.fadeDistance = fadeDistance;
-        this.sizeMod = sizeMod;
+        this.lifetime = lifetime;
+        this.timer = 0f;
 
-        // Apply uniform scale
+        // Apply scale
         transform.localScale = Vector3.one * sizeMod;
-
-        // Cache renderer and material
-        rend = GetComponent<Renderer>();
-        if (rend == null)
-        {
-            Debug.LogError("CloudBehavior: Missing Renderer component.");
-            return;
-        }
-        mat = rend.material;
-        baseColor = mat.color;
-
-        // Determine initial travel direction towards center
-        travelSign = Vector3.Dot((transform.position - center), direction) > 0 ? -1f : 1f;
 
         initialized = true;
     }
@@ -49,22 +33,14 @@ public class CloudBehavior : MonoBehaviour
             return;
 
         // Move cloud
-        transform.position += direction * (speed * Time.deltaTime * travelSign);
+        transform.position += direction * (speed * Time.deltaTime);
 
-        // Compute alpha based on distance along axis
-        float dist = Vector3.Dot((transform.position - center), direction);
-        float absDist = Mathf.Abs(dist);
-        float alpha = absDist <= fadeDistance
-            ? 1f
-            : Mathf.Clamp01(1f - ((absDist - fadeDistance) / fadeDistance));
-
-        // Apply transparency
-        mat.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
-
-        // Deactivate when fully transparent
-        if (alpha <= 0f)
+        // Update lifetime
+        timer += Time.deltaTime;
+        if (timer >= lifetime)
         {
             gameObject.SetActive(false);
+            initialized = false;
         }
     }
 }

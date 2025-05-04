@@ -552,6 +552,81 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 902706424eb966d4cbb17dd5b0978abe, type: 3}
+--- !u!1 &203019070
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 203019071}
+  - component: {fileID: 203019073}
+  - component: {fileID: 203019072}
+  m_Layer: 5
+  m_Name: Panel (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &203019071
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203019070}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.96945053, y: 0.96945053, z: 0.96945053}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1900358228}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 400, y: 225}
+  m_SizeDelta: {x: 46.9217, y: 46.9217}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &203019072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203019070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: e7e80d39e3e102147a3be13caa7cd3d7, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &203019073
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203019070}
+  m_CullTransparentMesh: 1
 --- !u!1 &230709537
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +1070,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &349214145
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2289,17 +2364,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cloudPrefabs:
-  - {fileID: 9074194988809392497, guid: f90c54a99a0526147be19ae3c8446083, type: 3}
-  - {fileID: 2445790299898197576, guid: 3990197aa6fc2f94291dd7d60a465539, type: 3}
-  rangeY: 5
-  rangeH: 10
-  isX: 1
-  fadeDistance: 30
-  minSpeed: 1
+  - {fileID: 9107807123055454603, guid: 5b86e96e2445f264cad17f35e551836e, type: 3}
+  - {fileID: 2090537781566333653, guid: 72d433d45aebb914a9282cc5a9c3040f, type: 3}
+  rangeY: 30
+  spawnDistance: 20
+  lateralRange: 10
+  isX: 0
+  reverseDirection: 0
+  minSpeed: 15
   maxSpeed: 20
-  sizeModEnabled: 0
-  minSize: 0
-  maxSize: 0
+  sizeModEnabled: 1
+  minSize: 0.5
+  maxSize: 0.8
+  minLifetime: 5
+  maxLifetime: 10
   minSpawnInterval: 1
   maxSpawnInterval: 3
 --- !u!4 &1534756898
@@ -2311,7 +2389,7 @@ Transform:
   m_GameObject: {fileID: 1534756896}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalPosition: {x: 0, y: 13.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3080,6 +3158,7 @@ RectTransform:
   - {fileID: 1994425774}
   - {fileID: 1519333281}
   - {fileID: 349214145}
+  - {fileID: 203019071}
   - {fileID: 230709538}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3353,7 +3432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2113200269
 MonoBehaviour:
   m_ObjectHideFlags: 0
