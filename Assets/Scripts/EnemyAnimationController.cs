@@ -5,30 +5,37 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator), typeof(NavMeshAgent))]
 public class EnemyAnimationController : MonoBehaviour
 {
-    private static readonly int IsWalking    = Animator.StringToHash("IsWalking");
-    private static readonly int MeleeAttack  = Animator.StringToHash("MeleeAttack");
-    private static readonly int Taunt        = Animator.StringToHash("Taunt");
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+    private static readonly int MeleeAttack = Animator.StringToHash("MeleeAttack");
+    private static readonly int Taunt = Animator.StringToHash("Taunt");
 
-    private enum State { Idle, Walking, MeleeAttack, Taunt }
+    private enum State
+    {
+        Idle,
+        Walking,
+        MeleeAttack,
+        Taunt
+    }
+
     private State _currentState;
 
-    private Animator     _anim;
+    private Animator _anim;
     private NavMeshAgent _agent;
-    private Transform    _player;
-    private Enemy        _enemy;
+    private Transform _player;
+    private Enemy _enemy;
 
-    [Header("Taunt Settings")]
-    [Tooltip("Seconds between possible taunts")]
-    [SerializeField] private float tauntCooldown = 10f;
+    [Header("Taunt Settings")] [Tooltip("Seconds between possible taunts")] [SerializeField]
+    private float tauntCooldown = 10f;
+
     private float _nextTauntTime;
 
     private void Awake()
     {
-        _anim          = GetComponent<Animator>();
-        _agent         = GetComponent<NavMeshAgent>();
-        _enemy         = GetComponent<Enemy>();
-        _player        = GameObject.FindGameObjectWithTag("Player").transform;
-        _currentState  = State.Idle;
+        _anim = GetComponent<Animator>();
+        _agent = GetComponent<NavMeshAgent>();
+        _enemy = GetComponent<Enemy>();
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _currentState = State.Idle;
 
         _agent.updateRotation = false; // prevent Animator from fighting our manual rotation
     }
@@ -81,6 +88,7 @@ public class EnemyAnimationController : MonoBehaviour
                 {
                     Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
                 }
+
                 _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(MeleeAttack);
                 StartCoroutine(ReturnToWalkAfter(_anim.GetCurrentAnimatorStateInfo(0).length));
@@ -95,6 +103,7 @@ public class EnemyAnimationController : MonoBehaviour
                 {
                     Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
                 }
+
                 _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(Taunt);
                 StartCoroutine(ReturnToWalkAfter(_anim.GetCurrentAnimatorStateInfo(0).length));
@@ -106,6 +115,21 @@ public class EnemyAnimationController : MonoBehaviour
     private IEnumerator ReturnToWalkAfter(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _agent.isStopped = false;
+
+        if (_agent != null)
+        {
+            if (_agent.isOnNavMesh)
+            {
+                _agent.isStopped = false;
+            }
+            else
+            {
+                Debug.LogWarning($"{gameObject.name}: Tried to resume NavMeshAgent, but it is not on a NavMesh.");
+            }
+        }
+        else
+        {
+            Debug.LogError($"{gameObject.name}: NavMeshAgent reference is null.");
+        }
     }
 }
