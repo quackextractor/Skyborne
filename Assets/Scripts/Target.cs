@@ -14,9 +14,9 @@ public class Target : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerHealthText;
     [SerializeField, Tooltip("Select exactly one layer here.")] private int ragdollLayerIndex = 6;
 
-    [Header("Ragdoll Launch Settings")]
+  /*  [Header("Ragdoll Launch Settings")]
     [Tooltip("0 = flat (no lift), 1 = 45° upwards")] 
-    [SerializeField, Range(0f, 1f)] private float upwardFactor = 0.25f;
+    [SerializeField, Range(-1f, 1f)] */ private float upwardFactor = -0.01f;
 
     private const float InitialAccumulatedKnockback = 1f;
     public float _accumulatedKnockback = InitialAccumulatedKnockback;
