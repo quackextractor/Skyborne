@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class CloudBehavior : MonoBehaviour
 {
@@ -10,19 +9,18 @@ public class CloudBehavior : MonoBehaviour
     private float timer;
     private bool initialized;
 
-    /// <summary>
-    /// Initializes cloud movement, size, direction, and lifetime.
-    /// </summary>
+    private Vector3 originalScale;
+    private float fadeDuration = 1.5f; // Duration of fade-out at end of life
+
     public void Initialize(Vector3 dir, float speed, float sizeMod, bool reverseDirection, float lifetime)
     {
-        // Apply movement direction
         this.direction = ((reverseDirection ? -dir : dir)).normalized;
         this.speed = speed;
         this.lifetime = lifetime;
         this.timer = 0f;
 
-        // Apply scale
-        transform.localScale = Vector3.one * sizeMod;
+        originalScale = Vector3.one * sizeMod;
+        transform.localScale = originalScale;
 
         initialized = true;
     }
@@ -32,11 +30,18 @@ public class CloudBehavior : MonoBehaviour
         if (!initialized)
             return;
 
-        // Move cloud
         transform.position += direction * (speed * Time.deltaTime);
-
-        // Update lifetime
         timer += Time.deltaTime;
+
+        float timeLeft = lifetime - timer;
+
+        // Start scaling down if we're in the fade period
+        if (timeLeft <= fadeDuration)
+        {
+            float t = Mathf.Clamp01(1 - (timeLeft / fadeDuration)); // goes from 0 to 1
+            transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, t);
+        }
+
         if (timer >= lifetime)
         {
             gameObject.SetActive(false);
