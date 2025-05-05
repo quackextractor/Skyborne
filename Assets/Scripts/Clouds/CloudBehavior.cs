@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class CloudBehavior : MonoBehaviour
 {
@@ -10,17 +9,20 @@ public class CloudBehavior : MonoBehaviour
     private bool initialized;
 
     private Vector3 originalScale;
-    private float fadeDuration = 1.5f; // Duration of fade-out at end of life
+
+    [Header("Fade Settings")]
+    [SerializeField] private float fadeInDuration = 1.5f;
+    [SerializeField] private float fadeOutDuration = 1.5f;
 
     public void Initialize(Vector3 dir, float speed, float sizeMod, bool reverseDirection, float lifetime)
     {
-        this.direction = ((reverseDirection ? -dir : dir)).normalized;
+        direction = ((reverseDirection ? -dir : dir)).normalized;
         this.speed = speed;
         this.lifetime = lifetime;
-        this.timer = 0f;
+        timer = 0f;
 
         originalScale = Vector3.one * sizeMod;
-        transform.localScale = originalScale;
+        transform.localScale = Vector3.zero; // Start invisible
 
         initialized = true;
     }
@@ -35,11 +37,22 @@ public class CloudBehavior : MonoBehaviour
 
         float timeLeft = lifetime - timer;
 
-        // Start scaling down if we're in the fade period
-        if (timeLeft <= fadeDuration)
+        // --- Fade In ---
+        if (timer < fadeInDuration)
         {
-            float t = Mathf.Clamp01(1 - (timeLeft / fadeDuration)); // goes from 0 to 1
+            float t = Mathf.Clamp01(timer / fadeInDuration);
+            transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, t);
+        }
+        // --- Fade Out ---
+        else if (timeLeft <= fadeOutDuration)
+        {
+            float t = Mathf.Clamp01(1 - (timeLeft / fadeOutDuration));
             transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, t);
+        }
+        else
+        {
+            // Maintain full scale
+            transform.localScale = originalScale;
         }
 
         if (timer >= lifetime)

@@ -2305,7 +2305,7 @@ MonoBehaviour:
   - {fileID: 9107807123055454603, guid: 5b86e96e2445f264cad17f35e551836e, type: 3}
   - {fileID: 2090537781566333653, guid: 72d433d45aebb914a9282cc5a9c3040f, type: 3}
   rangeY: 30
-  spawnDistance: 20
+  spawnDistance: 50
   lateralRange: 10
   isX: 0
   reverseDirection: 0
@@ -2868,6 +2868,7 @@ Transform:
   m_Children:
   - {fileID: 1923479308}
   - {fileID: 1335847191}
+  - {fileID: 1952640002}
   - {fileID: 598706555}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3085,6 +3086,70 @@ Transform:
   - {fileID: 1617847673}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -55.447, z: 180}
+--- !u!1001 &1952640001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1658024517}
+    m_Modifications:
+    - target: {fileID: 761375717940326204, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_Name
+      value: Cloud Mega Gargantuar (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 28.889666
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 25.019775
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.6128841
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7901729
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 255.597
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 4257361084704899411, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+    - {fileID: 828153189191115482, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+--- !u!4 &1952640002 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4586854402691288142, guid: 23985b69185921c419a272f1fbb557e9, type: 3}
+  m_PrefabInstance: {fileID: 1952640001}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1994425773
 GameObject:
   m_ObjectHideFlags: 0
