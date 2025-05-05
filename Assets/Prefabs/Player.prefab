@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1259936979786475796}
   - component: {fileID: 3841134541770311838}
   - component: {fileID: 5201386760490474539}
+  - component: {fileID: 1391918066716085645}
   m_Layer: 6
   m_Name: Camera
   m_TagString: MainCamera
@@ -73,7 +74,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -93,6 +94,63 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 65404600934139257}
   m_Enabled: 1
+--- !u!114 &1391918066716085645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65404600934139257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fee76f5c3ca2d994abac24ddcc0ef49c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CloudsMask:
+    serializedVersion: 2
+    m_Bits: 256
+  LightMask:
+    serializedVersion: 2
+    m_Bits: 0
+  WorldBlockingMask:
+    serializedVersion: 2
+    m_Bits: 247
+  ResolutionDivider: 3
+  WorldDepthResolutionDivider: 2
+  DepthPrecision: 5
+  LateCut: 1
+  BlurRadius: 10
+  BlurQuality: 10
+  LateCutThreshohld: 0
+  LateCutPower: 1.5
+  UseDepthFiltering: 0
+  DepthFilteringPower: 0
+  UseNoise: 0
+  Noise: {fileID: 2800000, guid: ea4ad7e4f21a143478fefc813c9174ab, type: 3}
+  Wind: {x: 2, y: 1, z: 3}
+  NoiseScale: 1
+  DepthNoiseScale: 1
+  NormalNoisePower: 1
+  DepthNoisePower: 1
+  DisplacementNoisePower: 1
+  NoiseSinTimeScale: 0.2
+  DistanceToClouds: 10
+  Light: {fileID: 0}
+  UseRamp: 0
+  Ramp: {fileID: 0}
+  LightColor: {r: 1, g: 1, b: 1, a: 1}
+  ShadowColor: {r: 0.6, g: 0.72, b: 0.84, a: 1}
+  LightEnd: 0.75
+  HaloPower: 3
+  HaloDistance: 0.5
+  FallbackDistance: 1
+  blurFastShader: {fileID: 4800000, guid: 7ab901123de490e4bad21fdb835edd20, type: 3}
+  blurShader: {fileID: 4800000, guid: fd4453f270eb2734b886efe5223588ce, type: 3}
+  blurHQShader: {fileID: 4800000, guid: 22d75b161fbf2d14b9cd656fde6d05bd, type: 3}
+  depthBlurShader: {fileID: 4800000, guid: 86ffe5743a2c74741be2ae7d00c19d9b, type: 3}
+  depthShader: {fileID: 4800000, guid: 009f6c8cf8d3c144792d6321909e830c, type: 3}
+  cloudShader: {fileID: 4800000, guid: ddd68a53b8f487941ac09b4480974963, type: 3}
+  clearColorShader: {fileID: 4800000, guid: e8f3ce2cbe4971147b1b7f04b791e52a, type: 3}
 --- !u!1 &72217867782385310
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,10 +847,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockback: 10
   damage: 5
-  windUpTime: 0.3
+  windUpTime: 0.25
   activationTime: 0.2
-  cooldownTime: 0.5
+  cooldownTime: 0.3
   weaponCollider: {fileID: 5045235319175053071}
+  _isAttacking: 0
 --- !u!1 &3179714501798985473
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,7 +869,8 @@ GameObject:
   - component: {fileID: 2313280653444343401}
   - component: {fileID: 6436688461329252004}
   - component: {fileID: 7659017804621248196}
-  m_Layer: 6
+  - component: {fileID: 6687028375313223229}
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -853,7 +913,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3179714501798985473}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -973,9 +1033,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   playerHealthText: {fileID: 0}
-  ragdollLayer:
-    serializedVersion: 2
-    m_Bits: 256
+  ragdollLayerIndex: 6
+  _accumulatedKnockback: 1
 --- !u!114 &6436688461329252004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1001,6 +1060,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 863702fc9425ef242b3f14d8e62a665c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dampenFactor: 0.5
+--- !u!114 &6687028375313223229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179714501798985473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554314f7fcbaa17499d76fa87ec38a1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thresholdY: -3
+  fadeSpeed: 2
 --- !u!1 &3376663897992125064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,6 +1870,7 @@ MonoBehaviour:
   activationTime: 0
   cooldownTime: 10
   weaponCollider: {fileID: 1737142437731200490}
+  _isAttacking: 0
 --- !u!1 &5253110760122001301
 GameObject:
   m_ObjectHideFlags: 0
@@ -2447,7 +2522,8 @@ MonoBehaviour:
   activationTime: 0.2
   cooldownTime: 0.5
   weaponCollider: {fileID: 0}
-  firePrefab: {fileID: 0}
+  _isAttacking: 0
+  firePrefab: {fileID: 3863087046821781677, guid: f86dc476ac9065f48b7cfb97b840fc2c, type: 3}
 --- !u!1 &7887559440630553679
 GameObject:
   m_ObjectHideFlags: 0
@@ -2584,6 +2660,7 @@ MonoBehaviour:
   activationTime: 0
   cooldownTime: 10
   weaponCollider: {fileID: 2206725807759252034}
+  _isAttacking: 0
 --- !u!1 &8518137033456138585
 GameObject:
   m_ObjectHideFlags: 0
