@@ -14,6 +14,10 @@ public class Target : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerHealthText;
     [SerializeField, Tooltip("Select exactly one layer here.")] private int ragdollLayerIndex = 6;
 
+    [Header("Ragdoll Launch Settings")]
+    [Tooltip("0 = flat (no lift), 1 = 45° upwards")] 
+    [SerializeField, Range(0f, 1f)] private float upwardFactor = 0.25f;
+
     private const float InitialAccumulatedKnockback = 1f;
     public float _accumulatedKnockback = InitialAccumulatedKnockback;
 
@@ -58,7 +62,7 @@ public class Target : MonoBehaviour
         _ragdollRigidbodies = new List<Rigidbody>();
         foreach (var childRb in GetComponentsInChildren<Rigidbody>())
         {
-            if (childRb == _rb) continue; // skip the main rigidbody
+            if (childRb == _rb) continue;
             _ragdollRigidbodies.Add(childRb);
             var col = childRb.GetComponent<Collider>();
             if (col != null) _ragdollColliders.Add(col);
@@ -93,7 +97,7 @@ public class Target : MonoBehaviour
         _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + damage / 100f);
         float totalKb = knockback * _accumulatedKnockback * knockbackMultiplier;
 
-        ApplyKnockbackForce(attackDir, totalKb);
+        ApplyKnockbackForce(attackDir.normalized, totalKb);
 
         if (!_isPlayer) StartCoroutine(FlashEffect());
     }
@@ -108,9 +112,6 @@ public class Target : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Recursively sets layer on this transform and all children.
-    /// </summary>
     private void SetLayerRecursively(Transform t, int layer)
     {
         t.gameObject.layer = layer;
@@ -143,63 +144,51 @@ public class Target : MonoBehaviour
 
     private void EnableRagdoll(Vector3 dir, float force)
     {
-        // 1) Remove constraints
+        // 1) Remove constraints on root
         _rb.constraints = RigidbodyConstraints.None;
 
+        // 2) Disable character scripts & controllers
         if (_isPlayer)
         {
-            // Only disable player controller
             var component = GetComponent<PlayerController>();
             if (component != null) component.enabled = false;
         }
         else
         {
-            // 2) Disable ALL other scripts/components on enemy root except this Target
-            //    (including NavMeshAgent, Enemy, Animator, etc.)
-            var allBehaviours = GetComponents<Behaviour>();
-            foreach (var beh in allBehaviours)
-            {
-                if (beh != this)
-                    beh.enabled = false;
-            }
-
-            // 3) Disable root capsule + CharacterController if present
+            foreach (var beh in GetComponents<Behaviour>())
+                if (beh != this) beh.enabled = false;
             if (_rootCapsule    != null) _rootCapsule.enabled    = false;
             if (_charController != null) _charController.enabled = false;
-
-            // 4) Queue auto‑destroy
-          //  Destroy(gameObject, 10f);
         }
 
-        // 5) Activate all child ragdoll colliders & physics
+        // 3) Compute a true 3D launch direction
+        Vector3 horiz = dir;
+        horiz.y = 0;
+        horiz.Normalize();
+        Vector3 launchDir = (horiz + Vector3.up * upwardFactor).normalized;
+
+        // 4) Activate ragdoll parts and give them the launch velocity
         foreach (var col in _ragdollColliders)
             col.enabled = true;
-        foreach (var rb in _ragdollRigidbodies)
-            rb.isKinematic = false;
 
-        // 6) Switch root to non‑kinematic & set ragdoll layer
+        foreach (var boneRb in _ragdollRigidbodies)
+        {
+            boneRb.isKinematic = false;
+            boneRb.velocity = launchDir * force * 1.5f;
+            boneRb.angularVelocity = Random.onUnitSphere * force * 0.1f;
+        }
+
+        // 5) Switch the root to ragdoll too
         _rb.isKinematic = false;
-        gameObject.layer = ragdollLayerIndex;
-        
-// 6.1) …**and** put **all** children into the ragdoll layer  
         SetLayerRecursively(transform, ragdollLayerIndex);
-        
-        Debug.Log("Ragdoll enabled");
 
-        // 7) Apply amplified knockback force + random torque
-        force *= 2f;
-        _rb.AddForce(dir * force, ForceMode.Impulse);
-        Vector3 randomTorque = new Vector3(
-            Random.Range(-10f, 10f),
-            Mathf.Abs(Random.Range(-10f, 10f)),
-            Random.Range(-10f, 10f)
-        );
-        _rb.AddTorque(randomTorque, ForceMode.Impulse);
+        // 6) (Optional) also launch the root a bit
+        _rb.velocity = launchDir * force * 1.5f;
+        _rb.angularVelocity = Random.onUnitSphere * force * 0.2f;
+
+        Debug.Log("Ragdoll launched!");
     }
 
-    /// <summary>
-    /// Resets accumulated knockback to its initial value.
-    /// </summary>
     public void ResetAccumulatedKnockback()
     {
         _accumulatedKnockback = InitialAccumulatedKnockback;
