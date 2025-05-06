@@ -1478,7 +1478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cb0e64acef6fb346b0cdef14110e5cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 120689244035567454, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
+  enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
+  defaultStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
   initialEnemies: 0
   spawnArea: {x: 20, y: 0, z: 20}
 --- !u!4 &846177967
@@ -1521,7 +1522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694025243bf24bd686326eb5d6fa19fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelData: {fileID: 11400000, guid: fb5ee91cdbe2bfd45a58c79a16292a56, type: 2}
+  levelData: {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
   enemyParent: {fileID: 0}
   spawnHeight: 0
   navMeshSampleDistance: 5

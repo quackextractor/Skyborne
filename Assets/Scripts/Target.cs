@@ -187,6 +187,9 @@ public class Target : MonoBehaviour
         _rb.angularVelocity = Random.onUnitSphere * force * 0.2f;
 
         Debug.Log("Ragdoll launched!");
+        
+        // 7) Schedule object destruction after 10 seconds
+        Destroy(gameObject, 10f);
     }
 
     public void ResetAccumulatedKnockback()
