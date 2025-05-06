@@ -188,8 +188,10 @@ public class Target : MonoBehaviour
 
         Debug.Log("Ragdoll launched!");
         
-        // 7) Schedule object destruction after 10 seconds
-        Destroy(gameObject, 10f);
+        // 7) Schedule enemy destruction after 10 seconds
+        if (!_isPlayer){
+            Destroy(gameObject, 10f);
+        }
     }
 
     public void ResetAccumulatedKnockback()
