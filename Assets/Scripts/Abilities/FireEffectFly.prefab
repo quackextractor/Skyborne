@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 973696108406894460}
+  - {fileID: 8794276835432472481}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &941704959504318060
@@ -46,10 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0774ac6171b8e1746b7503eccafa7151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timestamp: 1.5
-  _attack: 4
-  _knockback: 4
-  speed: 93.9
+  timestamp: 1.5
+  attack: 4
+  knockback: 4
+  speed: 50
 --- !u!135 &6109171938175508676
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -97,7 +98,7 @@ Transform:
   m_GameObject: {fileID: 4292291371703968599}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -165,3 +166,105 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1001 &5376906921474071711
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2367535025484889115}
+    m_Modifications:
+    - target: {fileID: 2474671289164315664, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2474671289164315664, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6693413847802462943, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6693413847802462943, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454753423061849787, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454753423061849787, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395717906473557002, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395717906473557002, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8452030957936298125, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_Name
+      value: Magic fire pro orange
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734601997857576067, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734601997857576067, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 80
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+--- !u!4 &8794276835432472481 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+  m_PrefabInstance: {fileID: 5376906921474071711}
+  m_PrefabAsset: {fileID: 0}
