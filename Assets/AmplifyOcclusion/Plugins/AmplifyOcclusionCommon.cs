@@ -1,15 +1,11 @@
 // Amplify Occlusion 2 - Robust Ambient Occlusion for Unity
 // Copyright (c) Amplify Creations, Lda <info@amplify.pt>
 
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Profiling;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-namespace AmplifyOcclusion
+namespace AmplifyOcclusion.Plugins
 {
 
 public static class AmplifyOcclusionCommon
@@ -20,8 +16,8 @@ public static class AmplifyOcclusionCommon
 
 	public static void CommandBuffer_TemporalFilterDirectionsOffsets( CommandBuffer cb, uint aSampleStep )
 	{
-		float temporalRotation = AmplifyOcclusionCommon.m_temporalRotations[ aSampleStep % 6 ];
-		float temporalOffset = AmplifyOcclusionCommon.m_spatialOffsets[ ( aSampleStep / 6 ) % 4 ];
+		var temporalRotation = AmplifyOcclusionCommon.m_temporalRotations[ aSampleStep % 6 ];
+		var temporalOffset = AmplifyOcclusionCommon.m_spatialOffsets[ ( aSampleStep / 6 ) % 4 ];
 
 		cb.SetGlobalFloat( PropertyID._AO_TemporalDirections, temporalRotation / 360.0f );
 		cb.SetGlobalFloat( PropertyID._AO_TemporalOffsets, temporalOffset );
@@ -51,7 +47,7 @@ public static class AmplifyOcclusionCommon
 												RenderTextureReadWrite readWrite = RenderTextureReadWrite.Default,
 												FilterMode filterMode = FilterMode.Point )
 	{
-		int id = Shader.PropertyToID( propertyName );
+		var id = Shader.PropertyToID( propertyName );
 
 		cb.GetTemporaryRT( id, width, height, 0, filterMode, format, readWrite );
 
@@ -76,7 +72,7 @@ public static class AmplifyOcclusionCommon
 		width = Mathf.Clamp( width, 1, 65536 );
 		height = Mathf.Clamp( height, 1, 65536 );
 
-		RenderTexture rt = new RenderTexture( width, height, 0, format, readWrite ) { hideFlags = HideFlags.DontSave };
+		var rt = new RenderTexture( width, height, 0, format, readWrite ) { hideFlags = HideFlags.DontSave };
 
 		rt.name = name;
 		rt.filterMode = filterMode;
@@ -165,14 +161,14 @@ public static class AmplifyOcclusionCommon
 		aTarget.oneOverWidth = 1.0f / (float)aTarget.width;
 		aTarget.oneOverHeight = 1.0f / (float)aTarget.height;
 
-		float fovRad = aCamera.fieldOfView * Mathf.Deg2Rad;
+		var fovRad = aCamera.fieldOfView * Mathf.Deg2Rad;
 
-		float invHalfTanFov = 1.0f / Mathf.Tan( fovRad * 0.5f );
+		var invHalfTanFov = 1.0f / Mathf.Tan( fovRad * 0.5f );
 
-		Vector2 focalLen = new Vector2( invHalfTanFov * ( aTarget.height / (float)aTarget.width ),
+		var focalLen = new Vector2( invHalfTanFov * ( aTarget.height / (float)aTarget.width ),
 										invHalfTanFov );
 
-		Vector2 invFocalLen = new Vector2( 1.0f / focalLen.x, 1.0f / focalLen.y );
+		var invFocalLen = new Vector2( 1.0f / focalLen.x, 1.0f / focalLen.y );
 
 		// Aspect Ratio
 		cb.SetGlobalVector( PropertyID._AO_UVToView, new Vector4( +2.0f * invFocalLen.x,
@@ -213,28 +209,28 @@ public class AmplifyOcclusionViewProjMatrix
 		// Camera matrixes
 		if( AmplifyOcclusionCommon.IsStereoSinglePassEnabled( aCamera ) == true )
 		{
-			Matrix4x4 viewLeft = aCamera.GetStereoViewMatrix( Camera.StereoscopicEye.Left );
-			Matrix4x4 viewRight = aCamera.GetStereoViewMatrix( Camera.StereoscopicEye.Right );
+			var viewLeft = aCamera.GetStereoViewMatrix( Camera.StereoscopicEye.Left );
+			var viewRight = aCamera.GetStereoViewMatrix( Camera.StereoscopicEye.Right );
 
 			cb.SetGlobalMatrix( PropertyID._AO_CameraViewLeft, viewLeft );
 			cb.SetGlobalMatrix( PropertyID._AO_CameraViewRight, viewRight );
 
-			Matrix4x4 projectionMatrixLeft = aCamera.GetStereoProjectionMatrix( Camera.StereoscopicEye.Left );
-			Matrix4x4 projectionMatrixRight = aCamera.GetStereoProjectionMatrix( Camera.StereoscopicEye.Right );
+			var projectionMatrixLeft = aCamera.GetStereoProjectionMatrix( Camera.StereoscopicEye.Left );
+			var projectionMatrixRight = aCamera.GetStereoProjectionMatrix( Camera.StereoscopicEye.Right );
 
-			Matrix4x4 projLeft = GL.GetGPUProjectionMatrix( projectionMatrixLeft, false );
-			Matrix4x4 projRight = GL.GetGPUProjectionMatrix( projectionMatrixRight, false );
+			var projLeft = GL.GetGPUProjectionMatrix( projectionMatrixLeft, false );
+			var projRight = GL.GetGPUProjectionMatrix( projectionMatrixRight, false );
 
 			cb.SetGlobalMatrix( PropertyID._AO_ProjMatrixLeft, projLeft );
 			cb.SetGlobalMatrix( PropertyID._AO_ProjMatrixRight, projRight );
 
 			if( isUsingTemporalFilter )
 			{
-				Matrix4x4 ViewProjMatrixLeft = projLeft * viewLeft;
-				Matrix4x4 ViewProjMatrixRight = projRight * viewRight;
+				var ViewProjMatrixLeft = projLeft * viewLeft;
+				var ViewProjMatrixRight = projRight * viewRight;
 
-				Matrix4x4 InvViewProjMatrixLeft = Matrix4x4.Inverse( ViewProjMatrixLeft );
-				Matrix4x4 InvViewProjMatrixRight = Matrix4x4.Inverse( ViewProjMatrixRight );
+				var InvViewProjMatrixLeft = Matrix4x4.Inverse( ViewProjMatrixLeft );
+				var InvViewProjMatrixRight = Matrix4x4.Inverse( ViewProjMatrixRight );
 
 				cb.SetGlobalMatrix( PropertyID._AO_InvViewProjMatrixLeft, InvViewProjMatrixLeft );
 				cb.SetGlobalMatrix( PropertyID._AO_PrevViewProjMatrixLeft, m_prevViewProjMatrixLeft );
@@ -253,16 +249,16 @@ public class AmplifyOcclusionViewProjMatrix
 		}
 		else
 		{
-			Matrix4x4 view = aCamera.worldToCameraMatrix;
+			var view = aCamera.worldToCameraMatrix;
 
 			cb.SetGlobalMatrix( PropertyID._AO_CameraViewLeft, view );
 
 			if( isUsingTemporalFilter )
 			{
-				Matrix4x4 proj = GL.GetGPUProjectionMatrix( aCamera.projectionMatrix, false );
+				var proj = GL.GetGPUProjectionMatrix( aCamera.projectionMatrix, false );
 
-				Matrix4x4 ViewProjMatrix = proj * view;
-				Matrix4x4 InvViewProjMatrix = Matrix4x4.Inverse( ViewProjMatrix );
+				var ViewProjMatrix = proj * view;
+				var InvViewProjMatrix = Matrix4x4.Inverse( ViewProjMatrix );
 
 				cb.SetGlobalMatrix( PropertyID._AO_InvViewProjMatrixLeft, InvViewProjMatrix );
 				cb.SetGlobalMatrix( PropertyID._AO_PrevViewProjMatrixLeft, m_prevViewProjMatrixLeft );

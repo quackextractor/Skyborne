@@ -2,13 +2,13 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	class ColliderController
 	{
 		public static void DrawControllers(BoneHelper boneHelper, Quaternion lastRotation, Transform transform, Vector3 pos)
 		{
-			Quaternion rotatorRotation = ColliderHelper.GetRotatorRotarion(transform);
+			var rotatorRotation = ColliderHelper.GetRotatorRotarion(transform);
 
 			switch (Tools.current)
 			{
@@ -34,7 +34,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 
 			if (Tools.pivotRotation == PivotRotation.Global)
 			{
-				Quaternion fromStart = rotatorRotation * Quaternion.Inverse(lastRotation);
+				var fromStart = rotatorRotation * Quaternion.Inverse(lastRotation);
 				newRotation = Handles.RotationHandle(fromStart, pos);
 				changed = fromStart != newRotation;
 				newRotation = newRotation * lastRotation;
@@ -61,8 +61,8 @@ namespace BzKovSoft.RagdollHelper.Editor
 			if (Tools.pivotRotation == PivotRotation.Global)
 				rotatorRotation = Quaternion.identity;
 
-			Vector3 newPosition = Handles.PositionHandle(pos, rotatorRotation);
-			Vector3 translateBy = newPosition - pos;
+			var newPosition = Handles.PositionHandle(pos, rotatorRotation);
+			var translateBy = newPosition - pos;
 
 			if (translateBy != Vector3.zero)
 				ColliderHelper.SetColliderPosition(transform, newPosition);
@@ -73,19 +73,19 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		static void ProcessColliderScale(BoneHelper boneHelper, Quaternion rotatorRotation, Transform transform, Vector3 pos)
 		{
-			float size = HandleUtility.GetHandleSize(pos);
+			var size = HandleUtility.GetHandleSize(pos);
 			var collider = ColliderHelper.GetCollider(transform);
 
 			// process each collider type in its own way
-			CapsuleCollider cCollider = collider as CapsuleCollider;
-			BoxCollider bCollider = collider as BoxCollider;
-			SphereCollider sCollider = collider as SphereCollider;
+			var cCollider = collider as CapsuleCollider;
+			var bCollider = collider as BoxCollider;
+			var sCollider = collider as SphereCollider;
 
-			float scale = (collider.transform.lossyScale.x + collider.transform.lossyScale.y + collider.transform.lossyScale.z) / 3f;
+			var scale = (collider.transform.lossyScale.x + collider.transform.lossyScale.y + collider.transform.lossyScale.z) / 3f;
 			if (cCollider != null)
 			{
 				// for capsule collider draw circle and two dot controllers
-				Vector3 direction = DirectionIntToVector(cCollider.direction);
+				var direction = DirectionIntToVector(cCollider.direction);
 
 				var t = Quaternion.LookRotation(cCollider.transform.TransformDirection(direction));
 
@@ -98,21 +98,21 @@ namespace BzKovSoft.RagdollHelper.Editor
 
 				// draw radius controll
 
-				float radius = Handles.ScaleValueHandle(cCollider.radius, pos, t, cCollider.radius * magicNumber * scale, Handles.CircleHandleCap, 0);
-				bool radiusChanged = cCollider.radius != radius;
+				var radius = Handles.ScaleValueHandle(cCollider.radius, pos, t, cCollider.radius * magicNumber * scale, Handles.CircleHandleCap, 0);
+				var radiusChanged = cCollider.radius != radius;
 
-				Vector3 scaleHeightShift = cCollider.transform.TransformDirection(direction * cCollider.height / 2);
+				var scaleHeightShift = cCollider.transform.TransformDirection(direction * cCollider.height / 2);
 
 				// draw height controlls
-				Vector3 heightControl1Pos = pos + scaleHeightShift;
-				Vector3 heightControl2Pos = pos - scaleHeightShift;
+				var heightControl1Pos = pos + scaleHeightShift;
+				var heightControl2Pos = pos - scaleHeightShift;
 
-				float height1 = Handles.ScaleValueHandle(cCollider.height, heightControl1Pos, t, size * 0.5f, Handles.DotHandleCap, 0);
-				float height2 = Handles.ScaleValueHandle(cCollider.height, heightControl2Pos, t, size * 0.5f, Handles.DotHandleCap, 0);
-				float newHeight = 0f;
+				var height1 = Handles.ScaleValueHandle(cCollider.height, heightControl1Pos, t, size * 0.5f, Handles.DotHandleCap, 0);
+				var height2 = Handles.ScaleValueHandle(cCollider.height, heightControl2Pos, t, size * 0.5f, Handles.DotHandleCap, 0);
+				var newHeight = 0f;
 
-				bool moved = false;
-				bool firstCtrlSelected = false;
+				var moved = false;
+				var firstCtrlSelected = false;
 				if (height1 != cCollider.height)
 				{
 					moved = true;
@@ -129,13 +129,13 @@ namespace BzKovSoft.RagdollHelper.Editor
 				{
 					Undo.RecordObject(cCollider, "Resize capsule collider");
 
-					bool upperSelected = false;
+					var upperSelected = false;
 					if (moved)
 					{
 						if (newHeight < 0.01f)
 							newHeight = 0.01f;
 
-						bool firstIsUpper = FirstIsUpper(cCollider.transform, heightControl1Pos, heightControl2Pos);
+						var firstIsUpper = FirstIsUpper(cCollider.transform, heightControl1Pos, heightControl2Pos);
 						upperSelected = firstIsUpper == firstCtrlSelected;
 
 						cCollider.center += direction * (newHeight - cCollider.height) / 2 * (firstCtrlSelected ? 1 : -1);
@@ -156,15 +156,15 @@ namespace BzKovSoft.RagdollHelper.Editor
 
 						if (moved)
 						{
-							Vector3 direction2 = DirectionIntToVector(symCapsule.direction);
+							var direction2 = DirectionIntToVector(symCapsule.direction);
 
-							Vector3 scaleHeightShift2 = symCapsule.transform.TransformDirection(direction2 * symCapsule.height / 2);
-							Vector3 pos2 = ColliderHelper.GetRotatorPosition(symCapsule.transform);
+							var scaleHeightShift2 = symCapsule.transform.TransformDirection(direction2 * symCapsule.height / 2);
+							var pos2 = ColliderHelper.GetRotatorPosition(symCapsule.transform);
 
-							Vector3 heightControl1Pos2 = pos2 + scaleHeightShift2;
-							Vector3 heightControl2Pos2 = pos2 - scaleHeightShift2;
+							var heightControl1Pos2 = pos2 + scaleHeightShift2;
+							var heightControl2Pos2 = pos2 - scaleHeightShift2;
 
-							bool firstIsUpper2 = FirstIsUpper(symCapsule.transform, heightControl1Pos2, heightControl2Pos2);
+							var firstIsUpper2 = FirstIsUpper(symCapsule.transform, heightControl1Pos2, heightControl2Pos2);
 
 							symCapsule.center += direction2 * (newHeight - symCapsule.height) / 2
 								* (upperSelected ? 1 : -1)
@@ -191,7 +191,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			else if (sCollider != null)
 			{
 				// resize Sphere collider
-				float radius = sCollider.radius * scale;
+				var radius = sCollider.radius * scale;
 				var newRadius = Handles.RadiusHandle(rotatorRotation, pos, radius, true);
 				if (radius != newRadius)
 				{
@@ -231,7 +231,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			if (transform.parent == null)
 				return true;
 
-			Vector3 currentPos = transform.position;
+			var currentPos = transform.position;
 			Vector3 parentPos;
 			do
 			{
@@ -243,15 +243,15 @@ namespace BzKovSoft.RagdollHelper.Editor
 			if (parentPos == currentPos)
 				return true;
 
-			Vector3 limbDirection = currentPos - parentPos;
+			var limbDirection = currentPos - parentPos;
 
 			limbDirection.Normalize();
 
-			float d1 = Vector3.Dot(limbDirection, heightControl1Pos - parentPos);
-			float d2 = Vector3.Dot(limbDirection, heightControl2Pos - parentPos);
+			var d1 = Vector3.Dot(limbDirection, heightControl1Pos - parentPos);
+			var d2 = Vector3.Dot(limbDirection, heightControl2Pos - parentPos);
 
 
-			bool firstIsUpper = d1 < d2;
+			var firstIsUpper = d1 < d2;
 			return firstIsUpper;
 		}
 

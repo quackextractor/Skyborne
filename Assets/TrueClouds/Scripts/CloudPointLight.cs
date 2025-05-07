@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using UnityEngine;
 
-namespace TrueClouds
+namespace TrueClouds.Scripts
 {
     [ExecuteInEditMode]
     class CloudPointLight : MonoBehaviour
@@ -34,7 +31,7 @@ namespace TrueClouds
 
         private void ValidateHasGoodLayer()
         {
-            CloudCamera[] cameras = GetComponents<CloudCamera>();
+            var cameras = GetComponents<CloudCamera>();
             if (cameras.Length == 0)
             {
                 return;
@@ -102,7 +99,7 @@ namespace TrueClouds
             _material.SetColor(COLOR_ID, Color);
             _material.SetFloat(SHADOW_INTENSITY_ID, ShadowIntensity);
 
-            float scale = Range * 2 * 1.1f; // scale up a bit to account for the fact that we don't have a perfect sphere
+            var scale = Range * 2 * 1.1f; // scale up a bit to account for the fact that we don't have a perfect sphere
             _lightTransform.localScale = new Vector3(scale, scale, scale); 
             _lightTransform.position = _transform.position;
         }
@@ -119,7 +116,7 @@ namespace TrueClouds
 
         private void OnDrawGizmosSelected()
         {
-            Color gizmo = Color.yellow;
+            var gizmo = Color.yellow;
             gizmo.a = 0.7f;
             Gizmos.color = gizmo;
             Gizmos.DrawSphere(transform.position, Start);

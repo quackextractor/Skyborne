@@ -1,3 +1,4 @@
+using ScriptObj;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,23 +19,8 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _agent.updateRotation = false;           // disable built-in turning
+        _agent.updateRotation = false; // disable built-in turning
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-    }
-
-    public void Setup(EnemyStats newStats)
-    {
-        stats = newStats;
-        InitializeStats();
-
-        // Warp onto NavMesh if needed
-        if (_agent != null)
-        {
-            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
-                _agent.Warp(hit.position);
-            else
-                Debug.LogWarning("Enemy not near a valid NavMesh area after spawn. Warp failed.");
-        }
     }
 
     private void Update()
@@ -42,11 +28,11 @@ public class Enemy : MonoBehaviour
         if (_attackCooldown > 0)
             _attackCooldown -= Time.deltaTime;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+        var distanceToPlayer = Vector3.Distance(transform.position, _player.position);
         if (distanceToPlayer <= stats.range)
         {
             _agent.isStopped = true;
-            RotateTowardsPlayer();                  // manual rotation when stopped
+            RotateTowardsPlayer(); // manual rotation when stopped
             TryAttack();
         }
         else
@@ -60,37 +46,52 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void Setup(EnemyStats newStats)
+    {
+        stats = newStats;
+        InitializeStats();
+
+        // Warp onto NavMesh if needed
+        if (_agent != null)
+        {
+            if (NavMesh.SamplePosition(transform.position, out var hit, 2f, NavMesh.AllAreas))
+                _agent.Warp(hit.position);
+            else
+                Debug.LogWarning("Enemy not near a valid NavMesh area after spawn. Warp failed.");
+        }
+    }
+
     private void InitializeStats()
     {
-        _agent.speed        = stats.movementSpeed;
-        _agent.angularSpeed = stats.turnSpeed;     // degrees per second
-        _agent.acceleration = stats.acceleration;  // units per second²
+        _agent.speed = stats.movementSpeed;
+        _agent.angularSpeed = stats.turnSpeed; // degrees per second
+        _agent.acceleration = stats.acceleration; // units per second²
 
-        weapon.Damage       = stats.weaponDamage;
-        weapon.Knockback    = stats.weaponKnockback;
+        weapon.Damage = stats.weaponDamage;
+        weapon.Knockback = stats.weaponKnockback;
 
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null)
-            renderer.material.SetColor(BaseColor1, stats.variantColor);
+        var enemyRenderer = GetComponent<Renderer>();
+        if (enemyRenderer != null)
+            enemyRenderer.material.SetColor(BaseColor1, stats.variantColor);
 
         BaseColor = stats.variantColor;
     }
 
     private void RotateTowardsPlayer()
     {
-        Vector3 dir = _player.position - transform.position;
+        var dir = _player.position - transform.position;
         dir.y = 0;
-        Quaternion target = Quaternion.LookRotation(dir);
-        float maxDelta = stats.turnSpeed * Time.deltaTime;
+        var target = Quaternion.LookRotation(dir);
+        var maxDelta = stats.turnSpeed * Time.deltaTime;
         transform.rotation = Quaternion.RotateTowards(transform.rotation, target, maxDelta);
     }
 
     private void RotateTowardsVelocity()
     {
-        Vector3 dir = _agent.velocity;
+        var dir = _agent.velocity;
         dir.y = 0;
-        Quaternion target = Quaternion.LookRotation(dir.normalized);
-        float maxDelta = stats.turnSpeed * Time.deltaTime;
+        var target = Quaternion.LookRotation(dir.normalized);
+        var maxDelta = stats.turnSpeed * Time.deltaTime;
         transform.rotation = Quaternion.RotateTowards(transform.rotation, target, maxDelta);
     }
 

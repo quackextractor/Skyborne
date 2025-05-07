@@ -1,11 +1,7 @@
-﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System;
+using UnityEngine;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	/// <summary>
 	/// Class responsible for regdoll and unregdoll character
@@ -40,7 +36,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			_readyToGenerate = false;
 
 			// find Animator
-			Animator animator = FindAnimator(player);
+			var animator = FindAnimator(player);
 			if (animator == null)
 				return;
 			_rootNode = animator.transform;
@@ -138,7 +134,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 
 			var weight = new WeightCalculator(totalMass, ragdollProperties.createTips);
 
-			bool alreadyRagdolled = _pelvis.transform.gameObject.GetComponent<Rigidbody>() != null;
+			var alreadyRagdolled = _pelvis.transform.gameObject.GetComponent<Rigidbody>() != null;
 
 			AddComponentesTo(_pelvis,     ragdollProperties, weight.Pelvis, false);
 			AddComponentesTo(_leftHip,    ragdollProperties, weight.Hip,    true);
@@ -164,8 +160,8 @@ namespace BzKovSoft.RagdollHelper.Editor
 				return;
 
 			// Pelvis
-			Vector3 pelvisSize = new Vector3(0.32f, 0.31f, 0.3f);
-			Vector3 pelvisCenter = new Vector3(00f, 0.06f, -0.01f);
+			var pelvisSize = new Vector3(0.32f, 0.31f, 0.3f);
+			var pelvisCenter = new Vector3(00f, 0.06f, -0.01f);
 			_pelvis.collider.size = Abs(_pelvis.transform.InverseTransformVector(pelvisSize));
 			_pelvis.collider.center = _pelvis.transform.InverseTransformVector(pelvisCenter);
 
@@ -173,9 +169,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 			ApplySide(false, ragdollProperties.createTips);
 
 			// Chest collider
-			Vector3 chestSize = new Vector3(0.34f, 0.34f, 0.28f);
+			var chestSize = new Vector3(0.34f, 0.34f, 0.28f);
 
-			float y = (pelvisSize.y + chestSize.y) / 2f + pelvisCenter.y;
+			var y = (pelvisSize.y + chestSize.y) / 2f + pelvisCenter.y;
 			y -= _chest.transform.position.y - _pelvis.transform.position.y;
 			_chest.collider.size = Abs(_chest.transform.InverseTransformVector(chestSize));
 			_chest.collider.center = _chest.transform.InverseTransformVector(new Vector3(0f, y, -0.03f));
@@ -186,7 +182,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			ConfigureJointLimits(chestJoint, -45f, 20f, 20f, 20f);
 
 			// head
-			float headScale = 3f / (_head.transform.lossyScale.x + _head.transform.lossyScale.y + _head.transform.lossyScale.z);
+			var headScale = 3f / (_head.transform.lossyScale.x + _head.transform.lossyScale.y + _head.transform.lossyScale.z);
 			_head.collider.radius = 0.1f * headScale;
 			_head.collider.center = _head.transform.InverseTransformVector(new Vector3(0f, 0.09f, 0.03f));
 			var headJoint = _head.joint;
@@ -243,13 +239,13 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// <param name="leftSide">If true, configuration apply to left hand and left leg, otherwise right hand and right leg</param>
 		void ApplySide(bool leftSide, bool createTips)
 		{
-			RagdollPartCapsule hip = (leftSide ? _leftHip : _rightHip);
-			RagdollPartCapsule knee = (leftSide ? _leftKnee : _rightKnee);
-			RagdollPartBox foot = (leftSide ? _leftFoot : _rightFoot);
+			var hip = (leftSide ? _leftHip : _rightHip);
+			var knee = (leftSide ? _leftKnee : _rightKnee);
+			var foot = (leftSide ? _leftFoot : _rightFoot);
 			
-			RagdollPartCapsule arm = (leftSide ? _leftArm : _rightArm);
-			RagdollPartCapsule elbow = (leftSide ? _leftElbow : _rightElbow);
-			RagdollPartBox hand = (leftSide ? _leftHand : _rightHand);
+			var arm = (leftSide ? _leftArm : _rightArm);
+			var elbow = (leftSide ? _leftElbow : _rightElbow);
+			var hand = (leftSide ? _leftHand : _rightHand);
 
 			ConfigureRagdollForLimb(hip, knee, foot, createTips);
 			ConfigureLegsJoints(hip, knee, foot, createTips);
@@ -262,10 +258,10 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		static void ConfigureRagdollForLimb(RagdollPartCapsule limbUpper, RagdollPartCapsule limbLower, RagdollPartBox tip, bool createTips)
 		{
-			float totalLength = limbUpper.transform.InverseTransformPoint(tip.transform.position).magnitude;
+			var totalLength = limbUpper.transform.InverseTransformPoint(tip.transform.position).magnitude;
 
 			// limbUpper
-			CapsuleCollider upperCapsule = limbUpper.collider;
+			var upperCapsule = limbUpper.collider;
 			var boneEndPos = limbUpper.transform.InverseTransformPoint(limbLower.transform.position);
 			upperCapsule.direction = GetXyzDirection(limbLower.transform.localPosition);
 			upperCapsule.radius = totalLength * 0.12f;
@@ -273,7 +269,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			upperCapsule.center = Vector3.Scale(boneEndPos, Vector3.one * 0.5f);
 
 			// limbLower
-			CapsuleCollider endCapsule = limbLower.collider;
+			var endCapsule = limbLower.collider;
 			boneEndPos = limbLower.transform.InverseTransformPoint(tip.transform.position);
 			endCapsule.direction = GetXyzDirection(boneEndPos);
 			endCapsule.radius = totalLength * 0.12f;
@@ -286,14 +282,14 @@ namespace BzKovSoft.RagdollHelper.Editor
 				boneEndPos = GetLongestTransform(tip.transform).position;
 				boneEndPos = tip.transform.InverseTransformPoint(boneEndPos);
 
-				Vector3 tipDir = GetXyzDirectionV(boneEndPos);
-				Vector3 tipSides = (tipDir - Vector3.one) * -1;
-				Vector3 boxSize = tipDir * boneEndPos.magnitude * 1.3f + tipSides * totalLength * 0.2f;
+				var tipDir = GetXyzDirectionV(boneEndPos);
+				var tipSides = (tipDir - Vector3.one) * -1;
+				var boxSize = tipDir * boneEndPos.magnitude * 1.3f + tipSides * totalLength * 0.2f;
 
-				BoxCollider tipBox = tip.collider;
+				var tipBox = tip.collider;
 				tipBox.size = boxSize;
 
-				float halfTipLength = boneEndPos.magnitude / 2f;
+				var halfTipLength = boneEndPos.magnitude / 2f;
 				tipBox.center = Vector3.Scale(boneEndPos.normalized, Vector3.one * halfTipLength);
 			}
 		}
@@ -304,9 +300,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 			Transform longestT = null;
 
 			// find the farest object that attached to 'limb'
-			foreach (Transform t in limb.GetComponentsInChildren<Transform>())
+			foreach (var t in limb.GetComponentsInChildren<Transform>())
 			{
-				float length = (limb.position - t.position).sqrMagnitude;
+				var length = (limb.position - t.position).sqrMagnitude;
 				if (length > longestF)
 				{
 					longestF = length;
@@ -336,9 +332,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		static int GetXyzDirection(Vector3 node)
 		{
-			float x = Mathf.Abs(node.x);
-			float y = Mathf.Abs(node.y);
-			float z = Mathf.Abs(node.z);
+			var x = Mathf.Abs(node.x);
+			var y = Mathf.Abs(node.y);
+			var z = Mathf.Abs(node.z);
 
 			if (x > y & x > z)		// x is the bigest
 				return 0;
@@ -410,7 +406,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		static void AddComponentesTo(RagdollPartBox part, RagdollProperties ragdollProperties, float mass, bool addJoint)
 		{
 			AddComponentesToBase(part, ragdollProperties, mass, addJoint);
-			GameObject go = part.transform.gameObject;
+			var go = part.transform.gameObject;
 
 			part.collider = GetCollider<BoxCollider>(go.transform);
 			if (part.collider == null)
@@ -421,7 +417,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		static void AddComponentesTo(RagdollPartCapsule part, RagdollProperties ragdollProperties, float mass, bool addJoint)
 		{
 			AddComponentesToBase(part, ragdollProperties, mass, addJoint);
-			GameObject go = part.transform.gameObject;
+			var go = part.transform.gameObject;
 
 			part.collider = GetCollider<CapsuleCollider>(go.transform);
 			if (part.collider == null)
@@ -432,7 +428,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		static void AddComponentesTo(RagdollPartSphere part, RagdollProperties ragdollProperties, float mass, bool addJoint)
 		{
 			AddComponentesToBase(part, ragdollProperties, mass, addJoint);
-			GameObject go = part.transform.gameObject;
+			var go = part.transform.gameObject;
 
 			part.collider = GetCollider<SphereCollider>(go.transform);
 			if (part.collider == null)
@@ -442,7 +438,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 
 		static void AddComponentesToBase(RagdollPartBase part, RagdollProperties ragdollProperties, float mass, bool addJoint)
 		{
-			GameObject go = part.transform.gameObject;
+			var go = part.transform.gameObject;
 
 			part.rigidbody = go.GetComponent<Rigidbody>();
 			if (part.rigidbody == null)
@@ -468,9 +464,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 		static T GetCollider<T>(Transform transform)
 			where T : Collider
 		{
-			for (int i = 0; i < transform.childCount; ++i)
+			for (var i = 0; i < transform.childCount; ++i)
 			{
-				Transform child = transform.GetChild(i);
+				var child = transform.GetChild(i);
 
 				if (child.name.EndsWith(_colliderNodeSufix))
 				{
@@ -502,9 +498,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// <param name="node"></param>
 		private static void DeleteColliderNodes(Transform node)
 		{
-			for (int i = 0; i < node.childCount; ++i)
+			for (var i = 0; i < node.childCount; ++i)
 			{
-				Transform child = node.GetChild(i);
+				var child = node.GetChild(i);
 
 				if (child.name.EndsWith(_colliderNodeSufix))
 					GameObject.DestroyImmediate(child.gameObject);

@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace MatthewAssets
+namespace Matthew_Guz.Hits_Effects_FREE.Scene_Demo.Script
 {
 
     public class PrefabManager : MonoBehaviour
@@ -38,7 +37,7 @@ namespace MatthewAssets
                 RaycastHit hit;
                 if (floorCollider.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f))
                 {
-                    GameObject instance = Instantiate(prefabs[currentIndex], hit.point, Quaternion.identity);
+                    var instance = Instantiate(prefabs[currentIndex], hit.point, Quaternion.identity);
                     Destroy(instance, destroyDelay); // Destroy in 2 seconds
                 }
             }
@@ -72,8 +71,8 @@ namespace MatthewAssets
         }
         private void UpdateInfoText()  // Name and number of the prefab
         {
-            int currentNumber = currentIndex + 1;
-            int totalNumber = prefabs.Length;
+            var currentNumber = currentIndex + 1;
+            var totalNumber = prefabs.Length;
 
             infoText.text = $"({currentNumber}/{totalNumber}) \nCurrent effect: {prefabs[currentIndex].name} ";
         }

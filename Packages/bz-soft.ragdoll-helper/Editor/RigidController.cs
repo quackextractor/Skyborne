@@ -1,14 +1,13 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	class RigidController
 	{
 		public static void DrawControllers(Transform transform)
 		{
-			Rigidbody rigid = transform.GetComponent<Rigidbody>();
+			var rigid = transform.GetComponent<Rigidbody>();
 			if (rigid == null)
 				return;
 
@@ -19,9 +18,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 			else
 				rotatorRotation = transform.rotation;
 
-			Vector3 pos = transform.position + transform.TransformDirection(rigid.centerOfMass);
+			var pos = transform.position + transform.TransformDirection(rigid.centerOfMass);
 
-			Vector3 newPosition = Handles.PositionHandle(pos, rotatorRotation);
+			var newPosition = Handles.PositionHandle(pos, rotatorRotation);
 
 			if (newPosition == pos)
 				return;
@@ -37,7 +36,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			if (rigid == null)
 				return Vector3.zero;
 
-			Vector3 pos = transform.position + transform.TransformDirection(rigid.centerOfMass);
+			var pos = transform.position + transform.TransformDirection(rigid.centerOfMass);
 			return pos;
 		}
 	}

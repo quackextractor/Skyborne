@@ -1,12 +1,9 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using UnityEditor;
 using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	/// <summary>
 	/// Bone fixer. Main class that draws panel and do a lot of logic
@@ -139,9 +136,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 				var colliders = _go.GetComponentsInChildren<Collider>();
 
 				_transforms = new Transform[colliders.Length];
-				for (int i = 0; i < colliders.Length; ++i)
+				for (var i = 0; i < colliders.Length; ++i)
 				{
-					Transform transform = colliders[i].transform;
+					var transform = colliders[i].transform;
 					if (transform.name.EndsWith(ColliderHelper.ColliderRotatorNodeSufix, false, CultureInfo.InvariantCulture))
 					{
 						transform = transform.parent;
@@ -154,9 +151,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 				var joints = _go.GetComponentsInChildren<Joint>();
 
 				_transforms = new Transform[joints.Length];
-				for (int i = 0; i < joints.Length; ++i)
+				for (var i = 0; i < joints.Length; ++i)
 				{
-					Transform transform = joints[i].transform;
+					var transform = joints[i].transform;
 					_transforms[i] = transform;
 				}
 			}
@@ -165,9 +162,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 				var rigids = _go.GetComponentsInChildren<Rigidbody>();
 
 				_transforms = new Transform[rigids.Length];
-				for (int i = 0; i < rigids.Length; ++i)
+				for (var i = 0; i < rigids.Length; ++i)
 				{
-					Transform transform = rigids[i].transform;
+					var transform = rigids[i].transform;
 					_transforms[i] = transform;
 				}
 			}
@@ -220,7 +217,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		void CheckSelectedMode()
 		{
-			bool selectionChanged =
+			var selectionChanged =
 				_lastSelectedMode != _selectedMode |
 				_lastPivotMode != Tools.pivotMode |
 				_lastPivotRotation != Tools.pivotRotation;
@@ -242,9 +239,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		void DrawPlayerDirection()
 		{
-			float size = HandleUtility.GetHandleSize(_go.transform.position);
+			var size = HandleUtility.GetHandleSize(_go.transform.position);
 			var playerDirection = GetPlayerDirection();
-			Color backupColor = Handles.color;
+			var backupColor = Handles.color;
 			Handles.color = Color.yellow;
 			Handles.ArrowHandleCap(1, _go.transform.position, Quaternion.LookRotation(playerDirection, Vector3.up), size, EventType.Repaint);
 			Handles.color = backupColor;
@@ -258,14 +255,14 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		void DrawControls()
 		{
-			for (int i = 0; i < _transforms.Length; i++)
+			for (var i = 0; i < _transforms.Length; i++)
 			{
-				Transform transform = _transforms[i];
+				var transform = _transforms[i];
 
 				if (transform == null)
 					continue;
 
-				Vector3 pos = Vector3.zero;
+				var pos = Vector3.zero;
 
 				switch (_selectedMode)
 				{
@@ -280,13 +277,13 @@ namespace BzKovSoft.RagdollHelper.Editor
 						break;
 				}
 
-				float size = HandleUtility.GetHandleSize(pos) / 6f;
+				var size = HandleUtility.GetHandleSize(pos) / 6f;
 
 				if (Handles.Button(pos, Quaternion.identity, size, size, Handles.SphereHandleCap))
 				{
 					_curPointIndex = i;
 				
-					Quaternion rotatorRotation2 = ColliderHelper.GetRotatorRotarion(transform);
+					var rotatorRotation2 = ColliderHelper.GetRotatorRotarion(transform);
 				
 					if (!_buttonPressed)
 					{
@@ -323,8 +320,8 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		public Vector3 GetPlayerDirection()
 		{
-			Vector3 leftKnee = _leftKnee.transform.position - _pelvis.transform.position;
-			Vector3 rightKnee = _rightKnee.transform.position - _pelvis.transform.position;
+			var leftKnee = _leftKnee.transform.position - _pelvis.transform.position;
+			var rightKnee = _rightKnee.transform.position - _pelvis.transform.position;
 
 			return Vector3.Cross(leftKnee, rightKnee).normalized;
 		}
@@ -346,7 +343,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			style.alignment = TextAnchor.UpperCenter;
 
 			GUILayout.Label(_humanoidSelected ? "Humanoid selected" : "Simple object selected", style);
-			int selectedMode = (int)_selectedMode;
+			var selectedMode = (int)_selectedMode;
 			selectedMode = GUILayout.SelectionGrid(selectedMode, _dropDownListOptions, 1, EditorStyles.radioButton);
 			_selectedMode = (SelectedMode)selectedMode;
 

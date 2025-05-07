@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	/// <summary>
 	/// Calculates weight of each character's bone
@@ -48,7 +44,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 				Hand = 0f;
 			}
 
-			float checkSum =
+			var checkSum =
 				Pelvis +
 				Hip * 2f +
 				Knee * 2f +

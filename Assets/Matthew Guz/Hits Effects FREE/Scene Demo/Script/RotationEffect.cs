@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MatthewAssets
+namespace Matthew_Guz.Hits_Effects_FREE.Scene_Demo.Script
 {
 
 
@@ -19,7 +19,7 @@ namespace MatthewAssets
         void SetRandomRotation()
         {
             // Genera un ángulo aleatorio entre los valores mínimo y máximo
-            float randomZRotation = Random.Range(minZRotation, maxZRotation);
+            var randomZRotation = Random.Range(minZRotation, maxZRotation);
             // Aplica la rotación al transform del sistema de partículas
             particleSystem.transform.rotation = Quaternion.Euler(0f, 0f, randomZRotation);
         }

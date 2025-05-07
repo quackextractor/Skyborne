@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Profiling;
 
-namespace TrueClouds
+namespace TrueClouds.Scripts
 {
     public enum BlurQuality
     {
@@ -129,7 +129,7 @@ namespace TrueClouds
         protected virtual void Awake()
         {
             _camera = GetComponent<Camera>();
-            GameObject child = new GameObject("cloud camera");
+            var child = new GameObject("cloud camera");
             child.hideFlags = HideFlags.HideAndDontSave;
 
             child.transform.parent = transform;
@@ -249,7 +249,7 @@ namespace TrueClouds
 
         private RenderTexture GetTemporaryTexture(int divider, FilterMode mode)
         {
-            RenderTexture res = RenderTexture.GetTemporary(
+            var res = RenderTexture.GetTemporary(
                 (int)_camera.pixelRect.size.x / divider, 
                 (int)_camera.pixelRect.size.y / divider,
                 16, 
@@ -423,7 +423,7 @@ namespace TrueClouds
         {
             a.DiscardContents();
 
-            RenderTexture tmp = a;
+            var tmp = a;
             a = b;
             b = tmp;
         }
@@ -457,10 +457,10 @@ namespace TrueClouds
                 _renderMaterial.SetVector(LIGHT_POS_ID, lightPos);
             }
 
-            bool preciseDepth = DepthPrecision == DepthPrecision.High;
+            var preciseDepth = DepthPrecision == DepthPrecision.High;
             SetFeature("HIGH_RES_DEPTH", "MEDIUM_RES_DEPTH", preciseDepth);
 
-            bool haloOn = HaloDistance > 0.01f && HaloPower > 0.01f;
+            var haloOn = HaloDistance > 0.01f && HaloPower > 0.01f;
             SetFeature("HALO_ON", "HALO_OFF", haloOn);
 
             SetFeature("LATE_CUT", "EARLY_CUT", LateCut);
@@ -490,8 +490,8 @@ namespace TrueClouds
                 _renderMaterial.SetTexture(NOISE_ID, Noise);
                 _depthBlurMaterial.SetTexture(NOISE_ID, Noise);
 
-                Vector4 noiseParams = new Vector4(-Wind.x, -Wind.y, -Wind.z, 1 / (NoiseScale * DistanceToClouds));
-                Vector4 depthNoiseParams = new Vector4(-Wind.x, -Wind.y, -Wind.z, 1 / (DepthNoiseScale * DistanceToClouds));
+                var noiseParams = new Vector4(-Wind.x, -Wind.y, -Wind.z, 1 / (NoiseScale * DistanceToClouds));
+                var depthNoiseParams = new Vector4(-Wind.x, -Wind.y, -Wind.z, 1 / (DepthNoiseScale * DistanceToClouds));
 
                 _renderMaterial.SetVector(NOISE_PARAMS_ID, noiseParams);
                 _depthBlurMaterial.SetVector(NOISE_PARAMS_ID, depthNoiseParams);
@@ -500,7 +500,7 @@ namespace TrueClouds
                 _renderMaterial.SetFloat(DISPLACEMENT_NOISE_POWER_ID, DisplacementNoisePower * 0.07f * DistanceToClouds);
                 _depthBlurMaterial.SetFloat(DEPTH_NOISE_POWER_ID, DepthNoisePower * DistanceToClouds);
 
-                Vector3 sinTime = new Vector3(
+                var sinTime = new Vector3(
                     Mathf.Sin((Time.time * NoiseSinTimeScale          ) * 2 * Mathf.PI),
                     Mathf.Sin((Time.time * NoiseSinTimeScale + 0.3333f) * 2 * Mathf.PI),
                     Mathf.Sin((Time.time * NoiseSinTimeScale + 0.6666f) * 2 * Mathf.PI));
@@ -523,7 +523,7 @@ namespace TrueClouds
             _blurMaterial.SetFloat(LATE_CUT_THRESHOLD, LateCutThreshohld);
             _blurMaterial.SetFloat(LATE_CUT_POWER, LateCutPower);
 
-            float blurRadiusScaled = BlurRadius;
+            var blurRadiusScaled = BlurRadius;
             if (UseDepthFiltering)
             {
                 blurRadiusScaled *= Mathf.Pow(DistanceToClouds / _camera.farClipPlane, DepthFilteringPower);
@@ -533,7 +533,7 @@ namespace TrueClouds
             _depthBlurMaterial.SetFloat(BLUR_SIZE_ID, blurRadiusScaled);
             _blurMaterial.SetFloat(BLUR_SIZE_ID, blurRadiusScaled);
 
-            Matrix4x4 world2local = transform.worldToLocalMatrix;
+            var world2local = transform.worldToLocalMatrix;
             Vector4 
                 _CameraDirLD = world2local * Point(_camera.ScreenToWorldPoint(new Vector3(0, 0, 1))),
                 _CameraDirRD = world2local * Point(_camera.ScreenToWorldPoint(new Vector3(_camera.pixelWidth, 0, 1))),

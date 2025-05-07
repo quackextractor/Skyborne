@@ -4,7 +4,7 @@
 using System;
 using UnityEngine;
 
-namespace AmplifyOcclusion
+namespace AmplifyOcclusion.Plugins.Runtime
 {
 #pragma warning disable 429
 [Serializable]

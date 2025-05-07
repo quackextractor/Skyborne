@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	class RagdollController
 	{
@@ -54,7 +54,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		void RemoveRagdoll()
 		{
-			Ragdoller ragdoller = new Ragdoller(_go.transform, _getPlayerDirection());
+			var ragdoller = new Ragdoller(_go.transform, _getPlayerDirection());
 			ragdoller.ClearRagdoll();
 		}
 
@@ -63,7 +63,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		void CreateRagdoll()
 		{
-			Ragdoller ragdoller = new Ragdoller(_go.transform, _getPlayerDirection());
+			var ragdoller = new Ragdoller(_go.transform, _getPlayerDirection());
 			ragdoller.ApplyRagdoll(_ragdollTotalWeight, _ragdollProperties);
 		}
 

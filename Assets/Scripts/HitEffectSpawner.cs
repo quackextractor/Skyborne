@@ -9,10 +9,9 @@ public class HitEffectSpawner : MonoBehaviour
     // Call this method when an enemy is hit
     public void SpawnHitEffect(Vector3 hitPosition)
     {
-
         if (hitEffectPrefab != null)
         {
-            GameObject effect = Instantiate(hitEffectPrefab, hitPosition, Quaternion.identity);
+            var effect = Instantiate(hitEffectPrefab, hitPosition, Quaternion.identity);
             Destroy(effect, 2f);
         }
         else
@@ -21,12 +20,8 @@ public class HitEffectSpawner : MonoBehaviour
         }
 
         if (hitSound != null)
-        {
             AudioSource.PlayClipAtPoint(hitSound, hitPosition, hitSoundVolume);
-        }
         else
-        {
             Debug.LogWarning("hitSound is not assigned!");
-        }
     }
 }

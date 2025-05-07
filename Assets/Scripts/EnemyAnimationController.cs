@@ -9,25 +9,18 @@ public class EnemyAnimationController : MonoBehaviour
     private static readonly int MeleeAttack = Animator.StringToHash("MeleeAttack");
     private static readonly int Taunt = Animator.StringToHash("Taunt");
 
-    private enum State
-    {
-        Idle,
-        Walking,
-        MeleeAttack,
-        Taunt
-    }
-
-    private State _currentState;
-
-    private Animator _anim;
-    private NavMeshAgent _agent;
-    private Transform _player;
-    private Enemy _enemy;
-
     [Header("Taunt Settings")] [Tooltip("Seconds between possible taunts")] [SerializeField]
     private float tauntCooldown = 10f;
 
+    private NavMeshAgent _agent;
+
+    private Animator _anim;
+
+    private State _currentState;
+    private Enemy _enemy;
+
     private float _nextTauntTime;
+    private Transform _player;
 
     private void Awake()
     {
@@ -42,7 +35,7 @@ public class EnemyAnimationController : MonoBehaviour
 
     private void Update()
     {
-        float dist = Vector3.Distance(transform.position, _player.position);
+        var dist = Vector3.Distance(transform.position, _player.position);
         State targetState;
         if (dist <= _enemy.Stats.range)
             targetState = State.MeleeAttack;
@@ -81,13 +74,9 @@ public class EnemyAnimationController : MonoBehaviour
 
             case State.MeleeAttack:
                 if (_agent != null && _agent.isOnNavMesh)
-                {
                     _agent.isStopped = true;
-                }
                 else
-                {
                     Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
-                }
 
                 _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(MeleeAttack);
@@ -96,13 +85,9 @@ public class EnemyAnimationController : MonoBehaviour
 
             case State.Taunt:
                 if (_agent != null && _agent.isOnNavMesh)
-                {
                     _agent.isStopped = true;
-                }
                 else
-                {
                     Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
-                }
 
                 _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(Taunt);
@@ -119,17 +104,21 @@ public class EnemyAnimationController : MonoBehaviour
         if (_agent != null)
         {
             if (_agent.isOnNavMesh)
-            {
                 _agent.isStopped = false;
-            }
             else
-            {
                 Debug.LogWarning($"{gameObject.name}: Tried to resume NavMeshAgent, but it is not on a NavMesh.");
-            }
         }
         else
         {
             Debug.LogError($"{gameObject.name}: NavMeshAgent reference is null.");
         }
+    }
+
+    private enum State
+    {
+        Idle,
+        Walking,
+        MeleeAttack,
+        Taunt
     }
 }

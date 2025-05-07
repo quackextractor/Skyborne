@@ -1,9 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.Collections;
-using System;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	/// <summary>
 	/// Joint controller. Draws the controls for 'CharacterJoint' components in scene view.
@@ -16,7 +14,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// <param name="joint">Joint.</param>
 		public static void DrawControllers(BoneHelper boneHelper, Transform transform)
 		{
-			CharacterJoint joint = transform.GetComponent<CharacterJoint>();
+			var joint = transform.GetComponent<CharacterJoint>();
 			if (joint == null)
 				return;
 
@@ -32,19 +30,19 @@ namespace BzKovSoft.RagdollHelper.Editor
 				Undo.RecordObject(symJoint, "Setup symetric joint");
 			}
 
-			Color backupColor = Handles.color;
-			Vector3 position = joint.transform.position + joint.anchor;
-			float size = HandleUtility.GetHandleSize(position);										// red
-			Vector3 swingAxisDir = joint.transform.TransformDirection(joint.swingAxis).normalized;	// green
-			Vector3 axisDir = joint.transform.TransformDirection(joint.axis).normalized;			// yellow
-			Vector3 direction = GetDirection(joint, swingAxisDir, axisDir);
+			var backupColor = Handles.color;
+			var position = joint.transform.position + joint.anchor;
+			var size = HandleUtility.GetHandleSize(position);										// red
+			var swingAxisDir = joint.transform.TransformDirection(joint.swingAxis).normalized;	// green
+			var axisDir = joint.transform.TransformDirection(joint.axis).normalized;			// yellow
+			var direction = GetDirection(joint, swingAxisDir, axisDir);
 
 			DrawTwist(joint, symJoint, position, direction, axisDir, size);
 			DrawSwing1(joint, symJoint, position, direction, axisDir, swingAxisDir, size);
 			DrawSwing2(joint, symJoint, position, direction, swingAxisDir, size);
 
 			var currRot = Quaternion.LookRotation(swingAxisDir, axisDir);
-			Quaternion newRotation = Handles.RotationHandle(currRot, position);
+			var newRotation = Handles.RotationHandle(currRot, position);
 
 
 			joint.swingAxis = joint.transform.InverseTransformDirection(newRotation * Vector3.forward);	// green
@@ -59,12 +57,12 @@ namespace BzKovSoft.RagdollHelper.Editor
 			Handles.ArrowHandleCap(0, position, Quaternion.LookRotation(axisDir), size * 1.1f, EventType.Repaint);
 
 			Handles.color = new Color(0.7f, 0.7f, 0.0f, 1f);
-			Vector3 twistNoraml = axisDir;
+			var twistNoraml = axisDir;
 			var highLimit = joint.highTwistLimit;
 			var lowLimit = joint.lowTwistLimit;
 
-			float newHightLimit = highLimit.limit;
-			float newLowLimit = lowLimit.limit;
+			var newHightLimit = highLimit.limit;
+			var newLowLimit = lowLimit.limit;
 
 			newHightLimit = -ProcessLimit(position, twistNoraml, direction, size, -newHightLimit);
 			newLowLimit = -ProcessLimit(position, twistNoraml, direction, size, -newLowLimit);
@@ -97,9 +95,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 			Handles.ArrowHandleCap(0, position, Quaternion.LookRotation(swingAxisDir), size * 1.1f, EventType.Repaint);
 
 			Handles.color = new Color(0.0f, 0.7f, 0.0f, 1f);
-			Vector3 swing1Noraml = Vector3.Cross(axisDir, direction);
+			var swing1Noraml = Vector3.Cross(axisDir, direction);
 			var swing1Limit = joint.swing1Limit;
-			float newLimit = swing1Limit.limit;
+			var newLimit = swing1Limit.limit;
 			newLimit = ProcessLimit(position, swing1Noraml, direction, size, newLimit);
 			newLimit = -ProcessLimit(position, swing1Noraml, direction, size, -newLimit);
 
@@ -123,9 +121,9 @@ namespace BzKovSoft.RagdollHelper.Editor
 			Handles.ArrowHandleCap(0, position, Quaternion.LookRotation(direction), size * 2f, EventType.Repaint);
 			
 			Handles.color = new Color(0.0f, 0.0f, 0.7f, 1f);
-			Vector3 swing2Noraml = direction;
+			var swing2Noraml = direction;
 			var swing2Limit = joint.swing2Limit;
-			float newLimit = swing2Limit.limit;
+			var newLimit = swing2Limit.limit;
 			newLimit = ProcessLimit(position, swing2Noraml, swingAxisDir, size, newLimit);
 			newLimit = -ProcessLimit(position, swing2Noraml, swingAxisDir, size, -newLimit);
 
@@ -145,14 +143,14 @@ namespace BzKovSoft.RagdollHelper.Editor
 
 		static Vector3 GetDirection(CharacterJoint joint, Vector3 swingAxisDir, Vector3 axisDir)
 		{
-			Vector3 direction = Vector3.Cross(swingAxisDir, axisDir);
-			Vector3 direction2 = GetDirection(joint);
+			var direction = Vector3.Cross(swingAxisDir, axisDir);
+			var direction2 = GetDirection(joint);
 
 			//Handles.color = new Color(1f, 0f, 0f, 1f);
 			//Handles.DrawLine(joint.transform.position, joint.transform.position + direction * 100);
 			//Handles.color = new Color(0f, 1f, 0f, 1f);
 			//Handles.DrawLine(joint.transform.position, joint.transform.position + direction2 * 100);
-			float r = Vector3.Dot(direction, direction2);
+			var r = Vector3.Dot(direction, direction2);
 
 			return direction *Mathf.Sign(r);
 		}
@@ -165,18 +163,18 @@ namespace BzKovSoft.RagdollHelper.Editor
 				// in now children. Return direction related to parent
 				return (joint.transform.position - joint.connectedBody.transform.position).normalized;
 			}
-			Vector3 direction = Vector3.zero;
+			var direction = Vector3.zero;
 
-			for (int ch = 0; ch < transform.childCount; ++ch)
+			for (var ch = 0; ch < transform.childCount; ++ch)
 			{
 				// take to account colliders that attached to children
 				var colliders = transform.GetChild(ch).GetComponents<Collider>();
-				for (int i = 0; i < colliders.Length; ++i)
+				for (var i = 0; i < colliders.Length; ++i)
 				{
-					Collider collider = colliders[i];
-					CapsuleCollider cCollider = collider as CapsuleCollider;
-					BoxCollider bCollider = collider as BoxCollider;
-					SphereCollider sCollider = collider as SphereCollider;
+					var collider = colliders[i];
+					var cCollider = collider as CapsuleCollider;
+					var bCollider = collider as BoxCollider;
+					var sCollider = collider as SphereCollider;
 					if (cCollider != null)
 						direction += collider.transform.TransformDirection(cCollider.center);
 					if (bCollider != null)
@@ -191,7 +189,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 				return direction.normalized;
 
 			// otherwise, take direction to first child
-			for (int i = 0; i < transform.childCount; ++i)
+			for (var i = 0; i < transform.childCount; ++i)
 				direction += transform.GetChild(i).localPosition;
 			return transform.TransformDirection(direction).normalized;
 		}
@@ -207,14 +205,14 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// <param name="limit">Current limit</param>
 		static float ProcessLimit(Vector3 position, Vector3 planeNormal, Vector3 startDir, float size, float limit)
 		{
-			Vector3 cross = Vector3.Cross(planeNormal, startDir);
+			var cross = Vector3.Cross(planeNormal, startDir);
 			startDir = Vector3.Cross(cross, planeNormal);
 
-			Vector3 controllerDir = (Quaternion.AngleAxis(limit, planeNormal) * startDir);
-			Vector3 controllerPos = position + (controllerDir * size * 1.2f);
+			var controllerDir = (Quaternion.AngleAxis(limit, planeNormal) * startDir);
+			var controllerPos = position + (controllerDir * size * 1.2f);
 
-			Color backupColor = Handles.color;
-			Color newColor = backupColor * 2;
+			var backupColor = Handles.color;
+			var newColor = backupColor * 2;
 			newColor.a = 1f;
 			Handles.color = newColor;
 			Handles.DrawLine(position, controllerPos);
@@ -232,7 +230,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			Handles.color = newColor;
 
 #if UNITY_2022_1_OR_NEWER
-			bool positionChanged = Handles.FreeMoveHandle(controllerPos, size * 0.1f, Vector3.zero, Handles.SphereHandleCap) != controllerPos;
+			var positionChanged = Handles.FreeMoveHandle(controllerPos, size * 0.1f, Vector3.zero, Handles.SphereHandleCap) != controllerPos;
 #else
 			bool positionChanged = Handles.FreeMoveHandle(controllerPos, Quaternion.identity, size * 0.1f, Vector3.zero, Handles.SphereHandleCap) != controllerPos;
 #endif
@@ -241,7 +239,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 				var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
 				float rayDistance;
 
-				Plane plane = new Plane(planeNormal, position);
+				var plane = new Plane(planeNormal, position);
 				if (plane.Raycast(ray, out rayDistance))
 					controllerPos = ray.GetPoint(rayDistance);
 				controllerPos = position + (controllerPos - position).normalized * size * 1.2f;
@@ -251,7 +249,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 				// Determine if the degree value should be negative.  Here, a positive value
 				// from the dot product means that our vector is on the right of the reference vector   
 				// whereas a negative value means we're on the left.
-				float sign = Mathf.Sign(Vector3.Dot(cross, controllerPos - position));
+				var sign = Mathf.Sign(Vector3.Dot(cross, controllerPos - position));
 				limit *= sign;
 
 				limit = Mathf.Round(limit / 5f) * 5f;	// i need this to snap rotation

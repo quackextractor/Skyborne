@@ -1,21 +1,14 @@
 using UnityEngine;
 
-public class Fireball : Ability
+namespace Abilities
 {
-    public GameObject firePrefab;
-    
-    protected void Start()
+    public class Fireball : Ability
     {
-       
-    }
+        public GameObject firePrefab;
 
-    private void Update()
-    {
-        
-    }
-
-    public override void AttackEffect()
-    {
-        Instantiate(firePrefab);
+        public override void AttackEffect()
+        {
+            Instantiate(firePrefab);
+        }
     }
 }

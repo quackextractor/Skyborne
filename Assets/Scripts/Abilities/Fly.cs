@@ -1,46 +1,42 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.Serialization;
 
-public class Fly:MonoBehaviour
+namespace Abilities
 {
- 
-    private GameObject player;
-    private Vector3 _position;
-    [SerializeField] private float _timestamp = 4 ;
-    [SerializeField] private float _attack = 10 ;
-    [SerializeField] private float _knockback = 30;
-    [SerializeField] private float speed = 0.1f ;
-    // Start is called before the first frame update
-    private void Start()
+    public class Fly : MonoBehaviour
     {
-        
-        player = GameObject.FindGameObjectWithTag("Player");
-        _position = player.transform.forward.normalized;
-        transform.position = player.transform.position + player.transform.forward;
-        _timestamp += Time.time;
-    }
+        [FormerlySerializedAs("_timestamp")] [SerializeField] private float timestamp = 4;
+        [FormerlySerializedAs("_attack")] [SerializeField] private float attack = 10;
+        [FormerlySerializedAs("_knockback")] [SerializeField] private float knockback = 30;
+        [SerializeField] private float speed = 0.1f;
+        private Vector3 _position;
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if (_timestamp < Time.time)
+        private GameObject player;
+
+        // Start is called before the first frame update
+        private void Start()
         {
-            Destroy(this.gameObject);
+            player = GameObject.FindGameObjectWithTag("Player");
+            _position = player.transform.forward.normalized;
+            transform.position = player.transform.position + player.transform.forward;
+            timestamp += Time.time;
         }
-        transform.position += _position * speed * Time.deltaTime;
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.name != "Player" && other.TryGetComponent<Target>(out Target target))
+
+        // Update is called once per frame
+        private void Update()
         {
-            target.TakeAttack(_position,_attack, _knockback);
-           // target.ApplyKnockbackForce(_position, _knockback*2);
-            Destroy(this.gameObject);
+            if (timestamp < Time.time) Destroy(gameObject);
+            transform.position += _position * (speed * Time.deltaTime);
         }
-        else
+
+        private void OnTriggerEnter(Collider other)
         {
-            return;
+            if (other.name != "Player" && other.TryGetComponent<Target>(out var target))
+            {
+                target.TakeAttack(_position, attack, knockback);
+                // target.ApplyKnockbackForce(_position, _knockback*2);
+                Destroy(gameObject);
+            }
         }
     }
 }

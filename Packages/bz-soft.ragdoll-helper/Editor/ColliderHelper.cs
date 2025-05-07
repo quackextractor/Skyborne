@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	static class ColliderHelper
 	{
@@ -20,7 +17,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		public static Quaternion GetRotatorRotarion(Transform boneTransform)
 		{
-			Collider collider = GetCollider(boneTransform);
+			var collider = GetCollider(boneTransform);
 			return collider.transform.rotation;
 		}
 
@@ -29,11 +26,11 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		public static Vector3 GetRotatorPosition(Transform boneTransform)
 		{
-			Collider collider = GetCollider(boneTransform);
-			CapsuleCollider cCollider = collider as CapsuleCollider;
-			BoxCollider bCollider = collider as BoxCollider;
-			SphereCollider sCollider = collider as SphereCollider;
-			MeshCollider mCollider = collider as MeshCollider;
+			var collider = GetCollider(boneTransform);
+			var cCollider = collider as CapsuleCollider;
+			var bCollider = collider as BoxCollider;
+			var sCollider = collider as SphereCollider;
+			var mCollider = collider as MeshCollider;
 
 			Vector3 colliderCenter;
 			if (cCollider != null) colliderCenter = cCollider.center;
@@ -52,7 +49,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		public static void RotateCollider(Transform transform, Quaternion rotate)
 		{
-			Vector3 prevPosition = GetColliderPosition(transform);
+			var prevPosition = GetColliderPosition(transform);
 
 			Undo.RecordObject(transform, "Rotate collider");
 			transform.rotation = rotate;
@@ -65,10 +62,10 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		public static Vector3 GetColliderPosition(Transform transform)
 		{
-			Collider collider = GetCollider(transform);
-			CapsuleCollider cCollider = collider as CapsuleCollider;
-			BoxCollider bCollider = collider as BoxCollider;
-			SphereCollider sCollider = collider as SphereCollider;
+			var collider = GetCollider(transform);
+			var cCollider = collider as CapsuleCollider;
+			var bCollider = collider as BoxCollider;
+			var sCollider = collider as SphereCollider;
 
 			Vector3 center;
 			if (cCollider != null) center = cCollider.center;
@@ -85,14 +82,14 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		public static void SetColliderPosition(Transform transform, Vector3 position)
 		{
-			Collider collider = GetCollider(transform);
+			var collider = GetCollider(transform);
 			Undo.RecordObject(collider, "Set collider position");
 
-			CapsuleCollider cCollider = collider as CapsuleCollider;
-			BoxCollider bCollider = collider as BoxCollider;
-			SphereCollider sCollider = collider as SphereCollider;
+			var cCollider = collider as CapsuleCollider;
+			var bCollider = collider as BoxCollider;
+			var sCollider = collider as SphereCollider;
 
-			Vector3 center = collider.transform.InverseTransformPoint(position);
+			var center = collider.transform.InverseTransformPoint(position);
 			if (cCollider != null) cCollider.center = center;
 			else if (bCollider != null) bCollider.center = center;
 			else if (sCollider != null) sCollider.center = center;
@@ -105,7 +102,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 		/// </summary>
 		public static Collider GetCollider(Transform transform)
 		{
-			Collider collider = transform.GetComponent<Collider>();
+			var collider = transform.GetComponent<Collider>();
 			if (collider == null)
 			{
 				var rotatorName = transform.name + ColliderRotatorNodeSufix;
@@ -135,11 +132,11 @@ namespace BzKovSoft.RagdollHelper.Editor
 				return rotatorTransform;
 
 			// if rotator node was not found, create it
-			Collider collider = boneTransform.GetComponent<Collider>();
+			var collider = boneTransform.GetComponent<Collider>();
 			if (collider == null)
 				throw new ArgumentException("Bone '" + boneTransform.name + "' does not have collider attached to it or ColliderRotatorNode");
 
-			GameObject colliderRotator = new GameObject(colliderRotatorName);
+			var colliderRotator = new GameObject(colliderRotatorName);
 			Undo.RegisterCreatedObjectUndo(colliderRotator, "Create Rotator");
 			rotatorTransform = colliderRotator.transform;
 
@@ -158,12 +155,12 @@ namespace BzKovSoft.RagdollHelper.Editor
 		static void ReattachCollider(GameObject from, GameObject to)
 		{
 			var oldCollider = from.GetComponent<Collider>();
-			CapsuleCollider cCollider = oldCollider as CapsuleCollider;
-			BoxCollider bCollider = oldCollider as BoxCollider;
+			var cCollider = oldCollider as CapsuleCollider;
+			var bCollider = oldCollider as BoxCollider;
 			Collider newCollider;
 			if (cCollider != null)
 			{
-				CapsuleCollider newCapsuleCollider = Undo.AddComponent<CapsuleCollider>(to);
+				var newCapsuleCollider = Undo.AddComponent<CapsuleCollider>(to);
 				newCollider = newCapsuleCollider;
 				newCapsuleCollider.direction = cCollider.direction;
 				newCapsuleCollider.radius = cCollider.radius;
@@ -172,7 +169,7 @@ namespace BzKovSoft.RagdollHelper.Editor
 			}
 			else if (bCollider != null)
 			{
-				BoxCollider newBoxCollider = Undo.AddComponent<BoxCollider>(to);
+				var newBoxCollider = Undo.AddComponent<BoxCollider>(to);
 				newCollider = newBoxCollider;
 				newBoxCollider.size = bCollider.size;
 				newBoxCollider.center = bCollider.center;

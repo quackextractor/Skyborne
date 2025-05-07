@@ -1,25 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelLoad : MonoBehaviour
+namespace Menu
 {
-    // Start is called before the first frame update
-    void Start()
+    public class LevelLoad : MonoBehaviour
     {
-        
-    }
+        // Start is called before the first frame update
+        private void Start()
+        {
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void LoadLevel() {
-        SceneManager.LoadScene(1);
-    }
-    public void Terminate() {
-        Application.Quit();
+        // Update is called once per frame
+        private void Update()
+        {
+        }
+
+        public void LoadLevel()
+        {
+            SceneManager.LoadScene(1);
+        }
+
+        public void Terminate()
+        {
+            Application.Quit();
+        }
     }
 }

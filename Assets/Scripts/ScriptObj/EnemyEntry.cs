@@ -1,16 +1,16 @@
+using System;
 using UnityEngine;
 
 namespace ScriptObj
 {
-    [System.Serializable]
+    [Serializable]
     public class EnemyEntry
     {
-        [Header("Enemy Settings")]
-        public Enemy enemyPrefab;     // Reference to the enemy prefab.
+        [Header("Enemy Settings")] public Enemy enemyPrefab; // Reference to the enemy prefab.
+
         public EnemyStats enemyStats; // Stats to assign to the enemy.
 
-        [Header("Spawn Position (X,Y)")]
-        [Tooltip("x and y positions are limited to your desired interval.")]
+        [Header("Spawn Position (X,Y)")] [Tooltip("x and y positions are limited to your desired interval.")]
         public Vector2 position;
     }
 }

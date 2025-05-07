@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrueClouds;
 using UnityEditor;
 using UnityEngine;
-using System.Collections;
 
-namespace TrueClouds
+namespace TrueClouds.Scripts.Editor
 {
     [CustomEditor(typeof (CloudCamera), true)]
-    public class CloudCameraEditor : Editor
+    public class CloudCameraEditor : UnityEditor.Editor
     {
         private CloudCamera _cloudCamera;
         private GUIStyle _lockedStyle;
@@ -87,7 +85,7 @@ namespace TrueClouds
 
         private EditTool EditTypeToolbar(EditTool selected)
         {
-            string[] toolbar = new string[] { "General", "Light", "Blur", "Noise" };
+            var toolbar = new string[] { "General", "Light", "Blur", "Noise" };
             return (EditTool)GUILayout.Toolbar((int)selected, toolbar);
         }
 
@@ -152,8 +150,8 @@ namespace TrueClouds
 
         private void DrawNoiseScales()
         {
-            float noiseScale = _cloudCamera.NoiseScale;
-            float depthNoiseScale = _cloudCamera.DepthNoiseScale;
+            var noiseScale = _cloudCamera.NoiseScale;
+            var depthNoiseScale = _cloudCamera.DepthNoiseScale;
 
             using (new IndentLevelScope())
             {
@@ -187,9 +185,9 @@ namespace TrueClouds
         {
             using (new IndentLevelScope())
             {
-                float normal = _cloudCamera.NormalNoisePower;
-                float displacement = _cloudCamera.DisplacementNoisePower;
-                float depth = _cloudCamera.DepthNoisePower;
+                var normal = _cloudCamera.NormalNoisePower;
+                var displacement = _cloudCamera.DisplacementNoisePower;
+                var depth = _cloudCamera.DepthNoisePower;
                 _cloudCamera.NormalNoisePower = EditorGUILayout.Slider(
                     new GUIContent("Normal", "Power of noise for normals"), _cloudCamera.NormalNoisePower, 0.01f, 5);
                 _cloudCamera.DisplacementNoisePower = EditorGUILayout.Slider(
@@ -218,10 +216,10 @@ namespace TrueClouds
             _areNoizePowersLocked = EditorGUI.Toggle(lockRect, _areNoizePowersLocked, _lockedStyle);
 
             Handles.color = _areNoizePowersLocked ? new Color(0.3f, 0.3f, 1f) : new Color(0.3f, 0.3f, 0.3f);
-            Vector2 center = lockRect.center + Vector2.right * 10;
-            Vector2 top = center - Vector2.up * 17;
-            Vector2 bottom = center - Vector2.down * 17;
-            Vector2 right = Vector2.right * 10;
+            var center = lockRect.center + Vector2.right * 10;
+            var top = center - Vector2.up * 17;
+            var bottom = center - Vector2.down * 17;
+            var right = Vector2.right * 10;
 
             Handles.DrawLine(top - Vector2.up * 2, bottom);
             Handles.DrawLine(top - Vector2.up * 2+ Vector2.right, bottom + Vector2.right);
@@ -244,10 +242,10 @@ namespace TrueClouds
             _areNoizeScalesLocked = EditorGUI.Toggle(lockRect, _areNoizeScalesLocked, _lockedStyle);
 
             Handles.color = _areNoizeScalesLocked ? new Color(0.3f, 0.3f, 1f) : new Color(0.3f, 0.3f, 0.3f);
-            Vector2 center = lockRect.center + Vector2.right * 10;
-            Vector2 top = center - Vector2.up * (17 / 2 + 2);
-            Vector2 bottom = center - Vector2.down * (17 / 2 + 1);
-            Vector2 right = Vector2.right * 10;
+            var center = lockRect.center + Vector2.right * 10;
+            var top = center - Vector2.up * (17 / 2 + 2);
+            var bottom = center - Vector2.down * (17 / 2 + 1);
+            var right = Vector2.right * 10;
 
             Handles.DrawLine(top - Vector2.up * 2, bottom);
             Handles.DrawLine(top - Vector2.up * 2 + Vector2.right, bottom + Vector2.right);
@@ -343,12 +341,12 @@ namespace TrueClouds
 
         private static LayerMask LayerMaskField(GUIContent label, LayerMask layerMask)
         {
-            List<string> layers = new List<string>();
-            List<int> layerNumbers = new List<int>();
+            var layers = new List<string>();
+            var layerNumbers = new List<int>();
 
-            for (int i = 0; i < 32; i++)
+            for (var i = 0; i < 32; i++)
             {
-                string layerName = LayerMask.LayerToName(i);
+                var layerName = LayerMask.LayerToName(i);
                 if (layerName != "")
                 {
                     layers.Add(layerName);
@@ -360,15 +358,15 @@ namespace TrueClouds
                     layerNumbers.Add(i);
                 }
             }
-            int maskWithoutEmpty = 0;
-            for (int i = 0; i < layerNumbers.Count; i++)
+            var maskWithoutEmpty = 0;
+            for (var i = 0; i < layerNumbers.Count; i++)
             {
                 if (((1 << layerNumbers[i]) & layerMask.value) > 0)
                     maskWithoutEmpty |= (1 << i);
             }
             maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
-            int mask = 0;
-            for (int i = 0; i < layerNumbers.Count; i++)
+            var mask = 0;
+            for (var i = 0; i < layerNumbers.Count; i++)
             {
                 if ((maskWithoutEmpty & (1 << i)) > 0)
                     mask |= (1 << layerNumbers[i]);

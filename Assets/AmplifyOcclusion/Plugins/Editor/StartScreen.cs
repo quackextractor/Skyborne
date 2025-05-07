@@ -1,13 +1,14 @@
 // Amplify Occlusion 2 - Robust Ambient Occlusion for Unity
 // Copyright (c) Amplify Creations, Lda <info@amplify.pt>
 
-using UnityEngine;
-using UnityEditor;
 using System;
-using UnityEngine.Networking;
 using System.Collections;
+using AmplifyOcclusion.Plugins.Runtime;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Networking;
 
-namespace AmplifyOcclusion
+namespace AmplifyOcclusion.Plugins.Editor
 {
 	public class Preferences
 	{
@@ -20,7 +21,7 @@ namespace AmplifyOcclusion
 		[MenuItem( "Window/Amplify Occlusion/Start Screen", false, 19 )]
 		public static void Init()
 		{
-			StartScreen window = (StartScreen)GetWindow( typeof( StartScreen ), true, "Amplify Occlusion Start Screen" );
+			var window = (StartScreen)GetWindow( typeof( StartScreen ), true, "Amplify Occlusion Start Screen" );
 			window.minSize = new Vector2( 650, 500 );
 			window.maxSize = new Vector2( 650, 500 );
 			window.Show();
@@ -31,15 +32,15 @@ namespace AmplifyOcclusion
 		private static readonly string IconGUID = "13ffadb74e0cf6248ac0430224ad2090";
 		private static readonly string BannerGUID = "a4949af6361c47942902cebcc0089340";
 
-		public static readonly string BannerInfoURL = "http://amplify.pt/Banner/AOInfo.json";
-		public static readonly string PackageRefURL = "http://amplify.pt/Banner/PackageRef.json";
+		public static readonly string BannerInfoURL = "https://amplify.pt/Banner/AOInfo.json";
+		public static readonly string PackageRefURL = "https://amplify.pt/Banner/PackageRef.json";
 
-		private static readonly string WikiURL = "http://wiki.amplify.pt/index.php?title=Unity_Products:Amplify_Occlusion";
+		private static readonly string WikiURL = "https://wiki.amplify.pt/index.php?title=Unity_Products:Amplify_Occlusion";
 
 		private static readonly string DiscordURL = "https://discordapp.com/invite/EdrVAP5";
 		private static readonly string ForumURL = "https://forum.unity.com/threads/free-introducing-amplify-occlusion-2-ground-truth-ambient-occlusion-up-to-2x-faster.399022/";
 
-		private static readonly string SiteURL = "http://amplify.pt/download/";
+		private static readonly string SiteURL = "https://amplify.pt/download/";
 		private static readonly string StoreURL = "https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/amplify-occlusion-56739?aid=1011lPwI&pubref=" + RefID;
 
 		private static readonly GUIContent ResourcesTitle = new GUIContent( "Learning Resources" );
@@ -87,7 +88,7 @@ namespace AmplifyOcclusion
 
 			if( textIcon == null )
 			{
-				Texture icon = EditorGUIUtility.IconContent( "TextAsset Icon" ).image;
+				var icon = EditorGUIUtility.IconContent( "TextAsset Icon" ).image;
 				var cache = RenderTexture.active;
 				RenderTexture.active = rt;
 				Graphics.Blit( icon, rt );
@@ -167,12 +168,12 @@ namespace AmplifyOcclusion
 				// get banner information and texture
 				StartBackgroundTask( StartRequest( BannerInfoURL, ( www ) =>
 				{
-					BannerInfo info = BannerInfo.CreateFromJSON( www.downloadHandler.text );
+					var info = BannerInfo.CreateFromJSON( www.downloadHandler.text );
 					if( info != null && !string.IsNullOrEmpty( info.ImageUrl ) )
 					{
 						StartBackgroundTask( StartTextureRequest( info.ImageUrl, ( www2 ) =>
 						{
-							Texture2D texture = DownloadHandlerTexture.GetContent( www2 );
+							var texture = DownloadHandlerTexture.GetContent( www2 );
 							if( texture != null )
 								m_newsImage = texture;
 						} ) );
@@ -184,9 +185,9 @@ namespace AmplifyOcclusion
 					}
 
 					// improve this later
-					int major = m_bannerInfo.Version / 100;
-					int minor = ( m_bannerInfo.Version / 10 ) - major * 10;
-					int release = m_bannerInfo.Version - major * 100 - minor * 10;
+					var major = m_bannerInfo.Version / 100;
+					var minor = ( m_bannerInfo.Version / 10 ) - major * 10;
+					var release = m_bannerInfo.Version - major * 100 - minor * 10;
 					m_newVersion = major + "." + minor + "." + release;
 					Repaint();
 				} ) );
@@ -235,7 +236,7 @@ namespace AmplifyOcclusion
 					if( m_packageRef.Links != null )
 					{
 						var webIcon = EditorGUIUtility.IconContent( "BuildSettings.Web.Small" ).image;
-						for( int i = 0; i < m_packageRef.Links.Length; i++ )
+						for( var i = 0; i < m_packageRef.Links.Length; i++ )
 						{
 							var gc = new GUIContent( " " + m_packageRef.Links[ i ].Title, webIcon );
 							if( GUILayout.Button( gc, m_buttonStyle ) )
@@ -268,13 +269,13 @@ namespace AmplifyOcclusion
 					if( m_newsImage != null )
 					{
 						var gc = new GUIContent( m_newsImage );
-						int width = 650 - 175 - 9 - 8;
+						var width = 650 - 175 - 9 - 8;
 						width = Mathf.Min( m_newsImage.width, width );
-						int height = m_newsImage.height;
+						var height = m_newsImage.height;
 						height = (int)( ( width + 8 ) * ( (float)m_newsImage.height / (float)m_newsImage.width ) );
 
 
-						Rect buttonRect = EditorGUILayout.GetControlRect( false, height );
+						var buttonRect = EditorGUILayout.GetControlRect( false, height );
 						EditorGUIUtility.AddCursorRect( buttonRect, MouseCursor.Link );
 						if( GUI.Button( buttonRect, gc, m_linkStyle ) )
 						{
@@ -373,7 +374,7 @@ namespace AmplifyOcclusion
 
 		public static IEnumerator StartTextureRequest( string url, SuccessCall success = null )
 		{
-			using( UnityWebRequest www = UnityWebRequestTexture.GetTexture( url ) )
+			using( var www = UnityWebRequestTexture.GetTexture( url ) )
 			{
 #if UNITY_2017_2_OR_NEWER
 				yield return www.SendWebRequest();
@@ -467,7 +468,7 @@ namespace AmplifyOcclusion
 		public PackageRef( string[] titles, string[] urls )
 		{
 			Links = new LinkRef[ titles.Length ];
-			for( int i = 0; i < titles.Length; i++ )
+			for( var i = 0; i < titles.Length; i++ )
 			{
 				Links[ i ] = new LinkRef( titles[ i ], urls[ i ] );
 			}
@@ -488,7 +489,7 @@ namespace AmplifyOcclusion
 
 			if( !EditorApplication.isPlayingOrWillChangePlaymode )
 			{
-				bool show = false;
+				var show = false;
 				if( !EditorPrefs.HasKey( Preferences.PrefStartUp ) )
 				{
 					show = true;
@@ -504,7 +505,7 @@ namespace AmplifyOcclusion
 						{
 							StartScreen.StartBackgroundTask( StartScreen.StartRequest( StartScreen.BannerInfoURL, ( www ) =>
 							{
-								BannerInfo info = BannerInfo.CreateFromJSON( www.downloadHandler.text );
+								var info = BannerInfo.CreateFromJSON( www.downloadHandler.text );
 								if( info != null )
 								{
 									if( DateTime.Now < DateTime.Parse( info.ShowBefore ) && !EditorPrefs.GetBool( Preferences.PrefForceUpdate, false ) )

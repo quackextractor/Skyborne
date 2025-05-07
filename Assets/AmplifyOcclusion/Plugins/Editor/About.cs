@@ -1,11 +1,11 @@
 // Amplify Occlusion 2 - Robust Ambient Occlusion for Unity
 // Copyright (c) Amplify Creations, Lda <info@amplify.pt>
 
-using UnityEngine;
+using AmplifyOcclusion.Plugins.Runtime;
 using UnityEditor;
+using UnityEngine;
 
-
-namespace AmplifyOcclusion
+namespace AmplifyOcclusion.Plugins.Editor
 {
 public class About : EditorWindow
 {
@@ -18,7 +18,7 @@ public class About : EditorWindow
 	[MenuItem( "Window/Amplify Occlusion/About...", false, 20 )]
 	static void Init()
 	{
-		About window = (About)GetWindow( typeof( About ), true, "About Amplify Occlusion" );
+		var window = (About)GetWindow( typeof( About ), true, "About Amplify Occlusion" );
 
 		window.minSize = new Vector2( 502, 290 );
 		window.maxSize = new Vector2( 502, 290 );
@@ -29,10 +29,10 @@ public class About : EditorWindow
 
 	public void OnFocus()
 	{
-		string path = AssetDatabase.GUIDToAssetPath( AboutImageGUID );
+		var path = AssetDatabase.GUIDToAssetPath( AboutImageGUID );
 		if ( !string.IsNullOrEmpty( path ) )
 		{
-			TextureImporter importer = AssetImporter.GetAtPath( path ) as TextureImporter;
+			var importer = AssetImporter.GetAtPath( path ) as TextureImporter;
 			if ( importer != null )
 			{
 				if( importer.textureType != TextureImporterType.GUI )
@@ -67,7 +67,7 @@ public class About : EditorWindow
 		GUILayout.FlexibleSpace();
 		GUILayout.EndHorizontal();
 
-		GUIStyle labelStyle = new GUIStyle( EditorStyles.label );
+		var labelStyle = new GUIStyle( EditorStyles.label );
 
 		labelStyle.alignment = TextAnchor.MiddleCenter;
 		labelStyle.wordWrap = true;

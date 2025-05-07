@@ -1,8 +1,11 @@
-public abstract class Ability : Weapon
+namespace Abilities
 {
-    public abstract override void AttackEffect();
-
-    public override void StartAttack()
+    public abstract class Ability : Weapon
     {
+        public abstract override void AttackEffect();
+
+        public override void StartAttack()
+        {
+        }
     }
 }

@@ -1,11 +1,10 @@
-using Unity.VisualScripting;
-using UnityEngine;
-
-public class Gust : Ability
+namespace Abilities
 {
-    public override void AttackEffect()
+    public class Gust : Ability
     {
-       
-        if (!_isAttacking) StartCoroutine(Attack());
+        public override void AttackEffect()
+        {
+            if (!isAttacking) StartCoroutine(Attack());
+        }
     }
 }

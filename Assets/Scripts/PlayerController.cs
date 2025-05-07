@@ -3,30 +3,32 @@ using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 5f;
+    [Header("Movement Settings")] [SerializeField]
+    private float moveSpeed = 5f;
+
     [SerializeField] private float mouseSensitivity = 2f;
 
-    [FormerlySerializedAs("DashForce")]
-    [Header("Dash Settings")]
-    [SerializeField] private float dashForce = 60f;
+    [FormerlySerializedAs("DashForce")] [Header("Dash Settings")] [SerializeField]
+    private float dashForce = 60f;
+
     [SerializeField] private float cooldown = 0.5f;
     [SerializeField] private float moveLock = 0.5f;
     [SerializeField] private int amountDash = 3;
 
-    [Header("Speed Particles")]
-    [Tooltip("Particle system to emit when moving fast.")]
-    [SerializeField] private ParticleSystem speedParticles;
-    [Tooltip("Start emitting particles when speed exceeds this value.")]
-    [SerializeField] private float speedThreshold = 10f;
+    [Header("Speed Particles")] [Tooltip("Particle system to emit when moving fast.")] [SerializeField]
+    private ParticleSystem speedParticles;
 
-    private Rigidbody _rb;
+    [Tooltip("Start emitting particles when speed exceeds this value.")] [SerializeField]
+    private float speedThreshold = 10f;
+
+    private readonly float _verticalRotationLimit = 80f;
+    private float _dashRefillTimestamp;
     private ParticleSystem.EmissionModule _emissionModule;
 
     private float _moveTimestamp;
-    private float _dashRefillTimestamp;
+
+    private Rigidbody _rb;
     private float _verticalRotation;
-    private readonly float _verticalRotationLimit = 80f;
 
     private void Start()
     {
@@ -60,21 +62,21 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.time < _moveTimestamp) return;
 
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-        Vector3 move = new Vector3(h, 0, v) * (moveSpeed * Time.deltaTime);
+        var h = Input.GetAxis("Horizontal");
+        var v = Input.GetAxis("Vertical");
+        var move = new Vector3(h, 0, v) * (moveSpeed * Time.deltaTime);
         transform.Translate(move, Space.Self);
     }
 
     private void HandleMouseLook()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         _verticalRotation -= mouseY;
         _verticalRotation = Mathf.Clamp(_verticalRotation, -_verticalRotationLimit, _verticalRotationLimit);
 
-        Camera.main.transform.localRotation = Quaternion.Euler(_verticalRotation, 0, 0);
+        if (Camera.main) Camera.main.transform.localRotation = Quaternion.Euler(_verticalRotation, 0, 0);
         transform.Rotate(0, mouseX, 0);
     }
 
@@ -100,8 +102,8 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        Vector3 inputDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        Vector3 dashDir = inputDir.magnitude > 0.1f
+        var inputDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        var dashDir = inputDir.magnitude > 0.1f
             ? transform.TransformDirection(inputDir.normalized)
             : transform.forward;
 
@@ -112,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
     private void ToggleSpeedParticles()
     {
-        float currentSpeed = _rb.velocity.magnitude;
+        var currentSpeed = _rb.velocity.magnitude;
 
         if (currentSpeed > speedThreshold)
         {
@@ -120,9 +122,9 @@ public class PlayerController : MonoBehaviour
                 _emissionModule.enabled = true;
 
             // Enhance visibility by increasing emission range and sensitivity
-            float emissionRate = Mathf.Lerp(50f, 300f, Mathf.Clamp01((currentSpeed - speedThreshold) / (moveSpeed * 1.5f)));
+            var emissionRate =
+                Mathf.Lerp(50f, 300f, Mathf.Clamp01((currentSpeed - speedThreshold) / (moveSpeed * 1.5f)));
             _emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(emissionRate);
-
         }
         else
         {
@@ -130,5 +132,4 @@ public class PlayerController : MonoBehaviour
                 _emissionModule.enabled = false;
         }
     }
-
 }

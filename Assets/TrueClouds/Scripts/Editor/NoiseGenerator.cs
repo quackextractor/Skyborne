@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Profiling;
 using Random = UnityEngine.Random;
 
-namespace TrueClouds
+namespace TrueClouds.Scripts.Editor
 {
     public class NoiseGenerator: EditorWindow
     {
@@ -46,7 +46,7 @@ namespace TrueClouds
 
         public static void Open(CloudCamera target)
         {
-            NoiseGenerator window = GetWindow<NoiseGenerator>();
+            var window = GetWindow<NoiseGenerator>();
 
             window._target = target;
             window.ShowAuxWindow();
@@ -67,11 +67,11 @@ namespace TrueClouds
 
         Texture2D SphereNoise(int size)
         {
-            Texture2D texture = new Texture2D(size, size, TextureFormat.ARGB32, false);
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false);
             texture.wrapMode = TextureWrapMode.Repeat;
-            for (int i = 0; i < size; i++)
+            for (var i = 0; i < size; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (var j = 0; j < size; j++)
                 {
                     Vector3 color;
                     switch (InitialNoiseType)
@@ -98,11 +98,11 @@ namespace TrueClouds
 
         Texture2D DirectionNoize(int size)
         {
-            Texture2D texture = new Texture2D(size, size, TextureFormat.ARGB32, false);
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false);
             texture.wrapMode = TextureWrapMode.Repeat;
-            for (int i = 0; i < size; i++)
+            for (var i = 0; i < size; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (var j = 0; j < size; j++)
                 {
                     Vector3 color;
                     color = new Vector3(Random.value, Random.value, Random.value);
@@ -119,7 +119,7 @@ namespace TrueClouds
             _octaves = new Texture2D[Octaves];
             _octaveDirections = new Texture2D[Octaves];
             float divider = 1;
-            for (int octave = 0; octave < Octaves; octave++)
+            for (var octave = 0; octave < Octaves; octave++)
             {
                 _octaves[octave] = SphereNoise((int) (Size / divider));
                 _octaveDirections[octave] = DirectionNoize((int)(Size / divider));
@@ -137,36 +137,36 @@ namespace TrueClouds
         {
             var pixels = _texture.GetPixels();
 
-            Vector3 half = Vector3.one * .5f;
+            var half = Vector3.one * .5f;
 
-            float noiseMultiplier = 1 / Mathf.Pow(OctaveDownscale, Octaves);
+            var noiseMultiplier = 1 / Mathf.Pow(OctaveDownscale, Octaves);
             Profiler.BeginSample("CreateNoizeNoize");
-            for (int octave = 0; octave < Octaves; octave++)
+            for (var octave = 0; octave < Octaves; octave++)
             {
                 var octaveTexture = _octaves[octave];
                 var directionTexture = _octaveDirections[octave];
 
                 Profiler.BeginSample("MakeStep" + octave);
 
-                int id = 0;
+                var id = 0;
                 float x = 0, y = 0;
-                float oneOverSize = 1.0f / Size;
+                var oneOverSize = 1.0f / Size;
 
-                for (int i = 0; i < Size; i++)
+                for (var i = 0; i < Size; i++)
                 {
-                    for (int j = 0; j < Size; j++)
+                    for (var j = 0; j < Size; j++)
                     {
-                        Color colorCurrent = pixels[id];
-                        Vector3 currentVec = new Vector3(colorCurrent.r, colorCurrent.g, colorCurrent.b) - half;
+                        var colorCurrent = pixels[id];
+                        var currentVec = new Vector3(colorCurrent.r, colorCurrent.g, colorCurrent.b) - half;
 
-                        Color directionColor = directionTexture.GetPixelBilinear(x, y);
-                        Vector3 noizeDirection = new Vector3(directionColor.r, directionColor.g, directionColor.b) - half;
+                        var directionColor = directionTexture.GetPixelBilinear(x, y);
+                        var noizeDirection = new Vector3(directionColor.r, directionColor.g, directionColor.b) - half;
 
-                        Color colorOctave = octaveTexture.GetPixelBilinear(
+                        var colorOctave = octaveTexture.GetPixelBilinear(
                             x + noizeDirection.x * currentVec.x * NoiseReapply * noiseMultiplier, 
                             y + noizeDirection.y * currentVec.y * NoiseReapply * noiseMultiplier);
 
-                        Vector3 octaveVec = new Vector3(colorOctave.r, colorOctave.g, colorOctave.b) - half;
+                        var octaveVec = new Vector3(colorOctave.r, colorOctave.g, colorOctave.b) - half;
                         
                         Vector3 res;
                         switch (LerpType)
@@ -206,14 +206,14 @@ namespace TrueClouds
 
         private void AdjustColor(Color[] pixels)
         {
-            Vector3 half = Vector3.one / 2;
+            var half = Vector3.one / 2;
             Profiler.BeginSample("Adjust Color");
 
-            Vector3 center = Vector3.zero;
-            for (int i = 0; i < pixels.Length; i++)
+            var center = Vector3.zero;
+            for (var i = 0; i < pixels.Length; i++)
             {
-                Color colorCurrent = pixels[i];
-                Vector3 vec = new Vector3(colorCurrent.r, colorCurrent.g, colorCurrent.b) - half;
+                var colorCurrent = pixels[i];
+                var vec = new Vector3(colorCurrent.r, colorCurrent.g, colorCurrent.b) - half;
 
                 if (NormalizeInTheEnd)
                 {
@@ -226,11 +226,11 @@ namespace TrueClouds
             }
             center /= pixels.Length;
 
-            for (int i = 0; i < pixels.Length; i++)
+            for (var i = 0; i < pixels.Length; i++)
             {
-                Color colorCurrent = pixels[i];
+                var colorCurrent = pixels[i];
 
-                Vector3 vec = new Vector3(colorCurrent.r, colorCurrent.g, colorCurrent.b) - half - center;
+                var vec = new Vector3(colorCurrent.r, colorCurrent.g, colorCurrent.b) - half - center;
                 vec *= ContrastAdjustement;
                 vec += half;
 
@@ -251,13 +251,13 @@ namespace TrueClouds
 
             Profiler.BeginSample("perform copy");
             var pixels = _texture.GetPixels32();
-            Color32[] pixelsR = new Color32[pixels.Length];
-            Color32[] pixelsG = new Color32[pixels.Length];
-            Color32[] pixelsB = new Color32[pixels.Length];
-            Color32[] pixelsA = new Color32[pixels.Length];
-            for (int i = 0; i < pixels.Length; i++)
+            var pixelsR = new Color32[pixels.Length];
+            var pixelsG = new Color32[pixels.Length];
+            var pixelsB = new Color32[pixels.Length];
+            var pixelsA = new Color32[pixels.Length];
+            for (var i = 0; i < pixels.Length; i++)
             {
-                Color32 color = pixels[i];
+                var color = pixels[i];
                 pixelsR[i] = new Color32(color.r, color.r, color.r, 255);
                 pixelsG[i] = new Color32(color.g, color.g, color.g, 255);
                 pixelsB[i] = new Color32(color.b, color.b, color.b, 255);
@@ -344,7 +344,7 @@ namespace TrueClouds
             
             if (GUILayout.Button(new GUIContent("Save", "Save texture to file and apply as Noise Texture to your CloudCamera3D")))
             {
-                string path = EditorUtility.SaveFilePanelInProject("Save generated noise texture", "noise", "png", "");
+                var path = EditorUtility.SaveFilePanelInProject("Save generated noise texture", "noise", "png", "");
                 if (path.Length != 0)
                 {
                     File.WriteAllBytes(path, _texture.EncodeToPNG());
@@ -376,7 +376,7 @@ namespace TrueClouds
                 labelRect.height = 70;
                 labelRect.center = rect.center;
                 labelRect.y += rect.height / 2 - 50;
-                GUIStyle labelStyle = new GUIStyle("NotificationBackground");
+                var labelStyle = new GUIStyle("NotificationBackground");
                 labelStyle.padding = new RectOffset(20, 20, 20, 20);
                 EditorGUI.LabelField(labelRect, label, labelStyle);
             }
@@ -388,7 +388,7 @@ namespace TrueClouds
             GUILayout.FlexibleSpace();
 
             GUILayoutUtility.GetRect(512, 512);
-            Rect rect = GUILayoutUtility.GetLastRect();
+            var rect = GUILayoutUtility.GetLastRect();
 
             DrawPreview(rect, _texture, "Texture");
 

@@ -1,16 +1,18 @@
+using Abilities;
 using UnityEngine;
 
 public class PlayerAttackScript : MonoBehaviour
 {
+    public const string Idle = "Idle";
+    public const string Walk = "Walk";
+    private const string Attack1 = "Attack 1";
+    private const string Attack2 = "Attack 2";
+    public Animator animator;
     private Ability[] _ability;
     private Weapon _weapon;
-   public Animator animator;
-    string currentAnimationState;
-    public const string IDLE = "Idle";
-    public const string WALK = "Walk";
-    public const string ATTACK1 = "Attack 1";
-    public const string ATTACK2 = "Attack 2";
     private bool attackCount = true;
+    private string currentAnimationState;
+
     private void Awake()
     {
         _weapon = GetComponentInChildren<Weapon>();
@@ -22,8 +24,7 @@ public class PlayerAttackScript : MonoBehaviour
 
     private void Update()
     {
-        if (!_weapon._isAttacking)
-        {
+        if (!_weapon.isAttacking)
             // Check for left mouse button press
             if (Input.GetMouseButtonDown(0))
                 // Trigger the attack
@@ -32,27 +33,26 @@ public class PlayerAttackScript : MonoBehaviour
                     _weapon.StartAttack();
                     if (attackCount)
                     {
-                        ChangeAnimationState(ATTACK1);
+                        ChangeAnimationState(Attack1);
                         attackCount = false;
                     }
                     else
                     {
-                        ChangeAnimationState(ATTACK2);
+                        ChangeAnimationState(Attack2);
                         attackCount = true;
                     }
                 }
-        }
-        
+
 
         if (Input.GetKeyDown(KeyCode.Q)) _ability[0].AttackEffect();
         if (Input.GetKeyDown(KeyCode.E)) _ability[1].AttackEffect();
     }
-    public void ChangeAnimationState(string newState)
+
+    private void ChangeAnimationState(string newState)
     {
         // STOP THE SAME ANIMATION FROM INTERRUPTING WITH ITSELF //
         if (currentAnimationState == newState)
         {
-
         }
         else
         {

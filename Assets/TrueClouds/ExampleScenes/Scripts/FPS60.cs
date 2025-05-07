@@ -1,14 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class FPS60 : MonoBehaviour
+namespace TrueClouds.ExampleScenes.Scripts
 {
-    void Awake()
+    public class FPS60 : MonoBehaviour
     {
-        if (Application.isMobilePlatform)
+        void Awake()
         {
-            Application.targetFrameRate = 300;
+            if (Application.isMobilePlatform)
+            {
+                Application.targetFrameRate = 300;
+            }
         }
     }
 }

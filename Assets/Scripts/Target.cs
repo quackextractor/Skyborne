@@ -2,42 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class Target : MonoBehaviour
 {
+    private const float InitialAccumulatedKnockback = 1f;
     private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
-    [Header("Knockback Settings")]
-    [SerializeField] private float knockbackMultiplier = 1f; // 100% default
+    [Header("Knockback Settings")] [SerializeField]
+    private float knockbackMultiplier = 1f; // 100% default
+
     [SerializeField] private LayerMask platformEdgeLayer;
     [SerializeField] private TextMeshProUGUI playerHealthText;
-    [SerializeField, Tooltip("Select exactly one layer here.")] private int ragdollLayerIndex = 6;
 
-  /*  [Header("Ragdoll Launch Settings")]
-    [Tooltip("0 = flat (no lift), 1 = 45° upwards")] 
-    [SerializeField, Range(-1f, 1f)] */ private float upwardFactor = -0.01f;
+    [SerializeField] [Tooltip("Select exactly one layer here.")]
+    private int ragdollLayerIndex = 6;
 
-    private const float InitialAccumulatedKnockback = 1f;
-    public float _accumulatedKnockback = InitialAccumulatedKnockback;
+    [FormerlySerializedAs("_accumulatedKnockback")]
+    public float accumulatedKnockback = InitialAccumulatedKnockback;
+
+    /*  [Header("Ragdoll Launch Settings")]
+      [Tooltip("0 = flat (no lift), 1 = 45° upwards")]
+      [SerializeField, Range(-1f, 1f)] */
+    private readonly float upwardFactor = -0.01f;
+    private CharacterController _charController;
 
     private Enemy _enemy;
     private bool _hasEnemyScript;
     private bool _hasHealthText;
     private bool _isPlayer;
 
+    // Ragdoll parts
+    private List<Collider> _ragdollColliders;
+    private List<Rigidbody> _ragdollRigidbodies;
+
     private Rigidbody _rb;
     private Renderer _renderer;
 
     // Root colliders/controllers
     private CapsuleCollider _rootCapsule;
-    private CharacterController _charController;
 
-    // Ragdoll parts
-    private List<Collider> _ragdollColliders;
-    private List<Rigidbody> _ragdollRigidbodies;
-
-    public float AccumulatedKnockback { get => _accumulatedKnockback; set => _accumulatedKnockback = value; }
+    public float AccumulatedKnockback
+    {
+        get => accumulatedKnockback;
+        set => accumulatedKnockback = value;
+    }
 
     private void Awake()
     {
@@ -54,11 +63,11 @@ public class Target : MonoBehaviour
             Debug.LogWarning("Player Target has an unassigned playerHealthText!");
 
         // Root collider/controller references
-        _rootCapsule    = GetComponent<CapsuleCollider>();
+        _rootCapsule = GetComponent<CapsuleCollider>();
         _charController = GetComponent<CharacterController>();
 
         // Collect all child ragdoll parts (exclude this root rigidbody)
-        _ragdollColliders   = new List<Collider>();
+        _ragdollColliders = new List<Collider>();
         _ragdollRigidbodies = new List<Rigidbody>();
         foreach (var childRb in GetComponentsInChildren<Rigidbody>())
         {
@@ -78,14 +87,14 @@ public class Target : MonoBehaviour
     private void Update()
     {
         if (_isPlayer && _hasHealthText)
-            playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
+            playerHealthText.text = "Current Knockback: " + accumulatedKnockback;
     }
 
     public void TakeAttack(Attack attack)
     {
-        Vector3 dir = (transform.position - attack.originPosition).normalized;
-        float totalKb = attack.knockbackValue * _accumulatedKnockback * knockbackMultiplier;
-        _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + attack.damageValue / 100f);
+        var dir = (transform.position - attack.originPosition).normalized;
+        var totalKb = attack.knockbackValue * accumulatedKnockback * knockbackMultiplier;
+        accumulatedKnockback = Mathf.Min(5f, accumulatedKnockback + attack.damageValue / 100f);
 
         ApplyKnockbackForce(dir, totalKb);
 
@@ -94,8 +103,8 @@ public class Target : MonoBehaviour
 
     public void TakeAttack(Vector3 attackDir, float damage, float knockback)
     {
-        _accumulatedKnockback = Mathf.Min(5f, _accumulatedKnockback + damage / 100f);
-        float totalKb = knockback * _accumulatedKnockback * knockbackMultiplier;
+        accumulatedKnockback = Mathf.Min(5f, accumulatedKnockback + damage / 100f);
+        var totalKb = knockback * accumulatedKnockback * knockbackMultiplier;
 
         ApplyKnockbackForce(attackDir.normalized, totalKb);
 
@@ -119,7 +128,7 @@ public class Target : MonoBehaviour
             SetLayerRecursively(child, layer);
     }
 
-    public void ApplyKnockbackForce(Vector3 direction, float force)
+    private void ApplyKnockbackForce(Vector3 direction, float force)
     {
         if (_rb == null) return;
 
@@ -131,15 +140,11 @@ public class Target : MonoBehaviour
 
     private bool CheckForFallOff(Vector3 dir, float force)
     {
-        Vector3 origin = transform.position;
+        var origin = transform.position;
         Debug.DrawRay(origin, dir * force, Color.red, 1f);
 
-        if (Physics.Raycast(origin, dir, out var hit, force, platformEdgeLayer))
-        {
-          //  Debug.Log("Platform edge detected. Switching to ragdoll.");
-            return true;
-        }
-        return false;
+        return Physics.Raycast(origin, dir, out var hit, force, platformEdgeLayer);
+        //  Debug.Log("Platform edge detected. Switching to ragdoll.");
     }
 
     private void EnableRagdoll(Vector3 dir, float force)
@@ -156,16 +161,17 @@ public class Target : MonoBehaviour
         else
         {
             foreach (var beh in GetComponents<Behaviour>())
-                if (beh != this) beh.enabled = false;
-            if (_rootCapsule    != null) _rootCapsule.enabled    = false;
+                if (beh != this)
+                    beh.enabled = false;
+            if (_rootCapsule != null) _rootCapsule.enabled = false;
             if (_charController != null) _charController.enabled = false;
         }
 
         // 3) Compute a true 3D launch direction
-        Vector3 horiz = dir;
+        var horiz = dir;
         horiz.y = 0;
         horiz.Normalize();
-        Vector3 launchDir = (horiz + Vector3.up * upwardFactor).normalized;
+        var launchDir = (horiz + Vector3.up * upwardFactor).normalized;
 
         // 4) Activate ragdoll parts and give them the launch velocity
         foreach (var col in _ragdollColliders)
@@ -186,21 +192,26 @@ public class Target : MonoBehaviour
         _rb.velocity = launchDir * force * 1.5f;
         _rb.angularVelocity = Random.onUnitSphere * force * 0.2f;
 
-       // Debug.Log("Ragdoll launched!");
-        
+        // Debug.Log("Ragdoll launched!");
+
         // 7) Schedule enemy destruction after 10 seconds
-        if (!_isPlayer){
-            Destroy(gameObject, 10f);
-        }
+        if (!_isPlayer) Destroy(gameObject, 10f);
     }
 
     public void ResetAccumulatedKnockback()
     {
-        _accumulatedKnockback = InitialAccumulatedKnockback;
+        accumulatedKnockback = InitialAccumulatedKnockback;
         if (_isPlayer && _hasHealthText)
-            playerHealthText.text = "Current Knockback: " + _accumulatedKnockback;
+            playerHealthText.text = "Current Knockback: " + accumulatedKnockback;
     }
 
-    public float GetAccumulatedKnockback() => _accumulatedKnockback;
-    public void SetKnockbackMultiplier(float m) => knockbackMultiplier = m;
+    public float GetAccumulatedKnockback()
+    {
+        return accumulatedKnockback;
+    }
+
+    public void SetKnockbackMultiplier(float m)
+    {
+        knockbackMultiplier = m;
+    }
 }

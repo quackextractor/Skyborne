@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-namespace TrueClouds
+namespace TrueClouds.ExampleScenes.Scripts
 {
     class ScriptPerformanceMeasure: MonoBehaviour
     {
@@ -28,7 +28,7 @@ namespace TrueClouds
             _enabledTimes = new float[BatchCount];
             _disabledlTimes = new float[BatchCount];
 
-            for (int i = 0; i < BatchCount; i++)
+            for (var i = 0; i < BatchCount; i++)
             {
                 _isScriptEnabled.Add(true);
                 _isScriptEnabled.Add(false);
@@ -39,9 +39,9 @@ namespace TrueClouds
 
         private IEnumerator MeasureCoroutine()
         {            
-            int enabledId = 0;
-            int disabledId = 0;
-            for (int i = 0; i < BatchCount * 2; i++)
+            var enabledId = 0;
+            var disabledId = 0;
+            for (var i = 0; i < BatchCount * 2; i++)
             {
                 float percent = 100 * i / (BatchCount * 2);
                 _testResult = string.Format("Measured {0}%", percent);
@@ -50,7 +50,7 @@ namespace TrueClouds
 
                 yield return null;
 
-                float time = Time.unscaledTime;
+                var time = Time.unscaledTime;
                 yield return WaitForFrames(BatchDurationInFrames);
                 time = (Time.unscaledTime - time) * 1000 / BatchDurationInFrames;
 
@@ -74,15 +74,15 @@ namespace TrueClouds
             Array.Sort(_enabledTimes);
             Array.Sort(_disabledlTimes);
 
-            float[] times = new float[BatchCount];
-            for (int i = 0; i < BatchCount; i++)
+            var times = new float[BatchCount];
+            for (var i = 0; i < BatchCount; i++)
             {
                 times[i] = _enabledTimes[i] - _disabledlTimes[i];
             }
 
             Array.Sort(times);
-            float percentile50 = times[BatchCount * 50 / 100];
-            float percentile90 = times[BatchCount * 90 / 100];
+            var percentile50 = times[BatchCount * 50 / 100];
+            var percentile90 = times[BatchCount * 90 / 100];
 
             _testResult = string.Format("3d Cloud rendering takes {0} ms per frame. 90% of time rendering was faster than {1} ms",
                           percentile50.ToString("F4"),
@@ -91,7 +91,7 @@ namespace TrueClouds
 
         private IEnumerator WaitForFrames(int frames)
         {
-            for (int i = 0; i < frames; i++)
+            for (var i = 0; i < frames; i++)
             {
                 Thread.Sleep(16);
                 yield return null;
@@ -120,12 +120,12 @@ namespace TrueClouds
         private static System.Random rnd = new System.Random();
         private static void Shuffle<T>(List<T> list)
         {
-            int n = list.Count;
+            var n = list.Count;
             while (n > 1)
             {
                 n--;
-                int k = rnd.Next(n + 1);
-                T value = list[k];
+                var k = rnd.Next(n + 1);
+                var value = list[k];
                 list[k] = list[n];
                 list[n] = value;
             }

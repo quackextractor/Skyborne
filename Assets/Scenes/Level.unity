@@ -1542,6 +1542,9 @@ MonoBehaviour:
   sizeModEnabled: 1
   minSize: 0.5
   maxSize: 0.8
+  randomRotationX: 0
+  randomRotationY: 1
+  randomRotationZ: 0
   minSpawnInterval: 0.1
   maxSpawnInterval: 0.1
 --- !u!4 &1534756898
@@ -2660,6 +2663,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4240220624025426620, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5886792829221745851, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5886792829221745851, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

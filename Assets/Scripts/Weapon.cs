@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Weapon : MonoBehaviour
 {
@@ -12,13 +13,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float activationTime = 0.2f;
     [SerializeField] private float cooldownTime = 0.5f;
     [SerializeField] private Collider weaponCollider;
+    [FormerlySerializedAs("_isAttacking")] public bool isAttacking;
+    private readonly HashSet<Target> _hitTargets = new();
 
-    protected Transform _attacker;
-    protected HashSet<Target> _hitTargets = new();
-    public bool _isAttacking;
+    private Transform _attacker;
+    private bool _hasHitEffectSpawner;
     private HitEffectSpawner _hitEffectSpawner;
-    private bool _hasHitEffectSpawner = false;
-    
+
     public float Knockback
     {
         get => knockback;
@@ -33,40 +34,33 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        weaponCollider.enabled = false;
+        if (weaponCollider != null) weaponCollider.enabled = false;
         _attacker = transform.parent;
-    
-        if (TryGetComponent(out _hitEffectSpawner))
-        {
-            _hasHitEffectSpawner = true;
-        }
+
+        if (TryGetComponent(out _hitEffectSpawner)) _hasHitEffectSpawner = true;
     }
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (!_isAttacking) return;
+        if (!isAttacking) return;
 
         if (other.TryGetComponent(out Target target))
         {
-            if (_hitTargets.Contains(target)) return;
-            
-            _hitTargets.Add(target);
+            if (!_hitTargets.Add(target)) return;
+
             target.TakeAttack(new Attack(knockback, damage, _attacker.position));
-            if (_hasHitEffectSpawner)
-            {
-                _hitEffectSpawner.SpawnHitEffect(target.transform.position);
-            }
+            if (_hasHitEffectSpawner) _hitEffectSpawner.SpawnHitEffect(target.transform.position);
         }
     }
 
     public virtual void StartAttack()
     {
-        if (!_isAttacking) StartCoroutine(Attack());
+        if (!isAttacking) StartCoroutine(Attack());
     }
 
     protected IEnumerator Attack()
     {
-        _isAttacking = true;
+        isAttacking = true;
         _hitTargets.Clear();
         //  Debug.Log("hit" + _hitTargets);
         yield return new WaitForSeconds(windUpTime);
@@ -75,7 +69,7 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(activationTime);
         weaponCollider.enabled = false;
         yield return new WaitForSeconds(cooldownTime);
-        _isAttacking = false;
+        isAttacking = false;
     }
 
     public virtual void AttackEffect()

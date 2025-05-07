@@ -1,13 +1,13 @@
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Respawn : MonoBehaviour
 {
+    [SerializeField] private float dampenFactor = 0.5f;
+
+    private Rigidbody _rb;
     private Transform _spawnPoint;
-    private Rigidbody _rb; 
-    [SerializeField]
-    private float dampenFactor = 0.5f;
 
     private void Start()
     {
@@ -15,13 +15,9 @@ public class Respawn : MonoBehaviour
 
         var spawnObj = GameObject.FindGameObjectWithTag("spawnpoint");
         if (spawnObj != null)
-        {
             _spawnPoint = spawnObj.transform;
-        }
         else
-        {
             Debug.LogWarning("Spawnpoint with tag 'spawnpoint' not found in the scene.");
-        }
     }
 
     private void Update()
@@ -47,7 +43,7 @@ public class Respawn : MonoBehaviour
 
             // Reset accumulated knockback
             var targetComponent = GetComponent<Target>();
-            if (targetComponent != null)
+            if (targetComponent)
                 targetComponent.ResetAccumulatedKnockback();
 
             // Re-freeze constraints if needed (adjust as appropriate)
@@ -55,18 +51,18 @@ public class Respawn : MonoBehaviour
 
             // Optionally re-enable any previously disabled components
             var target = GetComponent<Target>();
-            if (target != null && target.CompareTag("Player"))
+            if (target && target.CompareTag("Player"))
             {
                 GetComponent<PlayerController>().enabled = true;
             }
             else
             {
                 var enemy = GetComponent<Enemy>();
-                if (enemy != null)
+                if (enemy)
                 {
                     enemy.enabled = true;
-                    var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-                    if (agent != null)
+                    var agent = GetComponent<NavMeshAgent>();
+                    if (agent)
                         agent.enabled = true;
                 }
             }

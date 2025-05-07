@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace TrueClouds
+namespace TrueClouds.Scripts.Editor
 {
     [CustomPropertyDrawer(typeof(CloudsReadOnlyAttribute))]
     public class TrueCloudsReadOnlyDrawer : PropertyDrawer

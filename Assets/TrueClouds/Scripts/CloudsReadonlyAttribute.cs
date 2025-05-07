@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TrueClouds
+namespace TrueClouds.Scripts
 {
     public class CloudsReadOnlyAttribute : PropertyAttribute { }
 }

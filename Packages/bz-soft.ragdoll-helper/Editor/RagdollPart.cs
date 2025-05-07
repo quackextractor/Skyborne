@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace BzKovSoft.RagdollHelper.Editor
+namespace Editor
 {
 	/// <summary>
 	/// Abstract class. Represents ragdoll part. For example: legUpper, head, pelvis or something else
