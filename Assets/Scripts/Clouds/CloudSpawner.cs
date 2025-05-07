@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class CloudSpawner : MonoBehaviour
 {
     [Header("Prefabs & Pooling")]
@@ -9,66 +13,60 @@ public class CloudSpawner : MonoBehaviour
     public GameObject[] cloudPrefabs;
     private Dictionary<GameObject, List<GameObject>> pool = new Dictionary<GameObject, List<GameObject>>();
 
-    [Header("Spawn Volume")]
-    public float rangeY = 5f;
-    [Tooltip("Distance from center along movement axis where clouds spawn.")]
-    public float spawnDistance = 20f;
-    [Tooltip("Lateral variance perpendicular to movement axis.")]
-    public float lateralRange = 10f;
-    public bool isX = true;
-    [Tooltip("If true, clouds move in the positive axis direction; otherwise, negative.")]
-    public bool reverseDirection = false;
+    [Header("Planes")]
+    [Tooltip("Plane GameObject (must have MeshFilter + MeshCollider). Spawn surface.")]
+    public MeshCollider startPlane;
+    [Tooltip("Plane GameObject (must have MeshFilter + MeshCollider). Target surface.")]
+    public MeshCollider endPlane;
 
-    [Header("Movement")]
-    public float minSpeed = 1f, maxSpeed = 3f;
+    [Header("Timing")]
+    [Tooltip("Time for a cloud to travel from start to end.")]
+    public float travelTime = 5f;
 
     [Header("Size Modulation")]
     public bool sizeModEnabled = true;
     public float minSize = 0.8f, maxSize = 1.2f;
-
-    [Header("Lifetime")]
-    [Tooltip("Minimum cloud lifetime in seconds.")]
-    public float minLifetime = 5f;
-    [Tooltip("Maximum cloud lifetime in seconds.")]
-    public float maxLifetime = 10f;
 
     [Header("Spawn Timing")]
     public float minSpawnInterval = 1f;
     public float maxSpawnInterval = 3f;
 
 #if UNITY_EDITOR
-    private void OnValidate()
+    private void OnDrawGizmosSelected()
     {
-        if (cloudPrefabs != null)
-        {
-            var list = new List<GameObject>(cloudPrefabs);
-            int removed = list.RemoveAll(p => p == null);
-            if (removed > 0)
-            {
-                cloudPrefabs = list.ToArray();
-                Debug.LogWarning($"CloudSpawner: Removed {removed} null entries from cloudPrefabs.");
-            }
-        }
-        // Ensure min <= max
-        minLifetime = Mathf.Min(minLifetime, maxLifetime);
-        maxLifetime = Mathf.Max(minLifetime, maxLifetime);
+        DrawPlaneGizmo(startPlane, Color.green);
+        DrawPlaneGizmo(endPlane, Color.red);
+    }
+
+    private void DrawPlaneGizmo(MeshCollider plane, Color color)
+    {
+        if (plane == null) return;
+        var mf = plane.GetComponent<MeshFilter>();
+        if (mf == null || mf.sharedMesh == null) return;
+        Gizmos.color = color;
+        var mesh = mf.sharedMesh;
+        var trs  = plane.transform;
+        Gizmos.matrix = Matrix4x4.TRS(trs.position, trs.rotation, trs.lossyScale);
+        Gizmos.DrawWireMesh(mesh);
     }
 #endif
 
     private void Start()
     {
-        // Validate prefabs
         if (cloudPrefabs == null || cloudPrefabs.Length == 0)
         {
             Debug.LogError("CloudSpawner: No cloudPrefabs assigned.");
             enabled = false;
             return;
         }
-
-        // Initialize pool
+        if (startPlane == null || endPlane == null)
+        {
+            Debug.LogError("CloudSpawner: StartPlane and EndPlane must be assigned.");
+            enabled = false;
+            return;
+        }
         foreach (var prefab in cloudPrefabs)
             pool[prefab] = new List<GameObject>();
-
         StartCoroutine(SpawnRoutine());
     }
 
@@ -83,15 +81,11 @@ public class CloudSpawner : MonoBehaviour
 
     private GameObject GetPooledInstance(GameObject prefab)
     {
-        if (prefab == null) return null;
-
         if (!pool.ContainsKey(prefab))
             pool[prefab] = new List<GameObject>();
-
         foreach (var go in pool[prefab])
             if (!go.activeInHierarchy)
                 return go;
-
         var newObj = Instantiate(prefab, transform);
         newObj.SetActive(false);
         pool[prefab].Add(newObj);
@@ -100,41 +94,19 @@ public class CloudSpawner : MonoBehaviour
 
     private void SpawnCloud()
     {
-        // Choose random prefab
         var prefab = cloudPrefabs[Random.Range(0, cloudPrefabs.Length)];
-        if (prefab == null)
-        {
-            Debug.LogError("CloudSpawner: Encountered null prefab in array.");
-            return;
-        }
+        if (prefab == null) return;
 
         var cloud = GetPooledInstance(prefab);
-        if (cloud == null)
-            return;
+        if (cloud == null) return;
 
-        // Compute spawn position
-        Vector3 centerPos = transform.position;
-        Vector3 pos = centerPos;
+        Vector3 startPos = RandomPointOnPlane(startPlane);
+        Vector3 endPos   = RandomPointOnPlane(endPlane);
+        Vector3 dir      = (endPos - startPos).normalized;
+        float distance   = Vector3.Distance(startPos, endPos);
+        float speed      = distance / travelTime;
 
-        // Vertical offset
-        pos.y += Random.Range(-rangeY, rangeY);
-
-        // Spawn distance along movement axis
-        float spawnSign = reverseDirection ? 1f : -1f;
-        if (isX)
-        {
-            pos.x += spawnSign * spawnDistance;
-            pos.z += Random.Range(-lateralRange, lateralRange);
-        }
-        else
-        {
-            pos.z += spawnSign * spawnDistance;
-            pos.x += Random.Range(-lateralRange, lateralRange);
-        }
-
-        cloud.transform.position = pos;
-
-        // Initialize behavior
+        cloud.transform.position = startPos;
         var behavior = cloud.GetComponent<CloudBehavior>();
         if (behavior == null)
         {
@@ -142,12 +114,31 @@ public class CloudSpawner : MonoBehaviour
             return;
         }
 
-        float speed = Random.Range(minSpeed, maxSpeed);
         float size = sizeModEnabled ? Random.Range(minSize, maxSize) : 1f;
-        float lifetime = Random.Range(minLifetime, maxLifetime);
-        var dir = isX ? Vector3.right : Vector3.forward;
-        behavior.Initialize(dir, speed, size, reverseDirection, lifetime);
-
+        behavior.Initialize(dir, speed, size, travelTime, endPos);
         cloud.SetActive(true);
     }
+
+    private Vector3 RandomPointOnPlane(MeshCollider plane)
+    {
+        // Use MeshFilter bounds (local) and then TransformPoint to apply scale/rotation
+        var mf   = plane.GetComponent<MeshFilter>();
+        var mesh = mf.sharedMesh;
+        var trs  = plane.transform;
+
+        Vector3 localCenter  = mesh.bounds.center;
+        Vector3 localExtents = mesh.bounds.extents;
+
+        float randX = Random.Range(-localExtents.x, localExtents.x);
+        float randZ = Random.Range(-localExtents.z, localExtents.z);
+
+        Vector3 localPoint = new Vector3(
+            localCenter.x + randX,
+            localCenter.y,
+            localCenter.z + randZ
+        );
+
+        return trs.TransformPoint(localPoint);
+    }
 }
+

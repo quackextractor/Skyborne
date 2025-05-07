@@ -9,53 +9,45 @@ public class CloudBehavior : MonoBehaviour
     private bool initialized;
 
     private Vector3 originalScale;
+    private Vector3 endPoint;
 
     [Header("Fade Settings")]
     [SerializeField] private float fadeInDuration = 1.5f;
     [SerializeField] private float fadeOutDuration = 1.5f;
 
-    public void Initialize(Vector3 dir, float speed, float sizeMod, bool reverseDirection, float lifetime)
+    public void Initialize(Vector3 dir, float speed, float sizeMod, float lifetime, Vector3 endPoint)
     {
-        direction = ((reverseDirection ? -dir : dir)).normalized;
-        this.speed = speed;
-        this.lifetime = lifetime;
-        timer = 0f;
+        this.direction    = dir;
+        this.speed        = speed;
+        this.lifetime     = lifetime;
+        this.timer        = 0f;
+        this.endPoint     = endPoint;
 
-        originalScale = Vector3.one * sizeMod;
-        transform.localScale = Vector3.zero; // Start invisible
-
+        this.originalScale = Vector3.one * sizeMod;
+        transform.localScale = Vector3.zero;
         initialized = true;
     }
 
     private void Update()
     {
-        if (!initialized)
-            return;
+        if (!initialized) return;
 
         transform.position += direction * (speed * Time.deltaTime);
         timer += Time.deltaTime;
 
-        float timeLeft = lifetime - timer;
-
-        // --- Fade In ---
         if (timer < fadeInDuration)
         {
             float t = Mathf.Clamp01(timer / fadeInDuration);
             transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, t);
         }
-        // --- Fade Out ---
-        else if (timeLeft <= fadeOutDuration)
-        {
-            float t = Mathf.Clamp01(1 - (timeLeft / fadeOutDuration));
-            transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, t);
-        }
         else
         {
-            // Maintain full scale
-            transform.localScale = originalScale;
+            float remainingDist = Vector3.Distance(transform.position, endPoint);
+            float fadeT = Mathf.Clamp01(1f - (remainingDist / (speed * fadeOutDuration)));
+            transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, fadeT);
         }
 
-        if (timer >= lifetime)
+        if (timer >= lifetime || Vector3.Distance(transform.position, endPoint) < 0.1f)
         {
             gameObject.SetActive(false);
             initialized = false;
