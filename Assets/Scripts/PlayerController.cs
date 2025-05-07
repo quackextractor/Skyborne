@@ -1,98 +1,122 @@
 using UnityEngine;
 using UnityEngine.Serialization;
-using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float mouseSensitivity = 2f;
 
-    [FormerlySerializedAs("DashForce")] [SerializeField]
-    private float dashForce = 60f;
+    [FormerlySerializedAs("DashForce")]
+    [Header("Dash Settings")]
+    [SerializeField] private float dashForce = 60f;
+    [SerializeField] private float cooldown = 0.5f;
+    [SerializeField] private float moveLock = 0.5f;
+    [SerializeField] private int amountDash = 3;
 
-   
-    public float cooldown = 0.5f;
-    public float moveLock = 0.5f;
-    public int amountDash = 3;
+    [Header("Speed Particles")]
+    [Tooltip("Particle system to emit when moving fast.")]
+    [SerializeField] private ParticleSystem speedParticles;
+    [Tooltip("Start emitting particles when speed exceeds this value.")]
+    [SerializeField] private float speedThreshold = 10f;
+
+    private Rigidbody _rb;
+    private ParticleSystem.EmissionModule _emissionModule;
 
     private float _moveTimestamp;
-
-    // private bool isGrounded = true;
-    // public float jumpForce = 10f;
-    private Rigidbody _rb;
-
-    private float _timestamp;
+    private float _dashRefillTimestamp;
     private float _verticalRotation;
-
     private readonly float _verticalRotationLimit = 80f;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        if (_rb == null) Debug.Log("no rigid");
+        if (_rb == null) Debug.LogError("PlayerController: no Rigidbody found on this GameObject!");
+
+        // Try to auto-find the ParticleSystem if none assigned
+        if (speedParticles == null)
+            speedParticles = GetComponentInChildren<ParticleSystem>();
+
+        if (speedParticles == null)
+            Debug.LogError("PlayerController: no ParticleSystem assigned or in children!");
+
+        // Cache and disable emission initially
+        _emissionModule = speedParticles.emission;
+        _emissionModule.enabled = false;
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-        if (_moveTimestamp < Time.time)
-        {
-            // Movement
-            var horizontal = Input.GetAxis("Horizontal");
-            var vertical = Input.GetAxis("Vertical");
-            var movement = new Vector3(horizontal, 0, vertical) * (moveSpeed * Time.deltaTime);
-            transform.Translate(movement);
-        }
-        // Mouse Look
-        var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        HandleMovement();
+        HandleMouseLook();
+        HandleDashRefill();
+        HandleDashInput();
+        ToggleSpeedParticles();
+    }
+
+    private void HandleMovement()
+    {
+        if (Time.time < _moveTimestamp) return;
+
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        Vector3 move = new Vector3(h, 0, v) * (moveSpeed * Time.deltaTime);
+        transform.Translate(move, Space.Self);
+    }
+
+    private void HandleMouseLook()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         _verticalRotation -= mouseY;
         _verticalRotation = Mathf.Clamp(_verticalRotation, -_verticalRotationLimit, _verticalRotationLimit);
+
         Camera.main.transform.localRotation = Quaternion.Euler(_verticalRotation, 0, 0);
         transform.Rotate(0, mouseX, 0);
+    }
 
-
-        /* //cloud perk jump
-        if (Input.GetButtonDown("Jump") && isGrounded)
+    private void HandleDashRefill()
+    {
+        if (amountDash < 3 && Time.time >= _dashRefillTimestamp)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            amountDash++;
+            _dashRefillTimestamp = Time.time + cooldown + moveLock;
         }
-        */
+    }
 
-        if (_timestamp < Time.time && amountDash < 3)
+    private void HandleDashInput()
+    {
+        if (amountDash <= 0 || Time.time < _moveTimestamp) return;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            amountDash += 1;
-            _timestamp = Time.time + cooldown + moveLock;
+            Dash();
+            _moveTimestamp = Time.time + moveLock;
         }
-
-        if (amountDash > 0 && _moveTimestamp < Time.time)
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                Dash();
-
-                _moveTimestamp = Time.time + moveLock;
-            }
     }
 
     private void Dash()
     {
-        var inputDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 inputDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 dashDir = inputDir.magnitude > 0.1f
+            ? transform.TransformDirection(inputDir.normalized)
+            : transform.forward;
 
-        Vector3 dashDirection;
+        amountDash--;
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(dashDir * dashForce, ForceMode.Impulse);
+    }
 
-        if (inputDirection.magnitude > 0.1f) // If player is moving
+    private void ToggleSpeedParticles()
+    {
+        float currentSpeed = _rb.velocity.magnitude;
+        bool shouldEmit = currentSpeed > speedThreshold;
+        if (_emissionModule.enabled != shouldEmit)
         {
-            dashDirection = transform.TransformDirection(inputDirection.normalized);
-            amountDash -= 1;
+            _emissionModule.enabled = shouldEmit;
         }
-        else
-        {
-            dashDirection = transform.forward;
-        }
-
-
-        _rb.velocity = Vector3.zero; // Reset velocity to avoid sliding
-        _rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
     }
 }
