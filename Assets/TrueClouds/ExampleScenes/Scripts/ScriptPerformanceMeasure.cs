@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using Random = System.Random;
 
 namespace TrueClouds.ExampleScenes.Scripts
 {
     class ScriptPerformanceMeasure: MonoBehaviour
     {
-        public MonoBehaviour Target = null;
+        public MonoBehaviour Target;
 
         public int BatchDurationInFrames = 10;
         public int BatchCount = 40;
@@ -20,7 +21,7 @@ namespace TrueClouds.ExampleScenes.Scripts
         private float[] _disabledlTimes;
 
         private GUIStyle _labelStyle;
-        private bool _wasMeasureLaunched = false;
+        private bool _wasMeasureLaunched;
 
         private void Start()
         {
@@ -117,7 +118,7 @@ namespace TrueClouds.ExampleScenes.Scripts
             GUILayout.EndArea();
         }
 
-        private static System.Random rnd = new System.Random();
+        private static Random rnd = new Random();
         private static void Shuffle<T>(List<T> list)
         {
             var n = list.Count;

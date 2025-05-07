@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent _agent;
     private float _attackCooldown;
     private Transform _player;
+    private Target _targetComponent;
+    private Renderer _enemyRenderer;
+    private Color _originalColor;
 
     public Color BaseColor { get; private set; }
     public EnemyStats Stats => stats;
@@ -21,12 +24,20 @@ public class Enemy : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false; // disable built-in turning
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _targetComponent = GetComponent<Target>();
+        _enemyRenderer = GetComponent<Renderer>();
+        
+        if (_enemyRenderer != null)
+            _originalColor = _enemyRenderer.material.GetColor(BaseColor1);
     }
 
     private void Update()
     {
         if (_attackCooldown > 0)
             _attackCooldown -= Time.deltaTime;
+
+        // Apply visual effects for burning if needed
+        UpdateBurningVisuals();
 
         var distanceToPlayer = Vector3.Distance(transform.position, _player.position);
         if (distanceToPlayer <= stats.range)
@@ -43,6 +54,24 @@ public class Enemy : MonoBehaviour
             // manual rotation while moving
             if (_agent.velocity.sqrMagnitude > 0.1f)
                 RotateTowardsVelocity();
+        }
+    }
+
+    private void UpdateBurningVisuals()
+    {
+        if (_targetComponent != null && _enemyRenderer != null)
+        {
+            if (_targetComponent.IsBurning)
+            {
+                // Apply a reddish tint to burning enemies
+                Color burningColor = new Color(1.0f, 0.3f, 0.3f);
+                _enemyRenderer.material.SetColor(BaseColor1, Color.Lerp(_originalColor, burningColor, 0.6f));
+            }
+            else
+            {
+                // Reset to original color when not burning
+                _enemyRenderer.material.SetColor(BaseColor1, _originalColor);
+            }
         }
     }
 
@@ -70,9 +99,11 @@ public class Enemy : MonoBehaviour
         weapon.Damage = stats.weaponDamage;
         weapon.Knockback = stats.weaponKnockback;
 
-        var enemyRenderer = GetComponent<Renderer>();
-        if (enemyRenderer != null)
-            enemyRenderer.material.SetColor(BaseColor1, stats.variantColor);
+        if (_enemyRenderer != null)
+        {
+            _enemyRenderer.material.SetColor(BaseColor1, stats.variantColor);
+            _originalColor = stats.variantColor;
+        }
 
         BaseColor = stats.variantColor;
     }

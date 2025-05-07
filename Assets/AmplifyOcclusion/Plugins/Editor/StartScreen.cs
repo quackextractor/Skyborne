@@ -49,31 +49,31 @@ namespace AmplifyOcclusion.Plugins.Editor
 		private static readonly GUIContent TitleSTR = new GUIContent( "Amplify Occlusion" );
 
 		Vector2 m_scrollPosition = Vector2.zero;
-		bool m_startup = false;
+		bool m_startup;
 
 		[NonSerialized]
-		Texture textIcon = null;
+		Texture textIcon;
 		[NonSerialized]
-		Texture webIcon = null;
+		Texture webIcon;
 
-		GUIContent WikiButton = null;
-		GUIContent DiscordButton = null;
-		GUIContent ForumButton = null;
+		GUIContent WikiButton;
+		GUIContent DiscordButton;
+		GUIContent ForumButton;
 
-		GUIContent Icon = null;
+		GUIContent Icon;
 		RenderTexture rt;
 
 		[NonSerialized]
-		GUIStyle m_buttonStyle = null;
+		GUIStyle m_buttonStyle;
 		[NonSerialized]
-		GUIStyle m_labelStyle = null;
+		GUIStyle m_labelStyle;
 		[NonSerialized]
-		GUIStyle m_linkStyle = null;
+		GUIStyle m_linkStyle;
 
-		Texture2D m_newsImage = null;
+		Texture2D m_newsImage;
 		private BannerInfo m_bannerInfo;
 		private PackageRef m_packageRef;
-		private bool m_infoDownloaded = false;
+		private bool m_infoDownloaded;
 		private string m_newVersion = string.Empty;
 
 		private void OnEnable()
@@ -155,7 +155,7 @@ namespace AmplifyOcclusion.Plugins.Editor
 				m_infoDownloaded = true;
 
 				// get affiliate links
-				StartBackgroundTask( StartRequest( PackageRefURL, ( www ) =>
+				StartBackgroundTask( StartRequest( PackageRefURL, www =>
 				{
 					var pack = PackageRef.CreateFromJSON( www.downloadHandler.text );
 					if( pack != null )
@@ -166,12 +166,12 @@ namespace AmplifyOcclusion.Plugins.Editor
 				} ) );
 
 				// get banner information and texture
-				StartBackgroundTask( StartRequest( BannerInfoURL, ( www ) =>
+				StartBackgroundTask( StartRequest( BannerInfoURL, www =>
 				{
 					var info = BannerInfo.CreateFromJSON( www.downloadHandler.text );
 					if( info != null && !string.IsNullOrEmpty( info.ImageUrl ) )
 					{
-						StartBackgroundTask( StartTextureRequest( info.ImageUrl, ( www2 ) =>
+						StartBackgroundTask( StartTextureRequest( info.ImageUrl, www2 =>
 						{
 							var texture = DownloadHandlerTexture.GetContent( www2 );
 							if( texture != null )
@@ -272,7 +272,7 @@ namespace AmplifyOcclusion.Plugins.Editor
 						var width = 650 - 175 - 9 - 8;
 						width = Mathf.Min( m_newsImage.width, width );
 						var height = m_newsImage.height;
-						height = (int)( ( width + 8 ) * ( (float)m_newsImage.height / (float)m_newsImage.width ) );
+						height = (int)( ( width + 8 ) * ( m_newsImage.height / (float)m_newsImage.width ) );
 
 
 						var buttonRect = EditorGUILayout.GetControlRect( false, height );
@@ -503,7 +503,7 @@ namespace AmplifyOcclusion.Plugins.Editor
 
 						if( !show )
 						{
-							StartScreen.StartBackgroundTask( StartScreen.StartRequest( StartScreen.BannerInfoURL, ( www ) =>
+							StartScreen.StartBackgroundTask( StartScreen.StartRequest( StartScreen.BannerInfoURL, www =>
 							{
 								var info = BannerInfo.CreateFromJSON( www.downloadHandler.text );
 								if( info != null )

@@ -18,10 +18,10 @@ namespace AmplifyOcclusion.Samples.Blacksmith.Scripts
 		public float forwardSpeedScale = 0.03f;
 		public float strafeSpeedScale = 0.03f;
 
-		float rotationX = 0F;
-		float rotationY = 0F;
+		float rotationX;
+		float rotationY;
 
-		bool look = false;
+		bool look;
 
 		Quaternion originalRotation;
 

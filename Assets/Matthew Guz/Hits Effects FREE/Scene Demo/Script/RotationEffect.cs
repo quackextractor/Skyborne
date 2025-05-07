@@ -7,7 +7,7 @@ namespace Matthew_Guz.Hits_Effects_FREE.Scene_Demo.Script
     public class ParticleRotationController : MonoBehaviour
     {
         public new ParticleSystem particleSystem; // Asigna el sistema de partículas en el Inspector
-        public float minZRotation = 0f; // Valor mínimo para la rotación en Z
+        public float minZRotation; // Valor mínimo para la rotación en Z
         public float maxZRotation = 360f; // Valor máximo para la rotación en Z
 
         void Start()

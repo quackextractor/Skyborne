@@ -105,8 +105,8 @@ namespace MeshCombiner.Editor
 			if(!meshIsSaved && !AssetDatabase.IsValidFolder("Assets/"+folderPath))
 			{
 				var folderNames = folderPath.Split('/');
-				folderNames = folderNames.Where((folderName) => !folderName.Equals("")).ToArray();
-				folderNames = folderNames.Where((folderName) => !folderName.Equals(" ")).ToArray();
+				folderNames = folderNames.Where(folderName => !folderName.Equals("")).ToArray();
+				folderNames = folderNames.Where(folderName => !folderName.Equals(" ")).ToArray();
 
 				folderPath = "/"; // Reset folder path.
 				for(var i = 0; i < folderNames.Length; i++)

@@ -33,13 +33,13 @@ namespace TrueClouds.Scripts
         
         public float BlurRadius = 10;
         public BlurQuality BlurQuality = BlurQuality.High;
-        public float LateCutThreshohld = 0.0f;
+        public float LateCutThreshohld;
         public float LateCutPower = 1.5f;
 
-        public bool UseDepthFiltering = false;
-        public float DepthFilteringPower = 0f;
+        public bool UseDepthFiltering;
+        public float DepthFilteringPower;
 
-        public bool UseNoise = false;
+        public bool UseNoise;
         public Texture2D Noise;
         public Vector3 Wind = new Vector3(2, 1, 3);
         public float NoiseScale = 1;
@@ -54,7 +54,7 @@ namespace TrueClouds.Scripts
 
         public Transform Light;
 
-        public bool UseRamp = false;
+        public bool UseRamp;
 
         public Texture Ramp;
 

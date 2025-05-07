@@ -17,12 +17,12 @@ public class VersionInfo
 
 	public static string StaticToString()
 	{
-		return string.Format( "{0}.{1}.{2}", Major, Minor, Release ) + ( Revision > 0 ? "r" + Revision.ToString() : "" );
+		return string.Format( "{0}.{1}.{2}", Major, Minor, Release ) + ( Revision > 0 ? "r" + Revision : "" );
 	}
 
 	public override string ToString()
 	{
-		return string.Format( "{0}.{1}.{2}", m_major, m_minor, m_release ) + ( Revision > 0 ? "r" + Revision.ToString() : "" );
+		return string.Format( "{0}.{1}.{2}", m_major, m_minor, m_release ) + ( Revision > 0 ? "r" + Revision : "" );
 	}
 
 	public static int FullNumber { get { return Major * 100 + Minor * 10 + Release; } }

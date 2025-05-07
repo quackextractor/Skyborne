@@ -13,7 +13,7 @@ namespace Editor
 		[MenuItem("Window/BzSoft/Ragdoll Helper")]
 		private static void ShowWindow()
 		{
-			EditorWindow.GetWindow(typeof(BoneHelper), false, "Ragdoll helper");
+			GetWindow(typeof(BoneHelper), false, "Ragdoll helper");
 		}
 
 		public Dictionary<string, Transform> SymmetricBones { get; private set; }

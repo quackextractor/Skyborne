@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace MeshCombiner.Scripts
 {
@@ -11,8 +13,8 @@ namespace MeshCombiner.Scripts
 		private const int Mesh16BitBufferVertexLimit = 65535;
 
 		[SerializeField]
-		private bool createMultiMaterialMesh = false, combineInactiveChildren = false, deactivateCombinedChildren = true,
-			deactivateCombinedChildrenMeshRenderers = false, generateUVMap = false, destroyCombinedChildren = false;
+		private bool createMultiMaterialMesh, combineInactiveChildren, deactivateCombinedChildren = true,
+			deactivateCombinedChildrenMeshRenderers, generateUVMap, destroyCombinedChildren;
 		[SerializeField]
 		private string folderPath = "Prefabs/CombinedMeshes";
 		[SerializeField]
@@ -124,14 +126,14 @@ namespace MeshCombiner.Scripts
 			var meshFilters = GetComponentsInChildren<MeshFilter>(combineInactiveChildren);
 
 			// Delete first MeshFilter belongs to this GameObject in meshFiltersToSkip array:
-			meshFiltersToSkip = meshFiltersToSkip.Where((meshFilter) => meshFilter != meshFilters[0]).ToArray();
+			meshFiltersToSkip = meshFiltersToSkip.Where(meshFilter => meshFilter != meshFilters[0]).ToArray();
 
 			// Delete null values in meshFiltersToSkip array:
-			meshFiltersToSkip = meshFiltersToSkip.Where((meshFilter) => meshFilter != null).ToArray();
+			meshFiltersToSkip = meshFiltersToSkip.Where(meshFilter => meshFilter != null).ToArray();
 
 			for(var i = 0; i < meshFiltersToSkip.Length; i++)
 			{
-				meshFilters = meshFilters.Where((meshFilter) => meshFilter != meshFiltersToSkip[i]).ToArray();
+				meshFilters = meshFilters.Where(meshFilter => meshFilter != meshFiltersToSkip[i]).ToArray();
 			}
 
 			return meshFilters;
@@ -175,7 +177,7 @@ namespace MeshCombiner.Scripts
 #if UNITY_2017_3_OR_NEWER
 			if(verticesLength > Mesh16BitBufferVertexLimit)
 			{
-				combinedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32; // Only works on Unity 2017.3 or higher.
+				combinedMesh.indexFormat = IndexFormat.UInt32; // Only works on Unity 2017.3 or higher.
 			}
 
 			combinedMesh.CombineMeshes(combineInstances);
@@ -283,7 +285,7 @@ namespace MeshCombiner.Scripts
 #if UNITY_2017_3_OR_NEWER
 				if(verticesLength > Mesh16BitBufferVertexLimit)
 				{
-					submesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32; // Only works on Unity 2017.3 or higher.
+					submesh.indexFormat = IndexFormat.UInt32; // Only works on Unity 2017.3 or higher.
 				}
 
 				submesh.CombineMeshes(submeshCombineInstancesList.ToArray(), true);
@@ -313,7 +315,7 @@ namespace MeshCombiner.Scripts
 #if UNITY_2017_3_OR_NEWER
 			if(verticesLength > Mesh16BitBufferVertexLimit)
 			{
-				combinedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32; // Only works on Unity 2017.3 or higher.
+				combinedMesh.indexFormat = IndexFormat.UInt32; // Only works on Unity 2017.3 or higher.
 			}
 
 			combinedMesh.CombineMeshes(finalMeshCombineInstancesList.ToArray(), false);
@@ -389,9 +391,9 @@ namespace MeshCombiner.Scripts
 #if UNITY_EDITOR
 			if(generateUVMap)
 			{
-				var unwrapParam = new UnityEditor.UnwrapParam();
-				UnityEditor.UnwrapParam.SetDefaults(out unwrapParam);
-				UnityEditor.Unwrapping.GenerateSecondaryUVSet(combinedMesh, unwrapParam);
+				var unwrapParam = new UnwrapParam();
+				UnwrapParam.SetDefaults(out unwrapParam);
+				Unwrapping.GenerateSecondaryUVSet(combinedMesh, unwrapParam);
 			}
 #endif
 		}

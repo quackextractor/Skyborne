@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6269387813611309299
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2474671289164315664, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2474671289164315664, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3500722339055338302, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6693413847802462943, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6693413847802462943, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 13.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454753423061849787, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454753423061849787, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395717906473557002, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395717906473557002, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8452030957936298125, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: m_Name
+      value: Magic fire pro orange Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734601997857576067, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734601997857576067, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 60
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 778ac155018ca084cad2786c356f9cb3, type: 3}

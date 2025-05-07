@@ -4,6 +4,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.XR;
 
 namespace AmplifyOcclusion.Plugins
 {
@@ -16,8 +17,8 @@ public static class AmplifyOcclusionCommon
 
 	public static void CommandBuffer_TemporalFilterDirectionsOffsets( CommandBuffer cb, uint aSampleStep )
 	{
-		var temporalRotation = AmplifyOcclusionCommon.m_temporalRotations[ aSampleStep % 6 ];
-		var temporalOffset = AmplifyOcclusionCommon.m_spatialOffsets[ ( aSampleStep / 6 ) % 4 ];
+		var temporalRotation = m_temporalRotations[ aSampleStep % 6 ];
+		var temporalOffset = m_spatialOffsets[ ( aSampleStep / 6 ) % 4 ];
 
 		cb.SetGlobalFloat( PropertyID._AO_TemporalDirections, temporalRotation / 360.0f );
 		cb.SetGlobalFloat( PropertyID._AO_TemporalOffsets, temporalOffset );
@@ -29,7 +30,7 @@ public static class AmplifyOcclusionCommon
 
 		if( shader == null )
 		{
-			if( aThroughErrorMsg == true )
+			if( aThroughErrorMsg )
 			{
 				Debug.LogErrorFormat( "[AmplifyOcclusion] Cannot find shader: \"{0}\"" +
 										" Please contact support@amplify.pt", aShaderName );
@@ -132,10 +133,10 @@ public static class AmplifyOcclusionCommon
 	public static void UpdateGlobalShaderConstants( CommandBuffer cb, ref TargetDesc aTarget, Camera aCamera, bool isDownsample, bool isFilterDownsample )
 	{
 	#if UNITY_2017_2_OR_NEWER && !UNITY_SWITCH && !UNITY_XBOXONE && !UNITY_PS4
-		if( UnityEngine.XR.XRSettings.enabled == true )
+		if( XRSettings.enabled )
 		{
-			aTarget.fullWidth = (int)( UnityEngine.XR.XRSettings.eyeTextureDesc.width * UnityEngine.XR.XRSettings.eyeTextureResolutionScale );
-			aTarget.fullHeight = (int)( UnityEngine.XR.XRSettings.eyeTextureDesc.height * UnityEngine.XR.XRSettings.eyeTextureResolutionScale );
+			aTarget.fullWidth = (int)( XRSettings.eyeTextureDesc.width * XRSettings.eyeTextureResolutionScale );
+			aTarget.fullHeight = (int)( XRSettings.eyeTextureDesc.height * XRSettings.eyeTextureResolutionScale );
 		}
 		else
 		{
@@ -147,7 +148,7 @@ public static class AmplifyOcclusionCommon
 		aTarget.fullHeight = aCamera.pixelHeight;
 	#endif
 
-		if( isFilterDownsample == true )
+		if( isFilterDownsample )
 		{
 			aTarget.width = aTarget.fullWidth / 2;
 			aTarget.height = aTarget.fullHeight / 2;
@@ -158,8 +159,8 @@ public static class AmplifyOcclusionCommon
 			aTarget.height = aTarget.fullHeight;
 		}
 
-		aTarget.oneOverWidth = 1.0f / (float)aTarget.width;
-		aTarget.oneOverHeight = 1.0f / (float)aTarget.height;
+		aTarget.oneOverWidth = 1.0f / aTarget.width;
+		aTarget.oneOverHeight = 1.0f / aTarget.height;
 
 		var fovRad = aCamera.fieldOfView * Mathf.Deg2Rad;
 
@@ -179,11 +180,11 @@ public static class AmplifyOcclusionCommon
 		float projScale;
 
 		if( aCamera.orthographic )
-			projScale = ( (float)aTarget.fullHeight ) / aCamera.orthographicSize;
+			projScale = aTarget.fullHeight / aCamera.orthographicSize;
 		else
-			projScale = ( (float)aTarget.fullHeight ) / ( Mathf.Tan( fovRad * 0.5f ) * 2.0f );
+			projScale = aTarget.fullHeight / ( Mathf.Tan( fovRad * 0.5f ) * 2.0f );
 
-		if( ( isDownsample == true ) || ( isFilterDownsample == true ) )
+		if( isDownsample || isFilterDownsample )
 		{
 			projScale = projScale * 0.5f * 0.5f;
 		}
@@ -207,7 +208,7 @@ public class AmplifyOcclusionViewProjMatrix
 	public void UpdateGlobalShaderConstants_Matrices( CommandBuffer cb, Camera aCamera, bool isUsingTemporalFilter )
 	{
 		// Camera matrixes
-		if( AmplifyOcclusionCommon.IsStereoSinglePassEnabled( aCamera ) == true )
+		if( AmplifyOcclusionCommon.IsStereoSinglePassEnabled( aCamera ) )
 		{
 			var viewLeft = aCamera.GetStereoViewMatrix( Camera.StereoscopicEye.Left );
 			var viewRight = aCamera.GetStereoViewMatrix( Camera.StereoscopicEye.Right );

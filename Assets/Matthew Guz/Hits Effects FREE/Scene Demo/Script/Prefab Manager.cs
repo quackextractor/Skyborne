@@ -12,7 +12,7 @@ namespace Matthew_Guz.Hits_Effects_FREE.Scene_Demo.Script
         public float cameraRotationSpeed = 10f; // Rotation speed
         public float destroyDelay = 2f; // Time to destroy prefabs
         public Text infoText;
-        private int currentIndex = 0; // Index of the current prefab
+        private int currentIndex; // Index of the current prefab
 
 
         void Start()

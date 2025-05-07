@@ -9,9 +9,8 @@ public class Target : MonoBehaviour
     private const float InitialAccumulatedKnockback = 1f;
     private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
-    [Header("Knockback Settings")] [SerializeField]
-    private float knockbackMultiplier = 1f; // 100% default
-
+    [Header("Knockback Settings")]
+    [SerializeField] private float knockbackMultiplier = 1f; // 100% default
     [SerializeField] private LayerMask platformEdgeLayer;
     [SerializeField] private TextMeshProUGUI playerHealthText;
 
@@ -21,10 +20,16 @@ public class Target : MonoBehaviour
     [FormerlySerializedAs("_accumulatedKnockback")]
     public float accumulatedKnockback = InitialAccumulatedKnockback;
 
+    [Header("Burning Effect")]
+    private bool _isBurning;
+    private float _burningTimeRemaining;
+    private ParticleSystem _fireEffect;
+    private Coroutine _burningCoroutine;
+
     /*  [Header("Ragdoll Launch Settings")]
       [Tooltip("0 = flat (no lift), 1 = 45° upwards")]
       [SerializeField, Range(-1f, 1f)] */
-    private readonly float upwardFactor = -0.01f;
+    private const float UpwardFactor = -0.01f;
     private CharacterController _charController;
 
     private Enemy _enemy;
@@ -46,6 +51,12 @@ public class Target : MonoBehaviour
     {
         get => accumulatedKnockback;
         set => accumulatedKnockback = value;
+    }
+
+    public bool IsBurning
+    {
+        get => _isBurning;
+        set => _isBurning = value;
     }
 
     private void Awake()
@@ -86,8 +97,16 @@ public class Target : MonoBehaviour
 
     private void Update()
     {
-        if (_isPlayer && _hasHealthText)
-            playerHealthText.text = "Current Knockback: " + accumulatedKnockback;
+        if (_isPlayer && playerHealthText != null)
+            playerHealthText.text = $"Current Knockback: {accumulatedKnockback}";
+    }
+
+    private void OnDestroy()
+    {
+        if (_fireEffect != null)
+        {
+            Destroy(_fireEffect.gameObject);
+        }
     }
 
     public void TakeAttack(Attack attack)
@@ -113,7 +132,7 @@ public class Target : MonoBehaviour
 
     private IEnumerator FlashEffect()
     {
-        if (_hasEnemyScript)
+        if (_hasEnemyScript && !_isBurning) // Don't flash if already burning
         {
             _renderer.material.SetColor(BaseColor, Color.white);
             yield return new WaitForSeconds(0.1f);
@@ -121,11 +140,52 @@ public class Target : MonoBehaviour
         }
     }
 
-    private void SetLayerRecursively(Transform t, int layer)
+    public void SetBurning(bool burning, float duration = 0f)
     {
-        t.gameObject.layer = layer;
-        foreach (Transform child in t)
-            SetLayerRecursively(child, layer);
+        if (burning && !IsBurning)
+        {
+            IsBurning = true;
+            _burningTimeRemaining = duration;
+            if (_burningCoroutine != null) StopCoroutine(_burningCoroutine);
+            _burningCoroutine = StartCoroutine(BurningProcess());
+        }
+        else if (!burning && IsBurning)
+        {
+            IsBurning = false;
+            // Stop emission and let particles fade
+            if (_fireEffect)
+            {
+                var main = _fireEffect.main;
+                float startLife = (main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants)
+                    ? main.startLifetime.constantMax : main.startLifetime.constant;
+                _fireEffect.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                Destroy(_fireEffect.gameObject, main.duration + startLife);
+                _fireEffect = null;
+            }
+
+            if (_burningCoroutine != null)
+            {
+                StopCoroutine(_burningCoroutine);
+                _burningCoroutine = null;
+            }
+        }
+    }
+    
+    public void SetFireEffect(ParticleSystem fireEffect)
+    {
+        if (_fireEffect != null)
+            Destroy(_fireEffect.gameObject);
+        _fireEffect = fireEffect;
+    }
+
+    private IEnumerator BurningProcess()
+    {
+        while (_burningTimeRemaining > 0f && IsBurning)
+        {
+            _burningTimeRemaining -= Time.deltaTime;
+            yield return null;
+        }
+        SetBurning(false);
     }
 
     private void ApplyKnockbackForce(Vector3 direction, float force)
@@ -171,7 +231,7 @@ public class Target : MonoBehaviour
         var horiz = dir;
         horiz.y = 0;
         horiz.Normalize();
-        var launchDir = (horiz + Vector3.up * upwardFactor).normalized;
+        var launchDir = (horiz + Vector3.up * UpwardFactor).normalized;
 
         // 4) Activate ragdoll parts and give them the launch velocity
         foreach (var col in _ragdollColliders)
@@ -196,6 +256,13 @@ public class Target : MonoBehaviour
 
         // 7) Schedule enemy destruction after 10 seconds
         if (!_isPlayer) Destroy(gameObject, 10f);
+    }
+
+    private void SetLayerRecursively(Transform t, int layer)
+    {
+        t.gameObject.layer = layer;
+        foreach (Transform child in t)
+            SetLayerRecursively(child, layer);
     }
 
     public void ResetAccumulatedKnockback()

@@ -30,7 +30,7 @@ namespace TrueClouds.Scripts.Editor
 
         public float NoiseReapply = 1.88f;
         public OctaveLerpType LerpType = OctaveLerpType.Lerp;
-        public bool NormalizeInTheEnd = false;
+        public bool NormalizeInTheEnd;
         public float ContrastAdjustement = 1;
 
         private Texture2D _texture;

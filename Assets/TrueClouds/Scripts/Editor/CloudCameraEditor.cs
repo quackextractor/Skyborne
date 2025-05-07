@@ -85,7 +85,7 @@ namespace TrueClouds.Scripts.Editor
 
         private EditTool EditTypeToolbar(EditTool selected)
         {
-            var toolbar = new string[] { "General", "Light", "Blur", "Noise" };
+            var toolbar = new[] { "General", "Light", "Blur", "Noise" };
             return (EditTool)GUILayout.Toolbar((int)selected, toolbar);
         }
 

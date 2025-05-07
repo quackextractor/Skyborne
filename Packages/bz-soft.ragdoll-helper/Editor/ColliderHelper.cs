@@ -124,7 +124,7 @@ namespace Editor
 		/// </summary>
 		public static Transform GetRotatorTransform(Transform boneTransform)
 		{
-			var colliderRotatorName = boneTransform.name + ColliderHelper.ColliderRotatorNodeSufix;
+			var colliderRotatorName = boneTransform.name + ColliderRotatorNodeSufix;
 
 			// find rotator node
 			var rotatorTransform = boneTransform.Find(colliderRotatorName);

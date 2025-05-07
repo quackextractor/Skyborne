@@ -1,6 +1,7 @@
 // Amplify Occlusion 2 - Robust Ambient Occlusion for Unity
 // Copyright (c) Amplify Creations, Lda <info@amplify.pt>
 
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -16,7 +17,7 @@ namespace AmplifyOcclusion.Plugins
 	[RequireComponent( typeof( Camera ) )]
 	public class AmplifyOcclusionEffect : MonoBehaviour
 	{
-		private static int m_nextID = 0;
+		private static int m_nextID;
 		private int m_myID;
 		private string m_myIDstring;
 
@@ -77,7 +78,7 @@ namespace AmplifyOcclusion.Plugins
 
 		[Header( "Distance Fade" )]
 		[Tooltip( "Control parameters at faraway." )]
-		public bool FadeEnabled = false;
+		public bool FadeEnabled;
 
 		[Tooltip( "Distance in Unity unities that start to fade." )]
 		public float FadeStart = 100.0f;
@@ -87,7 +88,7 @@ namespace AmplifyOcclusion.Plugins
 
 		[Tooltip( "Final Intensity parameter." )]
 		[Range( 0, 1 )]
-		public float FadeToIntensity = 0.0f;
+		public float FadeToIntensity;
 		public Color FadeToTint = Color.black;
 
 		[Tooltip( "Final Radius parameter." )]
@@ -136,23 +137,23 @@ namespace AmplifyOcclusion.Plugins
 		// Previous state variables
 		private PerPixelNormalSource m_prevPerPixelNormals;
 		private ApplicationMethod m_prevApplyMethod;
-		private bool m_prevDeferredReflections = false;
+		private bool m_prevDeferredReflections;
 		private SampleCountLevel m_prevSampleCount = SampleCountLevel.Low;
-		private bool m_prevDownsample = false;
-		private bool m_prevCacheAware = false;
-		private bool m_prevBlurEnabled = false;
-		private int m_prevBlurRadius = 0;
-		private int m_prevBlurPasses = 0;
+		private bool m_prevDownsample;
+		private bool m_prevCacheAware;
+		private bool m_prevBlurEnabled;
+		private int m_prevBlurRadius;
+		private int m_prevBlurPasses;
 		private bool m_prevFilterEnabled = true;
 		private bool m_prevFilterDownsample = true;
 		private bool m_prevHDR = true;
 		private bool m_prevMSAA = true;
 
 #if UNITY_EDITOR
-		private bool m_prevIsPlaying = false;
+		private bool m_prevIsPlaying;
 #endif
 
-		private Camera m_targetCamera = null;
+		private Camera m_targetCamera;
 
 		private RenderTargetIdentifier[] applyDebugTargetsTemporal = new RenderTargetIdentifier[2];
 		private RenderTargetIdentifier[] applyDeferredTargets_Log_Temporal = new RenderTargetIdentifier[3];
@@ -161,12 +162,12 @@ namespace AmplifyOcclusion.Plugins
 		private RenderTargetIdentifier[] applyPostEffectTargetsTemporal = new RenderTargetIdentifier[2];
 
 		// NOTE: MotionVectors are not supported in Deferred Injection mode due to 1 frame delay
-		private bool UsingTemporalFilter { get { return ( m_sampleStep > 0 ) && ( FilterEnabled == true ) && ( m_targetCamera.cameraType != UnityEngine.CameraType.SceneView ); } }
+		private bool UsingTemporalFilter { get { return ( m_sampleStep > 0 ) && FilterEnabled && ( m_targetCamera.cameraType != CameraType.SceneView ); } }
 		private bool UsingMotionVectors { get { return UsingTemporalFilter && ( ApplyMethod != ApplicationMethod.Deferred ); } }
-		private bool UsingFilterDownsample { get { return ( Downsample == true ) && ( FilterDownsample == true ) && ( UsingTemporalFilter == true ); } }
+		private bool UsingFilterDownsample { get { return Downsample && FilterDownsample && UsingTemporalFilter; } }
 
-		private bool useMRTBlendingFallback = false;
-		private bool checkedforMRTBlendingFallback = false;
+		private bool useMRTBlendingFallback;
+		private bool checkedforMRTBlendingFallback;
 
 		// Command buffer
 		private struct CmdBuffer
@@ -215,7 +216,7 @@ namespace AmplifyOcclusion.Plugins
 		}
 
 		// Quad Mesh
-		static private Mesh m_quadMesh = null;
+		static private Mesh m_quadMesh;
 
 		private void createQuadMesh()
 		{
@@ -240,9 +241,9 @@ namespace AmplifyOcclusion.Plugins
 		}
 
 		// Render Materials
-		static private Material m_occlusionMat = null;
-		static private Material m_blurMat = null;
-		static private Material m_applyOcclusionMat = null;
+		static private Material m_occlusionMat;
+		static private Material m_blurMat;
+		static private Material m_applyOcclusionMat;
 
 		private void checkMaterials( bool aThroughErrorMsg )
 		{
@@ -311,24 +312,24 @@ namespace AmplifyOcclusion.Plugins
 			{
 				Debug.LogError( "[AmplifyOcclusion] Target platform does not meet the minimum requirements for this effect to work properly." );
 
-				this.enabled = false;
+				enabled = false;
 
 				return;
 			}
 
-			if( CacheAware == true )
+			if( CacheAware )
 			{
 				if( SystemInfo.SupportsRenderTextureFormat( RenderTextureFormat.RFloat ) == false )
 				{
 					CacheAware = false;
-					UnityEngine.Debug.LogWarning( "[AmplifyOcclusion] System does not support RFloat RenderTextureFormat. CacheAware will be disabled." );
+					Debug.LogWarning( "[AmplifyOcclusion] System does not support RFloat RenderTextureFormat. CacheAware will be disabled." );
 				}
 				else
 				{
 					if( SystemInfo.copyTextureSupport == CopyTextureSupport.None )
 					{
 						CacheAware = false;
-						UnityEngine.Debug.LogWarning( "[AmplifyOcclusion] System does not support CopyTexture. CacheAware will be disabled." );
+						Debug.LogWarning( "[AmplifyOcclusion] System does not support CopyTexture. CacheAware will be disabled." );
 					}
 					else
 					{
@@ -337,7 +338,7 @@ namespace AmplifyOcclusion.Plugins
 						    ( SystemInfo.graphicsDeviceType == GraphicsDeviceType.OpenGLES3 ) )
 						{
 							CacheAware = false;
-							UnityEngine.Debug.LogWarningFormat( "[AmplifyOcclusion] CacheAware is not supported on {0} devices. CacheAware will be disabled.", SystemInfo.graphicsDeviceType );
+							Debug.LogWarningFormat( "[AmplifyOcclusion] CacheAware is not supported on {0} devices. CacheAware will be disabled.", SystemInfo.graphicsDeviceType );
 						}
 					}
 				}
@@ -439,7 +440,7 @@ namespace AmplifyOcclusion.Plugins
 				    ( m_prevFilterDownsample != UsingFilterDownsample ) ||
 				    ( m_temporalAccumRT != null && ( !m_temporalAccumRT[ 0 ].IsCreated() || !m_temporalAccumRT[ 1 ].IsCreated() ) )
 #if UNITY_EDITOR
-				    || ( ( m_prevIsPlaying == true ) && ( EditorApplication.isPlaying == false ) )
+				    || ( m_prevIsPlaying && ( EditorApplication.isPlaying == false ) )
 #endif
 				  )
 				{
@@ -453,7 +454,7 @@ namespace AmplifyOcclusion.Plugins
 
 			if( m_temporalAccumRT != null )
 			{
-				if( AmplifyOcclusionCommon.IsStereoMultiPassEnabled( m_targetCamera ) == true )
+				if( AmplifyOcclusionCommon.IsStereoMultiPassEnabled( m_targetCamera ) )
 				{
 					if( m_temporalAccumRT.Length != 4 )
 					{
@@ -481,7 +482,7 @@ namespace AmplifyOcclusion.Plugins
 
 			if( m_temporalAccumRT == null && FilterEnabled )
 			{
-				if( AmplifyOcclusionCommon.IsStereoMultiPassEnabled( m_targetCamera ) == true )
+				if( AmplifyOcclusionCommon.IsStereoMultiPassEnabled( m_targetCamera ) )
 				{
 					m_temporalAccumRT = new RenderTexture[ 4 ];
 				}
@@ -492,7 +493,7 @@ namespace AmplifyOcclusion.Plugins
 
 				for( var i = 0; i < m_temporalAccumRT.Length; i++ )
 				{
-					m_temporalAccumRT[ i ] = AmplifyOcclusionCommon.SafeAllocateRT( "_AO_TemporalAccum_" + i.ToString(),
+					m_temporalAccumRT[ i ] = AmplifyOcclusionCommon.SafeAllocateRT( "_AO_TemporalAccum_" + i,
 						m_target.width,
 						m_target.height,
 						m_accumTemporalRTFormat,
@@ -504,7 +505,7 @@ namespace AmplifyOcclusion.Plugins
 				m_clearHistory = true;
 			}
 
-			if( ( CacheAware == true ) && ( m_depthMipmap == null ) )
+			if( CacheAware && ( m_depthMipmap == null ) )
 			{
 				m_depthMipmap = AmplifyOcclusionCommon.SafeAllocateRT( "_AO_DepthMipmap",
 					m_target.fullWidth >> 1,
@@ -515,15 +516,15 @@ namespace AmplifyOcclusion.Plugins
 					1,
 					true );
 
-				var minSize = (int)Mathf.Min( m_target.fullWidth, m_target.fullHeight );
-				m_numberMips = (int)( Mathf.Log( (float)minSize, 2.0f ) + 1.0f ) - 1;
+				var minSize = Mathf.Min( m_target.fullWidth, m_target.fullHeight );
+				m_numberMips = (int)( Mathf.Log( minSize, 2.0f ) + 1.0f ) - 1;
 
 				m_tmpMipString = null;
 				m_tmpMipString = new string[m_numberMips];
 
 				for( var i = 0; i < m_numberMips; i++ )
 				{
-					m_tmpMipString[i] = "_AO_TmpMip_" + i.ToString();
+					m_tmpMipString[i] = "_AO_TmpMip_" + i;
 				}
 			}
 			else
@@ -540,7 +541,7 @@ namespace AmplifyOcclusion.Plugins
 			    ( m_prevCacheAware != CacheAware ) ||
 			    ( m_prevBlurEnabled != BlurEnabled ) ||
 			    ( ( ( m_prevBlurPasses != BlurPasses ) ||
-			        ( m_prevBlurRadius != BlurRadius ) ) && ( BlurEnabled == true ) ) ||
+			        ( m_prevBlurRadius != BlurRadius ) ) && BlurEnabled ) ||
 			    ( m_prevFilterEnabled != FilterEnabled ) ||
 			    ( m_prevFilterDownsample != UsingFilterDownsample ) ||
 			    ( m_prevHDR != HDR ) ||
@@ -588,9 +589,9 @@ namespace AmplifyOcclusion.Plugins
 						m_paramsChanged = true;
 						PerPixelNormals = PerPixelNormalSource.Camera;
 
-						if( m_targetCamera.cameraType != UnityEngine.CameraType.SceneView )
+						if( m_targetCamera.cameraType != CameraType.SceneView )
 						{
-							UnityEngine.Debug.LogWarning( "[AmplifyOcclusion] GBuffer Normals only available in Camera Deferred Shading mode. Switched to Camera source." );
+							Debug.LogWarning( "[AmplifyOcclusion] GBuffer Normals only available in Camera Deferred Shading mode. Switched to Camera source." );
 						}
 					}
 
@@ -599,9 +600,9 @@ namespace AmplifyOcclusion.Plugins
 						m_paramsChanged = true;
 						ApplyMethod = ApplicationMethod.PostEffect;
 
-						if( m_targetCamera.cameraType != UnityEngine.CameraType.SceneView )
+						if( m_targetCamera.cameraType != CameraType.SceneView )
 						{
-							UnityEngine.Debug.LogWarning( "[AmplifyOcclusion] Deferred Method requires a Deferred Shading path. Switching to Post Effect Method." );
+							Debug.LogWarning( "[AmplifyOcclusion] Deferred Method requires a Deferred Shading path. Switching to Post Effect Method." );
 						}
 					}
 				}
@@ -612,9 +613,9 @@ namespace AmplifyOcclusion.Plugins
 						m_paramsChanged = true;
 						PerPixelNormals = PerPixelNormalSource.GBuffer;
 
-						if( m_targetCamera.cameraType != UnityEngine.CameraType.SceneView )
+						if( m_targetCamera.cameraType != CameraType.SceneView )
 						{
-							UnityEngine.Debug.LogWarning( "[AmplifyOcclusion] Camera Normals not supported for Deferred Method. Switching to GBuffer Normals." );
+							Debug.LogWarning( "[AmplifyOcclusion] Camera Normals not supported for Deferred Method. Switching to GBuffer Normals." );
 						}
 					}
 				}
@@ -630,7 +631,7 @@ namespace AmplifyOcclusion.Plugins
 					m_targetCamera.depthTextureMode |= DepthTextureMode.DepthNormals;
 				}
 
-				if( ( UsingMotionVectors == true ) &&
+				if( UsingMotionVectors &&
 				    ( m_targetCamera.depthTextureMode & DepthTextureMode.MotionVectors ) == 0 )
 				{
 					m_targetCamera.depthTextureMode |= DepthTextureMode.MotionVectors;
@@ -653,8 +654,8 @@ namespace AmplifyOcclusion.Plugins
 			if( m_targetCamera != null )
 			{
 #if UNITY_EDITOR
-				if( ( m_targetCamera.cameraType == UnityEngine.CameraType.SceneView ) &&
-				    ( ( ( PerPixelNormals == PerPixelNormalSource.GBuffer ) && ( m_targetCamera.orthographic == true ) ) ||
+				if( ( m_targetCamera.cameraType == CameraType.SceneView ) &&
+				    ( ( ( PerPixelNormals == PerPixelNormalSource.GBuffer ) && m_targetCamera.orthographic ) ||
 				      ( PerPixelNormals == PerPixelNormalSource.Camera ) && 
 					
 #if UNITY_2019_1_OR_NEWER
@@ -700,7 +701,7 @@ namespace AmplifyOcclusion.Plugins
 				    ( m_commandBuffer_Occlusion.cmdBuffer != null ) &&
 				    ( m_commandBuffer_Apply.cmdBuffer != null ) )
 				{
-					if( AmplifyOcclusionCommon.IsStereoMultiPassEnabled( m_targetCamera ) == true )
+					if( AmplifyOcclusionCommon.IsStereoMultiPassEnabled( m_targetCamera ) )
 					{
 						var curStepIdx = ( m_sampleStep >> 1 ) & 1;
 						var curEyeIdx = ( m_sampleStep & 1 );
@@ -763,9 +764,9 @@ namespace AmplifyOcclusion.Plugins
 				Update();
 
 #if UNITY_EDITOR
-				if( m_targetCamera.cameraType != UnityEngine.CameraType.SceneView )
+				if( m_targetCamera.cameraType != CameraType.SceneView )
 				{
-					var T = System.Type.GetType( "UnityEditor.GameView,UnityEditor" );
+					var T = Type.GetType( "UnityEditor.GameView,UnityEditor" );
 					var array = Resources.FindObjectsOfTypeAll( T );
 
 					if( array.Length > 0 )
@@ -797,16 +798,16 @@ namespace AmplifyOcclusion.Plugins
 		}
 
 
-		private RenderTexture m_occlusionDepthRT = null;
-		private RenderTexture[] m_temporalAccumRT = null;
-		private RenderTexture m_depthMipmap = null;
+		private RenderTexture m_occlusionDepthRT;
+		private RenderTexture[] m_temporalAccumRT;
+		private RenderTexture m_depthMipmap;
 
-		private uint m_sampleStep = 0;
-		private uint m_curTemporalIdx = 0;
-		private uint m_prevTemporalIdx = 0;
+		private uint m_sampleStep;
+		private uint m_curTemporalIdx;
+		private uint m_prevTemporalIdx;
 
-		private string[] m_tmpMipString = null;
-		private int m_numberMips = 0;
+		private string[] m_tmpMipString;
+		private int m_numberMips;
 		private void commandBuffer_FillComputeOcclusion( CommandBuffer cb )
 		{
 			cb.BeginSample( "AO 1 - ComputeOcclusion" );
@@ -817,8 +818,8 @@ namespace AmplifyOcclusion.Plugins
 				cb.SetGlobalTexture( PropertyID._AO_GBufferNormals, BuiltinRenderTextureType.GBuffer2 );
 			}
 
-			var oneOverFullSize_Size = new Vector4( 1.0f / (float)m_target.fullWidth,
-				1.0f / (float)m_target.fullHeight,
+			var oneOverFullSize_Size = new Vector4( 1.0f / m_target.fullWidth,
+				1.0f / m_target.fullHeight,
 				m_target.fullWidth,
 				m_target.fullHeight );
 
@@ -828,7 +829,7 @@ namespace AmplifyOcclusion.Plugins
 			                      sampleCountPass +
 			                      ( (int)PerPixelNormals ) );
 
-			if( CacheAware == true )
+			if( CacheAware )
 			{
 				occlusionPass += ShaderPass.OcclusionLow_None_UseDynamicDepthMips;
 
@@ -870,7 +871,7 @@ namespace AmplifyOcclusion.Plugins
 				cb.SetGlobalTexture( PropertyID._AO_SourceDepthMipmap, m_depthMipmap );
 			}
 
-			if( ( Downsample == true ) && ( UsingFilterDownsample == false ) )
+			if( Downsample && ( UsingFilterDownsample == false ) )
 			{
 				var halfWidth = m_target.fullWidth / 2;
 				var halfHeight = m_target.fullHeight / 2;
@@ -893,7 +894,7 @@ namespace AmplifyOcclusion.Plugins
 				cb.SetRenderTarget( default( RenderTexture ) );
 				cb.EndSample( "AO 1 - ComputeOcclusion" );
 
-				if( BlurEnabled == true )
+				if( BlurEnabled )
 				{
 					commandBuffer_Blur( cb, tmpSmallOcclusionRT, halfWidth, halfHeight );
 				}
@@ -918,7 +919,7 @@ namespace AmplifyOcclusion.Plugins
 			{
 				cb.SetGlobalVector( PropertyID._AO_Source_TexelSize, oneOverFullSize_Size );
 
-				if( UsingFilterDownsample == true )
+				if( UsingFilterDownsample )
 				{
 					// Must use proper float precision 2.0 division to avoid artefacts
 					cb.SetGlobalVector( PropertyID._AO_Target_TexelSize, new Vector4( 1.0f / ( m_target.fullWidth / 2.0f ),
@@ -928,8 +929,8 @@ namespace AmplifyOcclusion.Plugins
 				}
 				else
 				{
-					cb.SetGlobalVector( PropertyID._AO_Target_TexelSize, new Vector4( 1.0f / (float)m_target.width,
-						1.0f / (float)m_target.height,
+					cb.SetGlobalVector( PropertyID._AO_Target_TexelSize, new Vector4( 1.0f / m_target.width,
+						1.0f / m_target.height,
 						m_target.width,
 						m_target.height ) );
 				}
@@ -940,7 +941,7 @@ namespace AmplifyOcclusion.Plugins
 				cb.SetRenderTarget( default( RenderTexture ) );
 				cb.EndSample( "AO 1 - ComputeOcclusion" );
 
-				if( BlurEnabled == true )
+				if( BlurEnabled )
 				{
 					commandBuffer_Blur( cb, m_occlusionDepthRT, m_target.width, m_target.height );
 				}
@@ -1031,12 +1032,12 @@ namespace AmplifyOcclusion.Plugins
 
 		int getTemporalPass()
 		{
-			return ( ( ( UsingMotionVectors == true ) && ( m_sampleStep > 1 ) ) ? ( 1 << 0 ) : 0 );
+			return ( ( UsingMotionVectors && ( m_sampleStep > 1 ) ) ? ( 1 << 0 ) : 0 );
 		}
 
 		void commandBuffer_TemporalFilter( CommandBuffer cb )
 		{
-			if( m_clearHistory == true )
+			if( m_clearHistory )
 			{
 				ClearHistory( cb );
 			}
@@ -1075,7 +1076,7 @@ namespace AmplifyOcclusion.Plugins
 
 					var tmpMotionIntensityRT = 0;
 
-					if( UsingMotionVectors == true )
+					if( UsingMotionVectors )
 					{
 						tmpMotionIntensityRT = commandBuffer_NeighborMotionIntensity( cb, m_target.fullWidth, m_target.fullHeight );
 					}
@@ -1130,7 +1131,7 @@ namespace AmplifyOcclusion.Plugins
 						PerformBlit( cb, m_applyOcclusionMat, ShaderPass.ApplyDeferredCombineFromTemporal );
 					}
 
-					if( UsingMotionVectors == true )
+					if( UsingMotionVectors )
 					{
 						AmplifyOcclusionCommon.SafeReleaseTemporaryRT( cb, tmpMotionIntensityRT );
 					}
@@ -1167,7 +1168,7 @@ namespace AmplifyOcclusion.Plugins
 
 					var tmpMotionIntensityRT = 0;
 
-					if( UsingMotionVectors == true )
+					if( UsingMotionVectors )
 					{
 						tmpMotionIntensityRT = commandBuffer_NeighborMotionIntensity( cb, m_target.fullWidth, m_target.fullHeight );
 					}
@@ -1195,7 +1196,7 @@ namespace AmplifyOcclusion.Plugins
 						PerformBlit( cb, m_applyOcclusionMat, ShaderPass.ApplyDeferredLogCombineFromTemporal );
 					}
 
-					if( UsingMotionVectors == true )
+					if( UsingMotionVectors )
 					{
 						AmplifyOcclusionCommon.SafeReleaseTemporaryRT( cb, tmpMotionIntensityRT );
 					}
@@ -1227,7 +1228,7 @@ namespace AmplifyOcclusion.Plugins
 
 				var tmpMotionIntensityRT = 0;
 
-				if( UsingMotionVectors == true )
+				if( UsingMotionVectors )
 				{
 					tmpMotionIntensityRT = commandBuffer_NeighborMotionIntensity( cb, m_target.fullWidth, m_target.fullHeight );
 				}
@@ -1274,7 +1275,7 @@ namespace AmplifyOcclusion.Plugins
 					PerformBlit( cb, m_applyOcclusionMat, ShaderPass.ApplyCombineFromTemporal );
 				}
 
-				if( UsingMotionVectors == true )
+				if( UsingMotionVectors )
 				{
 					AmplifyOcclusionCommon.SafeReleaseTemporaryRT( cb, tmpMotionIntensityRT );
 				}
@@ -1302,7 +1303,7 @@ namespace AmplifyOcclusion.Plugins
 
 				var tmpMotionIntensityRT = 0;
 
-				if( UsingMotionVectors == true )
+				if( UsingMotionVectors )
 				{
 					tmpMotionIntensityRT = commandBuffer_NeighborMotionIntensity( cb, m_target.fullWidth, m_target.fullHeight );
 				}
@@ -1329,7 +1330,7 @@ namespace AmplifyOcclusion.Plugins
 					PerformBlit( cb, m_applyOcclusionMat, ShaderPass.ApplyDebugCombineFromTemporal );
 				}
 
-				if( UsingMotionVectors == true )
+				if( UsingMotionVectors )
 				{
 					AmplifyOcclusionCommon.SafeReleaseTemporaryRT( cb, tmpMotionIntensityRT );
 				}
@@ -1346,7 +1347,7 @@ namespace AmplifyOcclusion.Plugins
 			cb.EndSample( "AO 3 - ApplyDebug" );
 		}
 
-		private TargetDesc m_target = new TargetDesc();
+		private TargetDesc m_target;
 
 		void UpdateGlobalShaderConstants( CommandBuffer cb )
 		{
@@ -1367,7 +1368,7 @@ namespace AmplifyOcclusion.Plugins
 			var AO_BufDepthToLinearEye = m_targetCamera.farClipPlane * m_oneOverDepthScale;
 			cb.SetGlobalFloat( PropertyID._AO_BufDepthToLinearEye, AO_BufDepthToLinearEye );
 
-			if( BlurEnabled == true )
+			if( BlurEnabled )
 			{
 				var AO_BlurSharpness = BlurSharpness * 100.0f * AO_BufDepthToLinearEye;
 
@@ -1375,7 +1376,7 @@ namespace AmplifyOcclusion.Plugins
 			}
 
 			// Distance Fade
-			if( FadeEnabled == true )
+			if( FadeEnabled )
 			{
 				FadeStart = Mathf.Max( 0.0f, FadeStart );
 				FadeLength = Mathf.Max( 0.01f, FadeLength );
@@ -1392,7 +1393,7 @@ namespace AmplifyOcclusion.Plugins
 				cb.SetGlobalVector( PropertyID._AO_FadeParams, new Vector2( 0.0f, 0.0f ) );
 			}
 
-			if( UsingTemporalFilter == true )
+			if( UsingTemporalFilter )
 			{
 				AmplifyOcclusionCommon.CommandBuffer_TemporalFilterDirectionsOffsets( cb, m_sampleStep );
 			}

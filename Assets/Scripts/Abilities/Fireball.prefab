@@ -50,4 +50,5 @@ MonoBehaviour:
   activationTime: 0.2
   cooldownTime: 0.5
   weaponCollider: {fileID: 0}
-  go: {fileID: 3863087046821781677, guid: f86dc476ac9065f48b7cfb97b840fc2c, type: 3}
+  isAttacking: 0
+  firePrefab: {fileID: 0}

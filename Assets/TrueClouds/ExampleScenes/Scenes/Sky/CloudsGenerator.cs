@@ -34,7 +34,7 @@ namespace TrueClouds.ExampleScenes.Scenes.Sky
                     curPos.y = 150;
                     var id = Random.Range(0, Prefabs.Length);
                     cnt++;
-                    var placed = (GameObject)Instantiate(Prefabs[id], curPos, Quaternion.identity);
+                    var placed = Instantiate(Prefabs[id], curPos, Quaternion.identity);
                     placed.transform.localScale = new Vector3(
                         width,
                         10,

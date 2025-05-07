@@ -55,7 +55,7 @@ namespace Editor
 				Chest +
 				Head;
 			if (Mathf.Abs(totalWeight - checkSum) > Mathf.Epsilon)
-				Debug.LogError("totalWeight != checkSum (" + totalWeight.ToString() + ", " + checkSum.ToString() + ")");
+				Debug.LogError("totalWeight != checkSum (" + totalWeight + ", " + checkSum + ")");
 		}
 	}
 }

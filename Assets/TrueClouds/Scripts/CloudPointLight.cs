@@ -6,12 +6,12 @@ namespace TrueClouds.Scripts
     [ExecuteInEditMode]
     class CloudPointLight : MonoBehaviour
     {
-        public float Start = 0;
+        public float Start;
         public float Range = 10;
         public Color Color = Color.white;
         public float ShadowIntensity = 0.2f;
 
-        private static Shader SHADER = null;
+        private static Shader SHADER;
 
         private static int START_ID = -1;
         private static int RANGE_ID = -1;
