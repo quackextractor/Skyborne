@@ -113,10 +113,22 @@ public class PlayerController : MonoBehaviour
     private void ToggleSpeedParticles()
     {
         float currentSpeed = _rb.velocity.magnitude;
-        bool shouldEmit = currentSpeed > speedThreshold;
-        if (_emissionModule.enabled != shouldEmit)
+
+        if (currentSpeed > speedThreshold)
         {
-            _emissionModule.enabled = shouldEmit;
+            if (!_emissionModule.enabled)
+                _emissionModule.enabled = true;
+
+            // Enhance visibility by increasing emission range and sensitivity
+            float emissionRate = Mathf.Lerp(50f, 300f, Mathf.Clamp01((currentSpeed - speedThreshold) / (moveSpeed * 1.5f)));
+            _emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(emissionRate);
+
+        }
+        else
+        {
+            if (_emissionModule.enabled)
+                _emissionModule.enabled = false;
         }
     }
+
 }

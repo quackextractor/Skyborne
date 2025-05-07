@@ -136,7 +136,7 @@ public class Target : MonoBehaviour
 
         if (Physics.Raycast(origin, dir, out var hit, force, platformEdgeLayer))
         {
-            Debug.Log("Platform edge detected. Switching to ragdoll.");
+          //  Debug.Log("Platform edge detected. Switching to ragdoll.");
             return true;
         }
         return false;
@@ -186,7 +186,7 @@ public class Target : MonoBehaviour
         _rb.velocity = launchDir * force * 1.5f;
         _rb.angularVelocity = Random.onUnitSphere * force * 0.2f;
 
-        Debug.Log("Ragdoll launched!");
+       // Debug.Log("Ragdoll launched!");
         
         // 7) Schedule enemy destruction after 10 seconds
         if (!_isPlayer){

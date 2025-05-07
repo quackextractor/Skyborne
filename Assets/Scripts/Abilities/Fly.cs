@@ -32,7 +32,6 @@ public class Fly:MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if (other.name != "Player" && other.TryGetComponent<Target>(out Target target))
         {
             target.TakeAttack(_position,_attack, _knockback);
