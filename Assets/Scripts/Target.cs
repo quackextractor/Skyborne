@@ -25,10 +25,6 @@ public class Target : MonoBehaviour
     private float _burningTimeRemaining;
     private ParticleSystem _fireEffect;
     private Coroutine _burningCoroutine;
-
-    /*  [Header("Ragdoll Launch Settings")]
-      [Tooltip("0 = flat (no lift), 1 = 45° upwards")]
-      [SerializeField, Range(-1f, 1f)] */
     private const float UpwardFactor = -0.01f;
     private CharacterController _charController;
 
@@ -56,7 +52,7 @@ public class Target : MonoBehaviour
     public bool IsBurning
     {
         get => _isBurning;
-        set => _isBurning = value;
+        private set => _isBurning = value;
     }
 
     private void Awake()
@@ -97,7 +93,7 @@ public class Target : MonoBehaviour
 
     private void Update()
     {
-        if (_isPlayer && playerHealthText != null)
+        if (_isPlayer && playerHealthText)
             playerHealthText.text = $"Current Knockback: {accumulatedKnockback}";
     }
 
@@ -152,14 +148,22 @@ public class Target : MonoBehaviour
         else if (!burning && IsBurning)
         {
             IsBurning = false;
-            // Stop emission and let particles fade
+
             if (_fireEffect)
             {
+                // stop particles
                 var main = _fireEffect.main;
-                float startLife = (main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants)
-                    ? main.startLifetime.constantMax : main.startLifetime.constant;
                 _fireEffect.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-                Destroy(_fireEffect.gameObject, main.duration + startLife);
+
+                // stop audio
+                var audioSrc = _fireEffect.GetComponent<AudioSource>();
+                if (audioSrc)
+                    audioSrc.Stop();
+
+                // destroy the whole GameObject after it’s faded out
+                float life = (main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants)
+                    ? main.startLifetime.constantMax : main.startLifetime.constant;
+                Destroy(_fireEffect.gameObject, main.duration + life);
                 _fireEffect = null;
             }
 
@@ -204,15 +208,12 @@ public class Target : MonoBehaviour
         Debug.DrawRay(origin, dir * force, Color.red, 1f);
 
         return Physics.Raycast(origin, dir, out var hit, force, platformEdgeLayer);
-        //  Debug.Log("Platform edge detected. Switching to ragdoll.");
     }
 
     private void EnableRagdoll(Vector3 dir, float force)
     {
-        // 1) Remove constraints on root
         _rb.constraints = RigidbodyConstraints.None;
 
-        // 2) Disable character scripts & controllers
         if (_isPlayer)
         {
             var component = GetComponent<PlayerController>();
@@ -227,13 +228,9 @@ public class Target : MonoBehaviour
             if (_charController != null) _charController.enabled = false;
         }
 
-        // 3) Compute a true 3D launch direction
-        var horiz = dir;
-        horiz.y = 0;
-        horiz.Normalize();
+        var horiz = dir; horiz.y = 0; horiz.Normalize();
         var launchDir = (horiz + Vector3.up * UpwardFactor).normalized;
 
-        // 4) Activate ragdoll parts and give them the launch velocity
         foreach (var col in _ragdollColliders)
             col.enabled = true;
 
@@ -244,17 +241,12 @@ public class Target : MonoBehaviour
             boneRb.angularVelocity = Random.onUnitSphere * force * 0.1f;
         }
 
-        // 5) Switch the root to ragdoll too
         _rb.isKinematic = false;
         SetLayerRecursively(transform, ragdollLayerIndex);
 
-        // 6) (Optional) also launch the root a bit
         _rb.velocity = launchDir * force * 1.5f;
         _rb.angularVelocity = Random.onUnitSphere * force * 0.2f;
 
-        // Debug.Log("Ragdoll launched!");
-
-        // 7) Schedule enemy destruction after 10 seconds
         if (!_isPlayer) Destroy(gameObject, 10f);
     }
 
