@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(Animator), typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator), typeof(NavMeshAgent), typeof(Rigidbody))]
 public class EnemyAnimationController : MonoBehaviour
 {
     private static readonly int IsWalking   = Animator.StringToHash("IsWalking");
@@ -13,9 +13,13 @@ public class EnemyAnimationController : MonoBehaviour
     [Header("Taunt Settings")]  
     [Tooltip("Seconds between possible taunts")]
     [SerializeField] private float tauntCooldown = 10f;
+    [Tooltip("Fraction to dampen rigidbody velocity on Hurt exit (0 = full stop)")]
+    [Range(0f, 1f)]
+    [SerializeField] private float velocityDamping = 0.1f;
 
     private NavMeshAgent _agent;
     private Animator     _anim;
+    private Rigidbody    _rigidbody;
     private State        _currentState;
     private Enemy        _enemy;
     private Transform    _player;
@@ -23,11 +27,14 @@ public class EnemyAnimationController : MonoBehaviour
 
     private void Awake()
     {
-        _anim    = GetComponent<Animator>();
-        _agent   = GetComponent<NavMeshAgent>();
-        _enemy   = GetComponent<Enemy>();
-        _player  = GameObject.FindGameObjectWithTag("Player").transform;
+        _anim       = GetComponent<Animator>();
+        _agent      = GetComponent<NavMeshAgent>();
+        _rigidbody  = GetComponent<Rigidbody>();
+        _enemy      = GetComponent<Enemy>();
+        _player     = GameObject.FindGameObjectWithTag("Player").transform;
         _agent.updateRotation = false;
+        _rigidbody.interpolation = RigidbodyInterpolation.None;
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _currentState = State.Idle;
     }
 
@@ -90,7 +97,7 @@ public class EnemyAnimationController : MonoBehaviour
 
             case State.Hurt:
                 _anim.SetTrigger(Hurt);
-                // No coroutine—HurtStateBehaviour will handle resuming walk
+                // Rigidbody velocity will be handled on exit via OnHurtFinished
                 break;
         }
     }
@@ -128,6 +135,16 @@ public class EnemyAnimationController : MonoBehaviour
         if (!_agent.isOnNavMesh)
             return;
 
+        // dampen any existing rigidbody velocity
+        if (_rigidbody != null)
+        {
+            _rigidbody.velocity *= velocityDamping;
+            _rigidbody.angularVelocity *= velocityDamping;
+        }
+        
+        Debug.Log("Dampening");
+
+        // resume NavMesh movement
         _agent.isStopped = false;
         _agent.SetDestination(_player.position);
         _currentState = State.Walking;
