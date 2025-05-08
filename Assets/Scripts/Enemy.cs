@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     private static readonly int BaseColor1 = Shader.PropertyToID("_BaseColor");
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
 
     [SerializeField] private EnemyStats stats;
     [SerializeField] private Weapon weapon;
@@ -15,6 +16,7 @@ public class Enemy : MonoBehaviour
     private Target _targetComponent;
     private Renderer _enemyRenderer;
     private Color _originalColor;
+    private Animator _anim;
 
     public Color BaseColor { get; private set; }
     public EnemyStats Stats => stats;
@@ -26,6 +28,7 @@ public class Enemy : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _targetComponent = GetComponent<Target>();
         _enemyRenderer = GetComponent<Renderer>();
+        _anim = GetComponent<Animator>();
         
         if (_enemyRenderer != null)
             _originalColor = _enemyRenderer.material.GetColor(BaseColor1);
@@ -33,27 +36,42 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (_attackCooldown > 0)
+        if (_attackCooldown > 0f)
             _attackCooldown -= Time.deltaTime;
 
-        // Apply visual effects for burning if needed
         UpdateBurningVisuals();
 
-        var distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+        // how far from player
+        float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+
+        // always stop agent when attacking
         if (distanceToPlayer <= stats.range)
         {
             _agent.isStopped = true;
-            RotateTowardsPlayer(); // manual rotation when stopped
+            RotateTowardsPlayer();
             TryAttack();
+            return;
+        }
+
+        // only move if Animator is in the Walking state
+        var isWalking = _anim.GetBool(IsWalking);
+        if (isWalking)
+        {
+            if (_agent.isOnNavMesh)
+            {
+                _agent.isStopped = false;
+                _agent.SetDestination(_player.position);
+            }
+
+            // rotate to face movement direction
+            if (_agent.velocity.sqrMagnitude > 0.1f)
+                RotateTowardsVelocity();
         }
         else
         {
-            _agent.isStopped = false;
-            _agent.SetDestination(_player.position);
-
-            // manual rotation while moving
-            if (_agent.velocity.sqrMagnitude > 0.1f)
-                RotateTowardsVelocity();
+            // animator isn’t walking → enforce no movement
+            if (_agent.isOnNavMesh)
+                _agent.isStopped = true;
         }
     }
 

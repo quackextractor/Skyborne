@@ -10,16 +10,16 @@ public class EnemyAnimationController : MonoBehaviour
     private static readonly int Taunt       = Animator.StringToHash("Taunt");
     private static readonly int Hurt        = Animator.StringToHash("Hurt");
 
-    [Header("Taunt Settings")]
+    [Header("Taunt Settings")]  
     [Tooltip("Seconds between possible taunts")]
     [SerializeField] private float tauntCooldown = 10f;
 
     private NavMeshAgent _agent;
-    private Animator       _anim;
-    private State          _currentState;
-    private Enemy          _enemy;
-    private Transform      _player;
-    private float          _nextTauntTime;
+    private Animator     _anim;
+    private State        _currentState;
+    private Enemy        _enemy;
+    private Transform    _player;
+    private float        _nextTauntTime;
 
     private void Awake()
     {
@@ -27,26 +27,20 @@ public class EnemyAnimationController : MonoBehaviour
         _agent   = GetComponent<NavMeshAgent>();
         _enemy   = GetComponent<Enemy>();
         _player  = GameObject.FindGameObjectWithTag("Player").transform;
-        _agent.updateRotation = false;  // manual rotation only
+        _agent.updateRotation = false;
         _currentState = State.Idle;
     }
 
     private void Update()
     {
-        // If we're playing Hurt, don’t change state until it finishes
-        if (_currentState == State.Hurt) return;
+        if (_currentState == State.Hurt) 
+            return;
 
-        // Decide next state
         float dist = Vector3.Distance(transform.position, _player.position);
-        State targetState;
-        if (dist <= _enemy.Stats.range)
-            targetState = State.MeleeAttack;
-        else if (_agent.velocity.magnitude > 0.1f)
-            targetState = State.Walking;
-        else
-            targetState = State.Idle;
+        State targetState = dist <= _enemy.Stats.range
+            ? State.MeleeAttack
+            : (dist > _enemy.Stats.range ? State.Walking : State.Idle);
 
-        // Taunt cooldown
         if (Time.time >= _nextTauntTime && targetState != State.MeleeAttack)
         {
             targetState = State.Taunt;
@@ -59,7 +53,7 @@ public class EnemyAnimationController : MonoBehaviour
 
     private void SwitchState(State newState)
     {
-        // Reset all triggers & stop any running coroutines
+        // Reset triggers & stop coroutines
         _anim.ResetTrigger(MeleeAttack);
         _anim.ResetTrigger(Taunt);
         _anim.ResetTrigger(Hurt);
@@ -67,22 +61,21 @@ public class EnemyAnimationController : MonoBehaviour
 
         _currentState = newState;
 
-        // Stop navigation for any non-walking state
-        bool shouldMove = newState == State.Walking || newState == State.Idle;
+        bool shouldMove = (newState == State.Walking);
         if (_agent.isOnNavMesh)
             _agent.isStopped = !shouldMove;
 
-        // Update walking bool
-        _anim.SetBool(IsWalking, newState == State.Walking);
+        _anim.SetBool(IsWalking, shouldMove);
+
+        if (newState == State.Walking && _agent.isOnNavMesh)
+            _agent.SetDestination(_player.position);
 
         switch (newState)
         {
             case State.Idle:
-                // nothing else
                 break;
 
             case State.Walking:
-                // nothing else
                 break;
 
             case State.MeleeAttack:
@@ -97,18 +90,18 @@ public class EnemyAnimationController : MonoBehaviour
 
             case State.Hurt:
                 _anim.SetTrigger(Hurt);
-                StartCoroutine(WaitForAnimationToEnd("Hurt"));
+                // No coroutine—HurtStateBehaviour will handle resuming walk
                 break;
         }
     }
 
     private IEnumerator WaitForAnimationToEnd(string stateName)
     {
-        // Wait until Animator actually enters the state
+        // wait until state enters
         while (!_anim.GetCurrentAnimatorStateInfo(0).IsName(stateName))
             yield return null;
 
-        // Then wait until it finishes (normalizedTime ≥ 1)
+        // wait until clip finishes
         var info = _anim.GetCurrentAnimatorStateInfo(0);
         while (info.normalizedTime < 1f)
         {
@@ -116,18 +109,31 @@ public class EnemyAnimationController : MonoBehaviour
             info = _anim.GetCurrentAnimatorStateInfo(0);
         }
 
-        // After animation, resume walking
+        // resume walking
         if (_agent.isOnNavMesh)
+        {
             _agent.isStopped = false;
+            _agent.SetDestination(_player.position);
+        }
 
         _currentState = State.Walking;
         _anim.SetBool(IsWalking, true);
     }
 
     /// <summary>
-    /// Call this externally (e.g. from Target.TakeAttack) to play Hurt
-    /// and stun the enemy until the Hurt clip finishes.
+    /// Called from HurtStateBehaviour when the Hurt clip exits.
     /// </summary>
+    public void OnHurtFinished()
+    {
+        if (!_agent.isOnNavMesh)
+            return;
+
+        _agent.isStopped = false;
+        _agent.SetDestination(_player.position);
+        _currentState = State.Walking;
+        _anim.SetBool(IsWalking, true);
+    }
+
     public void Stun()
     {
         if (_currentState != State.Hurt)
