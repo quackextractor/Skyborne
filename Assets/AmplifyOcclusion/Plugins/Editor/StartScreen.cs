@@ -409,7 +409,7 @@ namespace AmplifyOcclusion.Plugins.Editor
 				{
 					if( end != null )
 						end();
-					Debug.LogException( ex );
+					Debug.LogWarning( ex );
 					EditorApplication.update -= closureCallback;
 				}
 			};

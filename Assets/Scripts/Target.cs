@@ -8,6 +8,7 @@ public class Target : MonoBehaviour
 {
     private const float InitialAccumulatedKnockback = 1f;
     private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
+    private EnemyAnimationController _animController;
 
     [Header("Knockback Settings")]
     [SerializeField] private float knockbackMultiplier = 1f; // 100% default
@@ -89,6 +90,11 @@ public class Target : MonoBehaviour
             col.enabled = false;
         foreach (var rb in _ragdollRigidbodies)
             rb.isKinematic = true;
+
+        if (!_isPlayer)
+        {
+            _animController = GetComponent<EnemyAnimationController>();
+        }
     }
 
     private void Update()
@@ -113,7 +119,11 @@ public class Target : MonoBehaviour
 
         ApplyKnockbackForce(dir, totalKb);
 
-        if (!_isPlayer) StartCoroutine(FlashEffect());
+        if (!_isPlayer)
+        {
+            StartCoroutine(FlashEffect());
+            _animController?.Stun();
+        }
     }
 
     public void TakeAttack(Vector3 attackDir, float damage, float knockback)

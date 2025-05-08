@@ -5,37 +5,39 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator), typeof(NavMeshAgent))]
 public class EnemyAnimationController : MonoBehaviour
 {
-    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+    private static readonly int IsWalking   = Animator.StringToHash("IsWalking");
     private static readonly int MeleeAttack = Animator.StringToHash("MeleeAttack");
-    private static readonly int Taunt = Animator.StringToHash("Taunt");
+    private static readonly int Taunt       = Animator.StringToHash("Taunt");
+    private static readonly int Hurt        = Animator.StringToHash("Hurt");
 
-    [Header("Taunt Settings")] [Tooltip("Seconds between possible taunts")] [SerializeField]
-    private float tauntCooldown = 10f;
+    [Header("Taunt Settings")]
+    [Tooltip("Seconds between possible taunts")]
+    [SerializeField] private float tauntCooldown = 10f;
 
     private NavMeshAgent _agent;
-
-    private Animator _anim;
-
-    private State _currentState;
-    private Enemy _enemy;
-
-    private float _nextTauntTime;
-    private Transform _player;
+    private Animator       _anim;
+    private State          _currentState;
+    private Enemy          _enemy;
+    private Transform      _player;
+    private float          _nextTauntTime;
 
     private void Awake()
     {
-        _anim = GetComponent<Animator>();
-        _agent = GetComponent<NavMeshAgent>();
-        _enemy = GetComponent<Enemy>();
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _anim    = GetComponent<Animator>();
+        _agent   = GetComponent<NavMeshAgent>();
+        _enemy   = GetComponent<Enemy>();
+        _player  = GameObject.FindGameObjectWithTag("Player").transform;
+        _agent.updateRotation = false;  // manual rotation only
         _currentState = State.Idle;
-
-        _agent.updateRotation = false; // prevent Animator from fighting our manual rotation
     }
 
     private void Update()
     {
-        var dist = Vector3.Distance(transform.position, _player.position);
+        // If we're playing Hurt, don’t change state until it finishes
+        if (_currentState == State.Hurt) return;
+
+        // Decide next state
+        float dist = Vector3.Distance(transform.position, _player.position);
         State targetState;
         if (dist <= _enemy.Stats.range)
             targetState = State.MeleeAttack;
@@ -44,6 +46,7 @@ public class EnemyAnimationController : MonoBehaviour
         else
             targetState = State.Idle;
 
+        // Taunt cooldown
         if (Time.time >= _nextTauntTime && targetState != State.MeleeAttack)
         {
             targetState = State.Taunt;
@@ -56,62 +59,79 @@ public class EnemyAnimationController : MonoBehaviour
 
     private void SwitchState(State newState)
     {
-        _anim.ResetTrigger("MeleeAttack");
-        _anim.ResetTrigger("Taunt");
+        // Reset all triggers & stop any running coroutines
+        _anim.ResetTrigger(MeleeAttack);
+        _anim.ResetTrigger(Taunt);
+        _anim.ResetTrigger(Hurt);
         StopAllCoroutines();
 
         _currentState = newState;
 
-        switch (_currentState)
+        // Stop navigation for any non-walking state
+        bool shouldMove = newState == State.Walking || newState == State.Idle;
+        if (_agent.isOnNavMesh)
+            _agent.isStopped = !shouldMove;
+
+        // Update walking bool
+        _anim.SetBool(IsWalking, newState == State.Walking);
+
+        switch (newState)
         {
             case State.Idle:
-                _anim.SetBool(IsWalking, false);
+                // nothing else
                 break;
 
             case State.Walking:
-                _anim.SetBool(IsWalking, true);
+                // nothing else
                 break;
 
             case State.MeleeAttack:
-                if (_agent != null && _agent.isOnNavMesh)
-                    _agent.isStopped = true;
-                else
-                    Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
-
-                _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(MeleeAttack);
-                StartCoroutine(ReturnToWalkAfter(_anim.GetCurrentAnimatorStateInfo(0).length));
+                StartCoroutine(WaitForAnimationToEnd("MeleeAttack"));
                 break;
 
             case State.Taunt:
-                if (_agent != null && _agent.isOnNavMesh)
-                    _agent.isStopped = true;
-                else
-                    Debug.LogWarning("Cannot stop NavMeshAgent: Not on NavMesh.");
-
-                _anim.SetBool(IsWalking, false);
                 _anim.SetTrigger(Taunt);
-                StartCoroutine(ReturnToWalkAfter(_anim.GetCurrentAnimatorStateInfo(0).length));
+                StartCoroutine(WaitForAnimationToEnd("Taunt"));
+                break;
+
+            case State.Hurt:
+                _anim.SetTrigger(Hurt);
+                StartCoroutine(WaitForAnimationToEnd("Hurt"));
                 break;
         }
     }
 
-
-    private IEnumerator ReturnToWalkAfter(float delay)
+    private IEnumerator WaitForAnimationToEnd(string stateName)
     {
-        yield return new WaitForSeconds(delay);
+        // Wait until Animator actually enters the state
+        while (!_anim.GetCurrentAnimatorStateInfo(0).IsName(stateName))
+            yield return null;
 
-        if (_agent != null)
+        // Then wait until it finishes (normalizedTime ≥ 1)
+        var info = _anim.GetCurrentAnimatorStateInfo(0);
+        while (info.normalizedTime < 1f)
         {
-            if (_agent.isOnNavMesh)
-                _agent.isStopped = false;
-            else
-                Debug.LogWarning($"{gameObject.name}: Tried to resume NavMeshAgent, but it is not on a NavMesh.");
+            yield return null;
+            info = _anim.GetCurrentAnimatorStateInfo(0);
         }
-        else
-        {
-            Debug.LogError($"{gameObject.name}: NavMeshAgent reference is null.");
-        }
+
+        // After animation, resume walking
+        if (_agent.isOnNavMesh)
+            _agent.isStopped = false;
+
+        _currentState = State.Walking;
+        _anim.SetBool(IsWalking, true);
+    }
+
+    /// <summary>
+    /// Call this externally (e.g. from Target.TakeAttack) to play Hurt
+    /// and stun the enemy until the Hurt clip finishes.
+    /// </summary>
+    public void Stun()
+    {
+        if (_currentState != State.Hurt)
+            SwitchState(State.Hurt);
     }
 
     private enum State
@@ -119,6 +139,7 @@ public class EnemyAnimationController : MonoBehaviour
         Idle,
         Walking,
         MeleeAttack,
-        Taunt
+        Taunt,
+        Hurt
     }
 }

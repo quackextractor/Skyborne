@@ -420,6 +420,7 @@ namespace AmplifyOcclusion.Plugins
 			}
 		}
 
+		[Obsolete("Obsolete")]
 		private void checkParamsChanged()
 		{
 			var HDR = m_targetCamera.allowHDR; // && tier?
@@ -645,6 +646,7 @@ namespace AmplifyOcclusion.Plugins
 		}
 
 
+		[Obsolete("Obsolete")]
 		void OnPreRender()
 		{
 			Profiler.BeginSample( "AO - OnPreRender" );
@@ -782,6 +784,7 @@ namespace AmplifyOcclusion.Plugins
 		}
 
 
+		[Obsolete("Obsolete")]
 		void OnPostRender()
 		{
 			if( m_occlusionDepthRT != null )
