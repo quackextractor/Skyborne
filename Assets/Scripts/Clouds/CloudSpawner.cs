@@ -19,18 +19,20 @@ namespace Clouds
         public float travelTime = 5f;
 
         [Header("Size Modulation")] public bool sizeModEnabled = true;
-
         public float minSize = 0.8f, maxSize = 1.2f;
 
         [Header("Rotation")] [Tooltip("Randomize cloud rotation on these axes.")]
         public bool randomRotationX;
-
         public bool randomRotationY = true;
         public bool randomRotationZ;
 
         [Header("Spawn Timing")] public float minSpawnInterval = 1f;
-
         public float maxSpawnInterval = 3f;
+
+        [Header("Spawn Control")] [Tooltip("Enable or disable spawning of new clouds.")]
+        [SerializeField]
+        private bool enableSpawning = true;
+
         private readonly Dictionary<GameObject, List<GameObject>> pool = new();
 
         private void Start()
@@ -51,6 +53,7 @@ namespace Clouds
 
             foreach (var prefab in cloudPrefabs)
                 pool[prefab] = new List<GameObject>();
+
             StartCoroutine(SpawnRoutine());
         }
 
@@ -58,7 +61,10 @@ namespace Clouds
         {
             while (enabled)
             {
-                SpawnCloud();
+                if (enableSpawning)
+                {
+                    SpawnCloud();
+                }
                 yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval));
             }
         }
@@ -67,9 +73,11 @@ namespace Clouds
         {
             if (!pool.ContainsKey(prefab))
                 pool[prefab] = new List<GameObject>();
+
             foreach (var go in pool[prefab])
                 if (!go.activeInHierarchy)
                     return go;
+
             var newObj = Instantiate(prefab, transform);
             newObj.SetActive(false);
             pool[prefab].Add(newObj);
@@ -79,10 +87,10 @@ namespace Clouds
         private void SpawnCloud()
         {
             var prefab = cloudPrefabs[Random.Range(0, cloudPrefabs.Length)];
-            if (prefab == null) return;
+            if (!prefab) return;
 
             var cloud = GetPooledInstance(prefab);
-            if (cloud == null) return;
+            if (!cloud) return;
 
             // Determine start and end
             var startPos = RandomPointOnPlane(startPlane);
@@ -103,7 +111,7 @@ namespace Clouds
 
             // Initialize behavior
             var behavior = cloud.GetComponent<CloudBehavior>();
-            if (behavior == null)
+            if (!behavior)
             {
                 Debug.LogError("CloudSpawner: Prefab missing CloudBehavior component.");
                 return;
@@ -135,7 +143,7 @@ namespace Clouds
             return trs.TransformPoint(localPoint);
         }
 
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             DrawPlaneGizmo(startPlane, Color.green);
@@ -153,6 +161,6 @@ namespace Clouds
             Gizmos.matrix = Matrix4x4.TRS(trs.position, trs.rotation, trs.lossyScale);
             Gizmos.DrawWireMesh(mesh);
         }
-#endif
+    #endif
     }
 }
