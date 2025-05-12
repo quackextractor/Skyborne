@@ -16,6 +16,8 @@ public class LevelTransitionController : MonoBehaviour
     
     public float tDurationTotal = 2f;
     public float tDurationStop = 1f;
+    
+    public float whiteScreenDelay;
 
     private float _tDistanceRemaining;
     private float _tDurationRemaining;
@@ -107,8 +109,8 @@ public class LevelTransitionController : MonoBehaviour
         // Resume shaking after level is loaded
         Coroutine resumeShakeCoroutine = StartCoroutine(ShakePlatformContinuously());
         
-        // Start fading from white
-        cameraFadeController.FadeFromWhite();
+        // Schedule fading from white after a delay
+        StartCoroutine(FadeFromWhiteAfterDelay());
         
         // Move the clouds the remaining distance if there is any
         if (_tDistanceRemaining > 0)
@@ -129,6 +131,12 @@ public class LevelTransitionController : MonoBehaviour
         RepositionClouds();
         cloudSpawner.enableSpawning = true;
         _isLevelLoaded = false;
+    }
+    
+    private IEnumerator FadeFromWhiteAfterDelay()
+    {
+        yield return new WaitForSeconds(whiteScreenDelay);
+        cameraFadeController.FadeFromWhite();
     }
 
     private IEnumerator MoveClouds(float distance, float duration)

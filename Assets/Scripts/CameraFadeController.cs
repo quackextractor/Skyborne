@@ -10,21 +10,23 @@ public class CameraFadeController : MonoBehaviour
 
     private Coroutine _currentTween;
     private Coroutine _manualFade;
+    
+    // When true, we suppress automatic fades until we FadeFromWhite()
+    private bool _manualOverride = false;
+
+    public event Action<float> OnFadeValueChanged;
 
     private void Update()
     {
-        // Only handle automatic fade based on position if there's no manual fade happening
-        if (_manualFade == null)
-        {
-            var target = transform.position.y <= thresholdY ? 1f : 0f;
-            if (Mathf.Approximately(target, Alpha)) return;
+        // Only handle automatic fades if we're not in manual override
+        if (_manualOverride) return;
 
-            if (_currentTween != null) StopCoroutine(_currentTween);
-            _currentTween = StartCoroutine(FadeTo(target));
-        }
+        var target = transform.position.y <= thresholdY ? 1f : 0f;
+        if (Mathf.Approximately(target, Alpha)) return;
+
+        if (_currentTween != null) StopCoroutine(_currentTween);
+        _currentTween = StartCoroutine(FadeTo(target));
     }
-
-    public event Action<float> OnFadeValueChanged;
 
     private IEnumerator FadeTo(float targetAlpha)
     {
@@ -34,7 +36,6 @@ public class CameraFadeController : MonoBehaviour
             OnFadeValueChanged?.Invoke(Alpha);
             yield return null;
         }
-
         _currentTween = null;
     }
 
@@ -42,10 +43,10 @@ public class CameraFadeController : MonoBehaviour
     {
         float startAlpha = Alpha;
         float elapsed = 0f;
-        
-        // Use default fade speed if no duration is specified
+
         if (duration <= 0)
         {
+            // default-speed fade
             while (!Mathf.Approximately(Alpha, targetAlpha))
             {
                 Alpha = Mathf.MoveTowards(Alpha, targetAlpha, fadeSpeed * Time.deltaTime);
@@ -55,7 +56,7 @@ public class CameraFadeController : MonoBehaviour
         }
         else
         {
-            // Use specified duration
+            // timed fade
             while (elapsed < duration)
             {
                 float t = elapsed / duration;
@@ -66,26 +67,34 @@ public class CameraFadeController : MonoBehaviour
             }
         }
 
+        // Ensure final value
         Alpha = targetAlpha;
         OnFadeValueChanged?.Invoke(Alpha);
+
+        // Maintain manual override if we just faded to white, clear if we faded back
+        _manualOverride = Mathf.Approximately(targetAlpha, 1f);
+
         _manualFade = null;
     }
 
     public void FadeToWhite(float duration = -1)
     {
-        // Stop any current transitions
+        // stop any active fades
         if (_currentTween != null) StopCoroutine(_currentTween);
         if (_manualFade != null) StopCoroutine(_manualFade);
 
+        // enter manual override and start the fade-to-white
+        _manualOverride = true;
         _manualFade = StartCoroutine(ManualFadeTo(1f, duration));
     }
 
     public void FadeFromWhite(float duration = -1)
     {
-        // Stop any current transitions
+        // stop any active fades
         if (_currentTween != null) StopCoroutine(_currentTween);
         if (_manualFade != null) StopCoroutine(_manualFade);
 
+        // start fade-from-white (ManualFadeTo will clear _manualOverride when done)
         _manualFade = StartCoroutine(ManualFadeTo(0f, duration));
     }
 }
