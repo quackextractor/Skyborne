@@ -30,15 +30,20 @@ public class LevelTransitionController : MonoBehaviour
     public CameraFadeController cameraFadeController;
 
     private Vector3 originalPlatformPosition;
+    private bool isLevelLoaded = false;
 
     private void Start()
     {
         tDistanceRemaining = tDistanceTotal - tDistanceStop;
         tDurationRemaining = tDurationTotal - tDurationStop;
         
-        originalPlatformPosition = platform.transform.position;
         topCloud.SetActive(false);
         PositionTopCloud();
+    }
+    
+    private void Awake()
+    {
+        originalPlatformPosition = platform.transform.position;
     }
 
     private void PositionTopCloud()
@@ -48,6 +53,7 @@ public class LevelTransitionController : MonoBehaviour
 
     public void StartTransition()
     {
+        originalPlatformPosition = platform.transform.position;
         StartCoroutine(TransitionCoroutine());
     }
 
@@ -57,19 +63,50 @@ public class LevelTransitionController : MonoBehaviour
         
         topCloud.SetActive(true);
 
-        yield return ShakePlatform(tDurationStop);
-        yield return MoveClouds(tDistanceStop, tDurationStop);
-
-        cameraFadeController.FadeToWhite(1);
-        levelLoader.LoadLevel();    
-        cameraFadeController.FadeFromWhite(1);
-
-        yield return ShakePlatform(tDurationRemaining);
-        yield return MoveClouds(tDurationRemaining, tDurationRemaining);
+        // Start the first cloud movement
+        Coroutine firstCloudMove = StartCoroutine(MoveClouds(tDistanceStop, tDurationStop));
+        
+        // Start shaking platform continuously until fade is complete
+        Coroutine shakeCoroutine = StartCoroutine(ShakePlatformUntilWhite());
+        
+        // Start fade to white before the first MoveClouds finishes
+        float fadeStartDelay = tDurationStop * 0.5f; // Start fade halfway through
+        yield return new WaitForSeconds(fadeStartDelay);
+        cameraFadeController.FadeToWhite();
+        
+        // Wait for the first cloud movement to finish
+        yield return new WaitForSeconds(tDurationStop - fadeStartDelay);
+        
+        // Wait until camera is fully white before loading level
+        yield return new WaitUntil(() => cameraFadeController.Alpha >= 1f);
+        
+        // Stop shaking once fully white
+        StopCoroutine(shakeCoroutine);
+        platform.transform.position = originalPlatformPosition;
+        
+        // Load the level
+        levelLoader.LoadLevel();
+        isLevelLoaded = true;
+        
+        // Resume shaking after level is loaded
+        Coroutine resumeShakeCoroutine = StartCoroutine(ShakePlatformContinuously());
+        
+        // Start fading from white
+        cameraFadeController.FadeFromWhite();
+        
+        // Resume moving clouds
+        yield return MoveClouds(tDistanceRemaining, tDurationRemaining);
+        
+        // Stop shaking after transition is complete
+        StopCoroutine(resumeShakeCoroutine);
+        platform.transform.position = originalPlatformPosition;
 
         bottomCloud.SetActive(false);
         RepositionClouds();
         cloudSpawner.enableSpawning = true;
+        isLevelLoaded = false;
+        
+        Debug.Log("Transition Complete");
     }
 
     private IEnumerator MoveClouds(float distance, float duration)
@@ -96,6 +133,39 @@ public class LevelTransitionController : MonoBehaviour
         topCloud.transform.position = topEnd;
         middleCloud.transform.position = middleEnd;
         bottomCloud.transform.position = bottomEnd;
+    }
+
+    private IEnumerator ShakePlatformUntilWhite()
+    {
+        Vector3 shakeStartPosition = platform.transform.position;
+        
+        while (cameraFadeController.Alpha < 1f)
+        {
+            Vector3 shakeOffset = new Vector3(
+                Random.Range(-shakeAmount.x, shakeAmount.x),
+                Random.Range(-shakeAmount.y, shakeAmount.y),
+                Random.Range(-shakeAmount.z, shakeAmount.z)
+            );
+            platform.transform.position = shakeStartPosition + shakeOffset;
+            yield return null;
+        }
+        platform.transform.position = shakeStartPosition;
+    }
+
+    private IEnumerator ShakePlatformContinuously()
+    {
+        Vector3 shakeStartPosition = platform.transform.position;
+        
+        while (true)
+        {
+            Vector3 shakeOffset = new Vector3(
+                Random.Range(-shakeAmount.x, shakeAmount.x),
+                Random.Range(-shakeAmount.y, shakeAmount.y),
+                Random.Range(-shakeAmount.z, shakeAmount.z)
+            );
+            platform.transform.position = shakeStartPosition + shakeOffset;
+            yield return null;
+        }
     }
 
     private IEnumerator ShakePlatform(float duration)
