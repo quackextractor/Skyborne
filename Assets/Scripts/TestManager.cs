@@ -71,20 +71,4 @@ public class TestManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    /// <summary>
-    /// Public method to trigger the LevelTransitionController's StartTransition.
-    /// Can be called from UI buttons or other scripts as well.
-    /// </summary>
-    public void TriggerTransition()
-    {
-        if (levelTransitionController != null)
-        {
-            levelTransitionController.StartTransition();
-        }
-        else
-        {
-            Debug.LogWarning("LevelTransitionController reference is missing on TestManager.");
-        }
-    }
 }

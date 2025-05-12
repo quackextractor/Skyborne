@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Clouds;
+using UnityEngine.Serialization;
 
 public class LevelTransitionController : MonoBehaviour
 {
@@ -10,8 +11,14 @@ public class LevelTransitionController : MonoBehaviour
     public GameObject bottomCloud;
 
     [Header("Transition Settings")]
-    public float transitionDistanceN = 10f;
-    public float transitionDuration = 2f;
+    public float tDistanceTotal = 50f;
+    public float tDistanceStop = 25f;
+    
+    public float tDurationTotal = 2f;
+    public float tDurationStop = 1f;
+
+    private float tDistanceRemaining;
+    private float tDurationRemaining;
 
     [Header("Shake Settings")]
     public GameObject platform;
@@ -26,6 +33,9 @@ public class LevelTransitionController : MonoBehaviour
 
     private void Start()
     {
+        tDistanceRemaining = tDistanceTotal - tDistanceStop;
+        tDurationRemaining = tDurationTotal - tDurationStop;
+        
         originalPlatformPosition = platform.transform.position;
         topCloud.SetActive(false);
         PositionTopCloud();
@@ -33,7 +43,7 @@ public class LevelTransitionController : MonoBehaviour
 
     private void PositionTopCloud()
     {
-        topCloud.transform.position = middleCloud.transform.position + Vector3.up * transitionDistanceN;
+        topCloud.transform.position = middleCloud.transform.position + Vector3.up * tDistanceTotal;
     }
 
     public void StartTransition()
@@ -44,24 +54,18 @@ public class LevelTransitionController : MonoBehaviour
     private IEnumerator TransitionCoroutine()
     {
         cloudSpawner.enableSpawning = false;
+        
         topCloud.SetActive(true);
 
-        float halfDuration = transitionDuration / 2f;
-        float halfDistance = transitionDistanceN / 2f;
+        yield return ShakePlatform(tDurationStop);
+        yield return MoveClouds(tDistanceStop, tDurationStop);
 
-        Coroutine shakeCoroutine = StartCoroutine(ShakePlatform(halfDuration));
-        yield return MoveClouds(halfDistance, halfDuration);
-        StopCoroutine(shakeCoroutine);
-        platform.transform.position = originalPlatformPosition;
+        cameraFadeController.FadeToWhite(1);
+        levelLoader.LoadLevel();    
+        cameraFadeController.FadeFromWhite(1);
 
-        yield return FadeToWhite();
-        levelLoader.LoadLevel();
-        yield return FadeFromWhite();
-
-        shakeCoroutine = StartCoroutine(ShakePlatform(halfDuration));
-        yield return MoveClouds(halfDistance, halfDuration);
-        StopCoroutine(shakeCoroutine);
-        platform.transform.position = originalPlatformPosition;
+        yield return ShakePlatform(tDurationRemaining);
+        yield return MoveClouds(tDurationRemaining, tDurationRemaining);
 
         bottomCloud.SetActive(false);
         RepositionClouds();
@@ -111,21 +115,9 @@ public class LevelTransitionController : MonoBehaviour
         platform.transform.position = originalPlatformPosition;
     }
 
-    private IEnumerator FadeToWhite()
-    {
-        cameraFadeController.FadeToWhite();
-        while (cameraFadeController.Alpha < 0.99f) yield return null;
-    }
-
-    private IEnumerator FadeFromWhite()
-    {
-        cameraFadeController.FadeFromWhite();
-        while (cameraFadeController.Alpha > 0.01f) yield return null;
-    }
-
     private void RepositionClouds()
     {
-        bottomCloud.transform.position = topCloud.transform.position + Vector3.up * transitionDistanceN;
+        bottomCloud.transform.position = topCloud.transform.position + Vector3.up * tDistanceTotal;
         GameObject temp = bottomCloud;
         bottomCloud = middleCloud;
         middleCloud = topCloud;

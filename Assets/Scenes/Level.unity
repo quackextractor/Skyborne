@@ -1052,9 +1052,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1108676508}
   m_SourcePrefab: {fileID: 100100000, guid: be20a5c9d5457a042a84cba4c14c222a, type: 3}
---- !u!1 &586020289 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7538237485845876942, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+--- !u!4 &586020290 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
   m_PrefabInstance: {fileID: 7893388337971988675}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &648285983 stripped
@@ -1224,11 +1224,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 728737426}
   m_Mesh: {fileID: 2534964839176971238, guid: be20a5c9d5457a042a84cba4c14c222a, type: 3}
---- !u!1 &791472753 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: be20a5c9d5457a042a84cba4c14c222a, type: 3}
-  m_PrefabInstance: {fileID: 522765934}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &791472754 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: be20a5c9d5457a042a84cba4c14c222a, type: 3}
@@ -1329,16 +1324,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564d232399bcba947a9264db3c1a4d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topCloud: {fileID: 2033060142}
-  middleCloud: {fileID: 1375405514}
-  bottomCloud: {fileID: 586020289}
-  transitionDistanceN: 50
-  transitionDuration: 2
-  platform: {fileID: 791472753}
-  shakeAmount: {x: 0.1, y: 0.1, z: 0.1}
+  topLayer: {fileID: 2033060143}
+  middleLayer: {fileID: 1011314877035196603}
+  bottomLayer: {fileID: 586020290}
+  layerGap: 50
+  moveDuration: 2
   cloudSpawner: {fileID: 1534756897}
   levelLoader: {fileID: 846177969}
-  cameraFadeController: {fileID: 1584712445}
+  fadeController: {fileID: 1584712445}
+  platform: {fileID: 791472754}
+  shakeAmount: {x: 0.1, y: 0.1, z: 0.1}
+  shakeFrequency: 20
 --- !u!1 &1086240656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,11 +1500,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245392790}
   m_CullTransparentMesh: 1
---- !u!1 &1375405514 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2370466623321934442, guid: d4db7e83c7024d540acc4cbb06c634dc, type: 3}
-  m_PrefabInstance: {fileID: 1257831715080754888}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1483442526
 GameObject:
   m_ObjectHideFlags: 0
@@ -2284,9 +2275,9 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1994425773}
   m_CullTransparentMesh: 1
---- !u!1 &2033060142 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7538237485845876942, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+--- !u!4 &2033060143 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
   m_PrefabInstance: {fileID: 369765218}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2113200268
@@ -2578,6 +2569,11 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!4 &1011314877035196603 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2268792499962898035, guid: d4db7e83c7024d540acc4cbb06c634dc, type: 3}
+  m_PrefabInstance: {fileID: 1257831715080754888}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1257831715080754888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2957,6 +2953,6 @@ SceneRoots:
   - {fileID: 6326963309448953405}
   - {fileID: 7893388337971988675}
   - {fileID: 369765218}
-  - {fileID: 1257831715080754888}
   - {fileID: 2113200272}
   - {fileID: 1534756898}
+  - {fileID: 1257831715080754888}
