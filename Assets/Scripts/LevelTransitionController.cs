@@ -17,8 +17,8 @@ public class LevelTransitionController : MonoBehaviour
     public float tDurationTotal = 2f;
     public float tDurationStop = 1f;
 
-    private float tDistanceRemaining;
-    private float tDurationRemaining;
+    private float _tDistanceRemaining;
+    private float _tDurationRemaining;
 
     [Header("Shake Settings")]
     public GameObject platform;
@@ -29,18 +29,18 @@ public class LevelTransitionController : MonoBehaviour
     public LevelLoader levelLoader;
     public CameraFadeController cameraFadeController;
 
-    private Vector3 originalPlatformPosition;
-    private bool isLevelLoaded = false;
+    private Vector3 _originalPlatformPosition;
+    private bool _isLevelLoaded = false;
 
     private void Start()
     {
         Debug.Log($"Initial values - Total: {tDistanceTotal}, Stop: {tDistanceStop}");
         
-        tDistanceRemaining = tDistanceTotal - tDistanceStop;
-        tDurationRemaining = tDurationTotal - tDurationStop;
+        _tDistanceRemaining = tDistanceTotal - tDistanceStop;
+        _tDurationRemaining = tDurationTotal - tDurationStop;
         
-        Debug.Log($"Calculated values - Remaining Distance: {tDistanceRemaining}, Remaining Duration: {tDurationRemaining}");
-        Debug.Log($"Cloud Movement - Stop Distance: {tDistanceStop}, Remaining Distance: {tDistanceRemaining}, Total: {tDistanceTotal}");
+        Debug.Log($"Calculated values - Remaining Distance: {_tDistanceRemaining}, Remaining Duration: {_tDurationRemaining}");
+        Debug.Log($"Cloud Movement - Stop Distance: {tDistanceStop}, Remaining Distance: {_tDistanceRemaining}, Total: {tDistanceTotal}");
         
         topCloud.SetActive(false);
         PositionTopCloud();
@@ -49,7 +49,7 @@ public class LevelTransitionController : MonoBehaviour
     private void Awake()
     {
         // Store the original position in Awake to ensure it's captured before any Start() methods run
-        originalPlatformPosition = platform.transform.position;
+        _originalPlatformPosition = platform.transform.position;
     }
 
     private void PositionTopCloud()
@@ -60,7 +60,7 @@ public class LevelTransitionController : MonoBehaviour
     public void StartTransition()
     {
         // Capture the platform position right before transition starts
-        originalPlatformPosition = platform.transform.position;
+        _originalPlatformPosition = platform.transform.position;
         StartCoroutine(TransitionCoroutine());
     }
 
@@ -71,9 +71,9 @@ public class LevelTransitionController : MonoBehaviour
         topCloud.SetActive(true);
 
         // Recalculate distances at transition start in case they were changed
-        tDistanceRemaining = tDistanceTotal - tDistanceStop;
-        tDurationRemaining = tDurationTotal - tDurationStop;
-        Debug.Log($"Transition start - Total: {tDistanceTotal}, Stop: {tDistanceStop}, Remaining: {tDistanceRemaining}");
+        _tDistanceRemaining = tDistanceTotal - tDistanceStop;
+        _tDurationRemaining = tDurationTotal - tDurationStop;
+        Debug.Log($"Transition start - Total: {tDistanceTotal}, Stop: {tDistanceStop}, Remaining: {_tDistanceRemaining}");
 
         // Start shaking platform continuously until fade is complete
         Coroutine shakeCoroutine = StartCoroutine(ShakePlatformUntilWhite());
@@ -97,12 +97,12 @@ public class LevelTransitionController : MonoBehaviour
         
         // Stop shaking once fully white
         StopCoroutine(shakeCoroutine);
-        platform.transform.position = originalPlatformPosition;
+        platform.transform.position = _originalPlatformPosition;
         
         // Load the level
         Debug.Log("Loading level...");
         levelLoader.LoadLevel();
-        isLevelLoaded = true;
+        _isLevelLoaded = true;
         
         // Resume shaking after level is loaded
         Coroutine resumeShakeCoroutine = StartCoroutine(ShakePlatformContinuously());
@@ -111,10 +111,10 @@ public class LevelTransitionController : MonoBehaviour
         cameraFadeController.FadeFromWhite();
         
         // Move the clouds the remaining distance if there is any
-        if (tDistanceRemaining > 0)
+        if (_tDistanceRemaining > 0)
         {
-            Debug.Log($"Starting second cloud movement: {tDistanceRemaining} units over {tDurationRemaining} seconds");
-            yield return MoveClouds(tDistanceRemaining, tDurationRemaining);
+            Debug.Log($"Starting second cloud movement: {_tDistanceRemaining} units over {_tDurationRemaining} seconds");
+            yield return MoveClouds(_tDistanceRemaining, _tDurationRemaining);
         }
         else
         {
@@ -123,12 +123,12 @@ public class LevelTransitionController : MonoBehaviour
         
         // Stop shaking after transition is complete
         StopCoroutine(resumeShakeCoroutine);
-        platform.transform.position = originalPlatformPosition;
+        platform.transform.position = _originalPlatformPosition;
 
         bottomCloud.SetActive(false);
         RepositionClouds();
         cloudSpawner.enableSpawning = true;
-        isLevelLoaded = false;
+        _isLevelLoaded = false;
     }
 
     private IEnumerator MoveClouds(float distance, float duration)
@@ -188,6 +188,7 @@ public class LevelTransitionController : MonoBehaviour
             platform.transform.position = shakeStartPosition + shakeOffset;
             yield return null;
         }
+        // ReSharper disable once IteratorNeverReturns
     }
 
     private IEnumerator ShakePlatform(float duration)
@@ -200,11 +201,11 @@ public class LevelTransitionController : MonoBehaviour
                 Random.Range(-shakeAmount.y, shakeAmount.y),
                 Random.Range(-shakeAmount.z, shakeAmount.z)
             );
-            platform.transform.position = originalPlatformPosition + shakeOffset;
+            platform.transform.position = _originalPlatformPosition + shakeOffset;
             elapsed += Time.deltaTime;
             yield return null;
         }
-        platform.transform.position = originalPlatformPosition;
+        platform.transform.position = _originalPlatformPosition;
     }
 
     private void RepositionClouds()
