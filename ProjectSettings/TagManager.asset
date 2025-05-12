@@ -6,6 +6,7 @@ TagManager:
   tags:
   - spawnpoint
   - Ground
+  - Abilities
   layers:
   - Default
   - TransparentFX
