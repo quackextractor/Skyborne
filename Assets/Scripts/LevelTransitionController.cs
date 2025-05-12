@@ -34,8 +34,13 @@ public class LevelTransitionController : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log($"Initial values - Total: {tDistanceTotal}, Stop: {tDistanceStop}");
+        
         tDistanceRemaining = tDistanceTotal - tDistanceStop;
         tDurationRemaining = tDurationTotal - tDurationStop;
+        
+        Debug.Log($"Calculated values - Remaining Distance: {tDistanceRemaining}, Remaining Duration: {tDurationRemaining}");
+        Debug.Log($"Cloud Movement - Stop Distance: {tDistanceStop}, Remaining Distance: {tDistanceRemaining}, Total: {tDistanceTotal}");
         
         topCloud.SetActive(false);
         PositionTopCloud();
@@ -43,6 +48,7 @@ public class LevelTransitionController : MonoBehaviour
     
     private void Awake()
     {
+        // Store the original position in Awake to ensure it's captured before any Start() methods run
         originalPlatformPosition = platform.transform.position;
     }
 
@@ -53,6 +59,7 @@ public class LevelTransitionController : MonoBehaviour
 
     public void StartTransition()
     {
+        // Capture the platform position right before transition starts
         originalPlatformPosition = platform.transform.position;
         StartCoroutine(TransitionCoroutine());
     }
@@ -63,14 +70,22 @@ public class LevelTransitionController : MonoBehaviour
         
         topCloud.SetActive(true);
 
-        // Start the first cloud movement
-        Coroutine firstCloudMove = StartCoroutine(MoveClouds(tDistanceStop, tDurationStop));
-        
+        // Recalculate distances at transition start in case they were changed
+        tDistanceRemaining = tDistanceTotal - tDistanceStop;
+        tDurationRemaining = tDurationTotal - tDurationStop;
+        Debug.Log($"Transition start - Total: {tDistanceTotal}, Stop: {tDistanceStop}, Remaining: {tDistanceRemaining}");
+
         // Start shaking platform continuously until fade is complete
         Coroutine shakeCoroutine = StartCoroutine(ShakePlatformUntilWhite());
         
-        // Start fade to white before the first MoveClouds finishes
+        // Start the first cloud movement and fade timing
         float fadeStartDelay = tDurationStop * 0.5f; // Start fade halfway through
+        
+        Debug.Log($"Starting first cloud movement: {tDistanceStop} units over {tDurationStop} seconds");
+        // Start moving clouds
+        StartCoroutine(MoveClouds(tDistanceStop, tDurationStop));
+        
+        // Wait before starting fade to white
         yield return new WaitForSeconds(fadeStartDelay);
         cameraFadeController.FadeToWhite();
         
@@ -85,6 +100,7 @@ public class LevelTransitionController : MonoBehaviour
         platform.transform.position = originalPlatformPosition;
         
         // Load the level
+        Debug.Log("Loading level...");
         levelLoader.LoadLevel();
         isLevelLoaded = true;
         
@@ -94,8 +110,16 @@ public class LevelTransitionController : MonoBehaviour
         // Start fading from white
         cameraFadeController.FadeFromWhite();
         
-        // Resume moving clouds
-        yield return MoveClouds(tDistanceRemaining, tDurationRemaining);
+        // Move the clouds the remaining distance if there is any
+        if (tDistanceRemaining > 0)
+        {
+            Debug.Log($"Starting second cloud movement: {tDistanceRemaining} units over {tDurationRemaining} seconds");
+            yield return MoveClouds(tDistanceRemaining, tDurationRemaining);
+        }
+        else
+        {
+            Debug.LogWarning($"No remaining distance to move. Total: {tDistanceTotal}, Stop: {tDistanceStop}");
+        }
         
         // Stop shaking after transition is complete
         StopCoroutine(resumeShakeCoroutine);
@@ -105,8 +129,6 @@ public class LevelTransitionController : MonoBehaviour
         RepositionClouds();
         cloudSpawner.enableSpawning = true;
         isLevelLoaded = false;
-        
-        Debug.Log("Transition Complete");
     }
 
     private IEnumerator MoveClouds(float distance, float duration)
