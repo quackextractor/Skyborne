@@ -9,13 +9,17 @@ public class TestManager : MonoBehaviour
     [SerializeField]
     private Enemy enemyPrefab;
 
-    [Tooltip("Default stats to apply to each spawned enemy.")] [SerializeField]
+    [Tooltip("Default stats to apply to each spawned enemy.")]
+    [SerializeField]
     private EnemyStats defaultStats;
 
-    [Header("Spawn Settings")] [SerializeField]
-    private int initialEnemies = 3;
-
+    [Header("Spawn Settings")]
+    [SerializeField] private int initialEnemies = 3;
     [SerializeField] private Vector3 spawnArea = new(5, 0, 5);
+
+    [Header("Level Transition")]
+    [Tooltip("Reference to the LevelTransitionController in the scene.")]
+    [SerializeField] private LevelTransitionController levelTransitionController;
 
     private void Start()
     {
@@ -25,10 +29,27 @@ public class TestManager : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
-            SpawnEnemies(1);
+        {
+            // Trigger the level transition
+            if (levelTransitionController != null)
+            {
+                levelTransitionController.StartTransition();
+            }
+            else
+            {
+                Debug.LogWarning("LevelTransitionController reference is missing on TestManager.");
+            }
+        }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R)){
             ResetScene();
+        }
+
+        // Optional: keep spawning on another key if needed
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            SpawnEnemies(1);
+        }
     }
 
     private void SpawnEnemies(int count)
@@ -41,17 +62,29 @@ public class TestManager : MonoBehaviour
                 Random.Range(-spawnArea.z, spawnArea.z)
             );
 
-            // Instantiate as an Enemy directly
             var enemyInstance = Instantiate(enemyPrefab, pos, Quaternion.identity);
-
-            // Initialize its stats
             enemyInstance.Setup(defaultStats);
         }
     }
 
     private void ResetScene()
     {
-        // Reload the current scene (index 1)
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    /// <summary>
+    /// Public method to trigger the LevelTransitionController's StartTransition.
+    /// Can be called from UI buttons or other scripts as well.
+    /// </summary>
+    public void TriggerTransition()
+    {
+        if (levelTransitionController != null)
+        {
+            levelTransitionController.StartTransition();
+        }
+        else
+        {
+            Debug.LogWarning("LevelTransitionController reference is missing on TestManager.");
+        }
     }
 }
