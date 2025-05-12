@@ -27,7 +27,7 @@ public class LevelLoader : MonoBehaviour
         LoadLevel();
     }
 
-    private void LoadLevel()
+    public void LoadLevel()
     {
         if (levelData == null)
         {

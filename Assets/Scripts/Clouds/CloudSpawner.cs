@@ -31,7 +31,7 @@ namespace Clouds
 
         [Header("Spawn Control")] [Tooltip("Enable or disable spawning of new clouds.")]
         [SerializeField]
-        private bool enableSpawning = true;
+        public bool enableSpawning = true;
 
         private readonly Dictionary<GameObject, List<GameObject>> pool = new();
 

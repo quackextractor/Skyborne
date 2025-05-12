@@ -6,13 +6,13 @@ public class CameraFadeController : MonoBehaviour
 {
     public float thresholdY = -15f;
     public float fadeSpeed = 1f;
-    private float _alpha;
+    public float Alpha { get; private set; }
     private Coroutine _currentTween;
 
     private void Update()
     {
         var target = transform.position.y <= thresholdY ? 1f : 0f;
-        if (Mathf.Approximately(target, _alpha)) return;
+        if (Mathf.Approximately(target, Alpha)) return;
         if (_currentTween != null) StopCoroutine(_currentTween);
         _currentTween = StartCoroutine(FadeTo(target));
     }
@@ -21,13 +21,24 @@ public class CameraFadeController : MonoBehaviour
 
     private IEnumerator FadeTo(float targetAlpha)
     {
-        while (!Mathf.Approximately(_alpha, targetAlpha))
+        while (!Mathf.Approximately(Alpha, targetAlpha))
         {
-            _alpha = Mathf.MoveTowards(_alpha, targetAlpha, fadeSpeed * Time.deltaTime);
-            OnFadeValueChanged?.Invoke(_alpha);
+            Alpha = Mathf.MoveTowards(Alpha, targetAlpha, fadeSpeed * Time.deltaTime);
+            OnFadeValueChanged?.Invoke(Alpha);
             yield return null;
         }
-
         _currentTween = null;
+    }
+    
+    public void FadeToWhite()
+    {
+        if (_currentTween != null) StopCoroutine(_currentTween);
+        _currentTween = StartCoroutine(FadeTo(1f));
+    }
+
+    public void FadeFromWhite()
+    {
+        if (_currentTween != null) StopCoroutine(_currentTween);
+        _currentTween = StartCoroutine(FadeTo(0f));
     }
 }
