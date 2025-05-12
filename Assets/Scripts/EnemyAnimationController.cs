@@ -141,8 +141,6 @@ public class EnemyAnimationController : MonoBehaviour
             _rigidbody.velocity *= velocityDamping;
             _rigidbody.angularVelocity *= velocityDamping;
         }
-        
-        Debug.Log("Dampening");
 
         // resume NavMesh movement
         _agent.isStopped = false;

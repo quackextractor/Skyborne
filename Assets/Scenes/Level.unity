@@ -780,6 +780,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 349214144}
   m_CullTransparentMesh: 1
+--- !u!1001 &369765218
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.889666
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -79.019775
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117548985188863900, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7538237485845876942, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+      propertyPath: m_Name
+      value: Top Clouds
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
 --- !u!1001 &427940993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -992,6 +1049,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1108676508}
   m_SourcePrefab: {fileID: 100100000, guid: be20a5c9d5457a042a84cba4c14c222a, type: 3}
+--- !u!1 &586020289 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7538237485845876942, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+  m_PrefabInstance: {fileID: 7893388337971988675}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &648285983 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3375460345458029954, guid: 63761c03bf303624fa4968a8d518f88e, type: 3}
@@ -1052,6 +1114,11 @@ MonoBehaviour:
   rotateX: 0
   rotateY: 1
   rotateZ: 0
+--- !u!1 &791472753 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: be20a5c9d5457a042a84cba4c14c222a, type: 3}
+  m_PrefabInstance: {fileID: 522765934}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &846177965
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,6 +1131,7 @@ GameObject:
   - component: {fileID: 846177966}
   - component: {fileID: 846177968}
   - component: {fileID: 846177969}
+  - component: {fileID: 846177970}
   m_Layer: 0
   m_Name: TestManager
   m_TagString: Untagged
@@ -1133,6 +1201,28 @@ MonoBehaviour:
   navMeshSampleDistance: 5
   fallbackSpawnPosition: {x: 0, y: 0, z: 0}
   spawnArea: {x: 0, y: 0}
+--- !u!114 &846177970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846177965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 564d232399bcba947a9264db3c1a4d1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topCloud: {fileID: 2033060142}
+  middleCloud: {fileID: 1375405514}
+  bottomCloud: {fileID: 586020289}
+  transitionDistanceN: 50
+  transitionDuration: 2
+  platform: {fileID: 791472753}
+  shakeAmount: {x: 0.1, y: 0.1, z: 0.1}
+  cloudSpawner: {fileID: 1534756897}
+  levelLoader: {fileID: 846177969}
+  cameraFadeController: {fileID: 1584712445}
 --- !u!1 &1086240656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,6 +1388,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245392790}
   m_CullTransparentMesh: 1
+--- !u!1 &1375405514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2370466623321934442, guid: d4db7e83c7024d540acc4cbb06c634dc, type: 3}
+  m_PrefabInstance: {fileID: 1257831715080754888}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1483442526
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,6 +1642,7 @@ MonoBehaviour:
   randomRotationZ: 0
   minSpawnInterval: 0.1
   maxSpawnInterval: 0.1
+  enableSpawning: 1
 --- !u!4 &1534756898
 Transform:
   m_ObjectHideFlags: 0
@@ -2072,6 +2168,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1994425773}
   m_CullTransparentMesh: 1
+--- !u!1 &2033060142 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7538237485845876942, guid: fc073fb058a6612489e1d0035e3bdf30, type: 3}
+  m_PrefabInstance: {fileID: 369765218}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2113200268
 GameObject:
   m_ObjectHideFlags: 0
@@ -2375,7 +2476,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2268792499962898035, guid: d4db7e83c7024d540acc4cbb06c634dc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 38.9
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2268792499962898035, guid: d4db7e83c7024d540acc4cbb06c634dc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2411,7 +2512,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2370466623321934442, guid: d4db7e83c7024d540acc4cbb06c634dc, type: 3}
       propertyPath: m_Name
-      value: Top Clouds
+      value: Middle Clouds
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2739,6 +2840,7 @@ SceneRoots:
   - {fileID: 1658335588937355246}
   - {fileID: 6326963309448953405}
   - {fileID: 7893388337971988675}
+  - {fileID: 369765218}
   - {fileID: 1257831715080754888}
   - {fileID: 2113200272}
   - {fileID: 1534756898}
