@@ -20,5 +20,9 @@ namespace ScriptObj
         [Header("Weapon Settings")] public float weaponKnockback = 10f;
 
         public float weaponDamage = 5f;
+        
+        [Header("Economy")]
+        [Tooltip("How much money this enemy drops when defeated")]
+        public int moneyReward = 1;
     }
 }
