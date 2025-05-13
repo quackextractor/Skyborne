@@ -1,13 +1,19 @@
 using ScriptObj;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class LevelLoader : MonoBehaviour
 {
-    [Header("Level Data")] [Tooltip("Assign your LevelData ScriptableObject here.")]
-    public LevelData levelData;
+    [Header("Level Data")] 
+    [Tooltip("List of LevelData ScriptableObjects for each level.")]
+    public List<LevelData> levelDataList = new List<LevelData>();
 
-    [Header("Spawn Settings")] [Tooltip("Parent object for all spawned enemies (optional).")]
+    [Tooltip("Current level index to load (0-based).")]
+    public int currentLevelIndex = 0;
+
+    [Header("Spawn Settings")] 
+    [Tooltip("Parent object for all spawned enemies (optional).")]
     public Transform enemyParent;
 
     [Tooltip("The fixed spawn height (Y coordinate) for enemy spawns.")]
@@ -22,19 +28,61 @@ public class LevelLoader : MonoBehaviour
     [Tooltip("Defines the area for randomly spawning enemies if no position is specified.")]
     public Vector2 spawnArea = new(10f, 10f);
 
-    private void Start()
+    public int GetCurrentLevelIndex()
     {
-        LoadLevel();
+        return currentLevelIndex;
+    }
+
+    public int GetTotalLevels()
+    {
+        return levelDataList.Count;
+    }
+
+    public bool IsLastLevel()
+    {
+        return currentLevelIndex >= levelDataList.Count - 1;
     }
 
     public void LoadLevel()
     {
-        if (levelData == null)
+        if (levelDataList == null || levelDataList.Count == 0)
         {
-            Debug.LogError("LevelData not assigned to LevelLoader!");
+            Debug.LogError("No LevelData assigned to LevelLoader!");
             return;
         }
 
+        if (currentLevelIndex < 0 || currentLevelIndex >= levelDataList.Count)
+        {
+            Debug.LogError($"Invalid level index: {currentLevelIndex}. Valid range is 0 to {levelDataList.Count - 1}");
+            return;
+        }
+
+        LoadLevelAtIndex(currentLevelIndex);
+    }
+
+    public void LoadLevelAtIndex(int index)
+    {
+        if (index < 0 || index >= levelDataList.Count)
+        {
+            Debug.LogError($"Invalid level index: {index}. Valid range is 0 to {levelDataList.Count - 1}");
+            return;
+        }
+
+        currentLevelIndex = index;
+        LevelData levelData = levelDataList[currentLevelIndex];
+
+        if (levelData == null)
+        {
+            Debug.LogError($"LevelData at index {currentLevelIndex} is null!");
+            return;
+        }
+
+        // Clear existing enemies before spawning new ones
+        ClearExistingEnemies();
+
+        Debug.Log($"Loading level {currentLevelIndex + 1} of {levelDataList.Count}");
+
+        int spawnedEnemies = 0;
         foreach (var entry in levelData.enemyEntries)
         {
             // If the entry has a non-zero position (interpreted as (x, z) data), use it.
@@ -75,6 +123,41 @@ public class LevelLoader : MonoBehaviour
             // Instantiate the enemy prefab at the verified spawn position.
             var enemyInstance = Instantiate(entry.enemyPrefab, spawnPosition, Quaternion.identity, enemyParent);
             enemyInstance.Setup(entry.enemyStats);
+            spawnedEnemies++;
+        }
+
+        Debug.Log($"Spawned {spawnedEnemies} enemies for level {currentLevelIndex + 1}");
+    }
+
+    public void LoadNextLevel()
+    {
+        if (IsLastLevel())
+        {
+            Debug.Log("Already at the last level!");
+            return;
+        }
+
+        currentLevelIndex++;
+        LoadLevel();
+    }
+
+    private void ClearExistingEnemies()
+    {
+        if (enemyParent != null)
+        {
+            foreach (Transform child in enemyParent)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        else
+        {
+            // If no enemy parent is set, find and destroy all enemies in the scene
+            Enemy[] existingEnemies = FindObjectsOfType<Enemy>();
+            foreach (Enemy enemy in existingEnemies)
+            {
+                Destroy(enemy.gameObject);
+            }
         }
     }
 }

@@ -1443,7 +1443,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694025243bf24bd686326eb5d6fa19fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelData: {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
+  levelDataList:
+  - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
+  - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
+  - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
+  - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
+  currentLevelIndex: 0
   enemyParent: {fileID: 0}
   spawnHeight: 0
   navMeshSampleDistance: 5

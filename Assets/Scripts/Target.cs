@@ -170,7 +170,7 @@ public class Target : MonoBehaviour
                 if (audioSrc)
                     audioSrc.Stop();
 
-                // destroy the whole GameObject after it’s faded out
+                // destroy the whole GameObject after it's faded out
                 float life = (main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants)
                     ? main.startLifetime.constantMax : main.startLifetime.constant;
                 Destroy(_fireEffect.gameObject, main.duration + life);
@@ -231,6 +231,12 @@ public class Target : MonoBehaviour
         }
         else
         {
+            // Notify GameMaster that this enemy has been defeated
+            if (GameMaster.Instance != null)
+            {
+                GameMaster.Instance.OnEnemyDefeated();
+            }
+
             foreach (var beh in GetComponents<Behaviour>())
                 if (beh != this)
                     beh.enabled = false;

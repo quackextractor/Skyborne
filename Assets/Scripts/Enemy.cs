@@ -1,9 +1,13 @@
+using System;
 using ScriptObj;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    // Event invoked whenever a new Enemy is spawned
+    public static event Action OnEnemySpawned;
+
     private static readonly int BaseColor1 = Shader.PropertyToID("_BaseColor");
     private static readonly int IsWalking = Animator.StringToHash("IsWalking");
 
@@ -106,6 +110,9 @@ public class Enemy : MonoBehaviour
             else
                 Debug.LogWarning("Enemy not near a valid NavMesh area after spawn. Warp failed.");
         }
+
+        // Notify listeners that an enemy has been spawned
+        OnEnemySpawned?.Invoke();
     }
 
     private void InitializeStats()

@@ -32,7 +32,7 @@ public class LevelTransitionController : MonoBehaviour
     public CameraFadeController cameraFadeController;
 
     private Vector3 _originalPlatformPosition;
-    private bool _isLevelLoaded = false;
+    private bool _isLevelLoaded;
 
     private void Start()
     {
@@ -103,7 +103,7 @@ public class LevelTransitionController : MonoBehaviour
         
         // Load the level
         Debug.Log("Loading level...");
-        levelLoader.LoadLevel();
+        levelLoader.LoadNextLevel();
         _isLevelLoaded = true;
         
         // Resume shaking after level is loaded
