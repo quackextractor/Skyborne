@@ -16,10 +16,10 @@ public class PlayerAttackScript : MonoBehaviour
     private void Awake()
     {
         _weapon = GetComponentInChildren<Weapon>();
-        abilities = GetComponentsInChildren<Ability>();
+       // abilities = GetComponentsInChildren<Ability>();
 
         if (_weapon == null) Debug.LogError("PlayerAttackScript: No Weapon component found in children!");
-        if (abilities == null) Debug.LogError("PlayerAttackScript: No Ability component found in children!");
+      //  if (abilities == null) Debug.LogError("PlayerAttackScript: No Ability component found in children!");
     }
 
     private void Update()
@@ -43,9 +43,17 @@ public class PlayerAttackScript : MonoBehaviour
                     }
                 }
 
+        if (abilities != null)
+        {
+            if (abilities != null)
+            {
+                if (abilities.Length > 0 && Input.GetKeyDown(KeyCode.Q))
+                    abilities[0].AttackEffect();
 
-        if (Input.GetKeyDown(KeyCode.Q)) abilities[0].AttackEffect();
-        if (Input.GetKeyDown(KeyCode.E)) abilities[1].AttackEffect();
+                if (abilities.Length > 1 && Input.GetKeyDown(KeyCode.E))
+                    abilities[1].AttackEffect();
+            }
+        }
     }
 
     private void ChangeAnimationState(string newState)

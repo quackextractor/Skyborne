@@ -7,17 +7,20 @@ public class ShopScript : MonoBehaviour
 {
     public GameObject ShopUi;
     public GameObject EquipUI;
-    GameObject[] Abilities;
+    Ability[] Abilities;
     GameObject player;
     PlayerAttackScript playerAttackScript;
     bool b;
     // Start is called before the first frame update
     void Start()
     {
-        
-        Abilities = GameObject.FindGameObjectsWithTag("Abilities");
         player = GameObject.FindGameObjectWithTag("Player");
         playerAttackScript = player.GetComponent<PlayerAttackScript>();
+        Abilities = playerAttackScript.GetComponentsInChildren<Ability>();
+        foreach (Ability a in Abilities)
+        {
+                a.gameObject.SetActive(!a.gameObject.activeSelf);
+        }
         b = true;
     }
 
@@ -35,27 +38,28 @@ public class ShopScript : MonoBehaviour
                 EquipUI.SetActive(b);
             }
             ShopUi.SetActive(b);
-            
-            
         };
     }
 
    public void EnableAbility(string AbilityName) {
 
-        foreach (GameObject a in Abilities)
+        foreach (Ability a in Abilities)
         {
             if (a.name == AbilityName)
             {
-                a.SetActive(!a.activeSelf);
-                
+                //a.gameObject.SetActive(!a.gameObject.activeSelf);
+                a.Bought = true;
             }
-
         }
         playerAttackScript.refreshInvetory();
     }
     public void DisableShop() { 
         ShopUi.SetActive(!ShopUi.activeSelf);
         EquipUI.SetActive(!EquipUI.activeSelf);
+    }
+    public void LoadAbilities()
+    {
+
     }
 
 
