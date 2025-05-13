@@ -15,46 +15,65 @@ public class ProgressionUI : MonoBehaviour
     public Color spendColor = Color.red;
     public float flashDuration = 0.5f;
 
-    private void UpdateBalance(int newBal) =>
-        balanceText.text = $"${newBal}";
+    private CurrencyManager _currency;
+
+    private void UpdateBalance(int newBal)
+    {
+        if (balanceText != null)
+            balanceText.text = $"${newBal}";
+    }
 
     private void FlashGain(int amount) => StartCoroutine(FlashColor(gainColor));
     private void FlashSpend(int amount) => StartCoroutine(FlashColor(spendColor));
 
     private IEnumerator FlashColor(Color c)
     {
+        if (balanceText == null)
+            yield break;
+
         var orig = balanceText.color;
         balanceText.color = c;
         yield return new WaitForSeconds(flashDuration);
         balanceText.color = orig;
     }
     
-    
     private void OnEnable()
     {
-        // Subscribe to events
-        GameMaster.OnEnemyCountChanged += UpdateEnemyCount;
-        GameMaster.OnLevelCompleted += ShowLevelCompleted;
-        GameMaster.OnGameCompleted += ShowGameCompleted;
-        CurrencyManager.Instance.OnBalanceChanged += UpdateBalance;
-        CurrencyManager.Instance.OnMoneyGained   += FlashGain;
-        CurrencyManager.Instance.OnMoneySpent    += FlashSpend;
+        // Subscribe to GameMaster events (static)
+        GameMaster.OnEnemyCountChanged  += UpdateEnemyCount;
+        GameMaster.OnLevelCompleted     += ShowLevelCompleted;
+        GameMaster.OnGameCompleted      += ShowGameCompleted;
+
+        // Cache and subscribe to CurrencyManager events
+        _currency = CurrencyManager.Instance;
+        if (_currency != null)
+        {
+            _currency.OnBalanceChanged += UpdateBalance;
+            _currency.OnMoneyGained   += FlashGain;
+            _currency.OnMoneySpent    += FlashSpend;
+        }
     }
 
     private void OnDisable()
     {
-        // Unsubscribe from events
-        GameMaster.OnEnemyCountChanged -= UpdateEnemyCount;
-        GameMaster.OnLevelCompleted -= ShowLevelCompleted;
-        GameMaster.OnGameCompleted -= ShowGameCompleted;
-        CurrencyManager.Instance.OnBalanceChanged -= UpdateBalance;
-        CurrencyManager.Instance.OnMoneyGained   -= FlashGain;
-        CurrencyManager.Instance.OnMoneySpent    -= FlashSpend;
+        // Unsubscribe GameMaster events
+        GameMaster.OnEnemyCountChanged  -= UpdateEnemyCount;
+        GameMaster.OnLevelCompleted     -= ShowLevelCompleted;
+        GameMaster.OnGameCompleted      -= ShowGameCompleted;
+
+        // Unsubscribe CurrencyManager events if still valid
+        if (_currency != null)
+        {
+            _currency.OnBalanceChanged  -= UpdateBalance;
+            _currency.OnMoneyGained     -= FlashGain;
+            _currency.OnMoneySpent      -= FlashSpend;
+        }
     }
 
     private void Start()
     {
         UpdateLevelText();
+
         if (completionMessage != null)
             completionMessage.SetActive(false);
         if (gameCompletedMessage != null)
@@ -71,7 +90,7 @@ public class ProgressionUI : MonoBehaviour
 
     private void UpdateLevelText()
     {
-        if (levelText != null && GameMaster.Instance != null && GameMaster.Instance.levelLoader != null)
+        if (levelText != null && GameMaster.Instance?.levelLoader != null)
         {
             int currentLevel = GameMaster.Instance.levelLoader.GetCurrentLevelIndex() + 1;
             int totalLevels = GameMaster.Instance.levelLoader.GetTotalLevels();
