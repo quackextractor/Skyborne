@@ -64,7 +64,6 @@ public class PlayerAttackScript : MonoBehaviour
     }
     public void refreshInvetory() {
         abilities = GetComponentsInChildren<Ability>();
-
         foreach (Ability ability in abilities) {
             Debug.Log(ability.name);
         }
