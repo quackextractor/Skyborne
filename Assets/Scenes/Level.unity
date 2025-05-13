@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 203019073}
   - component: {fileID: 203019072}
   m_Layer: 5
-  m_Name: Panel (1)
+  m_Name: CrossairNew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -826,7 +826,7 @@ GameObject:
   - component: {fileID: 349214147}
   - component: {fileID: 349214146}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: CrossairOld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1379,6 +1379,8 @@ GameObject:
   - component: {fileID: 846177968}
   - component: {fileID: 846177969}
   - component: {fileID: 846177970}
+  - component: {fileID: 846177971}
+  - component: {fileID: 846177972}
   m_Layer: 0
   m_Name: TestManager
   m_TagString: Untagged
@@ -1479,6 +1481,37 @@ MonoBehaviour:
   cloudSpawner: {fileID: 1534756897}
   levelLoader: {fileID: 846177969}
   cameraFadeController: {fileID: 1584712445}
+--- !u!114 &846177971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846177965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bc42b0cf4b3d894fbaa24788bf0b097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyCount: 0
+  levelLoader: {fileID: 846177969}
+  levelTransitionController: {fileID: 846177970}
+--- !u!114 &846177972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846177965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a961600355b274fa19ab3300b8ebc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelText: {fileID: 0}
+  enemyCountText: {fileID: 0}
+  completionMessage: {fileID: 0}
+  gameCompletedMessage: {fileID: 0}
 --- !u!1 &1086240656
 GameObject:
   m_ObjectHideFlags: 0
