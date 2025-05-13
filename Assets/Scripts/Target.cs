@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class Target : MonoBehaviour
@@ -9,6 +10,7 @@ public class Target : MonoBehaviour
     private const float InitialAccumulatedKnockback = 1f;
     private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
     private EnemyAnimationController _animController;
+    private CurrencyManager _currencyManager;
 
     [Header("Knockback Settings")]
     [SerializeField] private float knockbackMultiplier = 1f; // 100% default
@@ -65,6 +67,7 @@ public class Target : MonoBehaviour
         _isPlayer = CompareTag("Player");
         _hasHealthText = playerHealthText != null;
         _hasEnemyScript = _enemy != null;
+        _currencyManager = FindObjectOfType<CurrencyManager>();
 
         if (_rb == null) Debug.LogError("Target requires a Rigidbody component!");
         if (_isPlayer && playerHealthText == null)
@@ -235,6 +238,11 @@ public class Target : MonoBehaviour
             if (GameMaster.Instance != null)
             {
                 GameMaster.Instance.OnEnemyDefeated();
+            }
+
+            if (_currencyManager != null)
+            {
+                CurrencyManager.Instance.AddMoney(_enemy.Stats.moneyReward);
             }
 
             foreach (var beh in GetComponents<Behaviour>())
