@@ -84,6 +84,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 5049218541201142314}
     m_Modifications:
     - target: {fileID: 1877404930627294908, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1838229
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877404930627294908, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.91696227
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877404930627294908, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -126,6 +134,26 @@ PrefabInstance:
     - target: {fileID: 2718277886037297129, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
       propertyPath: m_Name
       value: GustParticles
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815123996366869798, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815123996366869798, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815123996366869798, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815123996366869798, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815123996366869798, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.m_ColorSpace
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
