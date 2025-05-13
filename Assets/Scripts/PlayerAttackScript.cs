@@ -8,7 +8,7 @@ public class PlayerAttackScript : MonoBehaviour
     private const string Attack1 = "Attack 1";
     private const string Attack2 = "Attack 2";
     public Animator animator;
-    private Ability[] abilities;
+    private Ability[] abilities = new Ability[10];
     private Weapon _weapon;
     private bool attackCount = true;
     private string currentAnimationState;
@@ -43,17 +43,15 @@ public class PlayerAttackScript : MonoBehaviour
                     }
                 }
 
-        if (abilities != null)
-        {
-            if (abilities != null)
-            {
-                if (abilities.Length > 0 && Input.GetKeyDown(KeyCode.Q))
+        
+           
+                if (abilities[0] != null && Input.GetKeyDown(KeyCode.Q))
                     abilities[0].AttackEffect();
 
-                if (abilities.Length > 1 && Input.GetKeyDown(KeyCode.E))
+                if (abilities[1] != null && Input.GetKeyDown(KeyCode.E))
                     abilities[1].AttackEffect();
-            }
-        }
+            
+        
     }
 
     private void ChangeAnimationState(string newState)
@@ -75,5 +73,13 @@ public class PlayerAttackScript : MonoBehaviour
         foreach (Ability ability in abilities) {
             Debug.Log(ability.name);
         }
+    }
+    public void SelectQAbility(Ability a) {
+        abilities[0] = a;
+
+    }
+    public void SelectEAbility(Ability a)
+    {
+        abilities[1] = a;
     }
 }

@@ -5,6 +5,24 @@ using UnityEngine;
 
 public class ShopScript : MonoBehaviour
 {
+    /**
+     TO DO: MARK BUTTONS WHEN ARENT BOUGHT 
+            CASES FOR WHEN A ABILTY ISNT BOUGHT 
+            MAKE IT SO YOU CANT HAVE DUPLICATE ABILITY IN YOUR SLOTS 
+            MAKE UI PRETTIER
+            Debug.Log("ability is not selected"); replace with something that shows on the screen maybe make unresponsive 
+            
+     
+     
+     */
+
+
+
+
+
+
+
+
     public GameObject ShopUi;
     public GameObject EquipUI;
     Ability[] Abilities;
@@ -40,26 +58,54 @@ public class ShopScript : MonoBehaviour
             ShopUi.SetActive(b);
         };
     }
-
+   
    public void EnableAbility(string AbilityName) {
 
         foreach (Ability a in Abilities)
         {
             if (a.name == AbilityName)
             {
-                //a.gameObject.SetActive(!a.gameObject.activeSelf);
+                a.gameObject.SetActive(true);
                 a.Bought = true;
+                a.gameObject.SetActive(false);
             }
         }
-        playerAttackScript.refreshInvetory();
     }
     public void DisableShop() { 
         ShopUi.SetActive(!ShopUi.activeSelf);
         EquipUI.SetActive(!EquipUI.activeSelf);
     }
-    public void LoadAbilities()
+    Ability ability;
+    public void SelectAbility(string AbilityName)
     {
+        foreach (Ability a in Abilities)
+        {
+            if (a.name == AbilityName && a.Bought)
+            {
+                //a.gameObject.SetActive(!a.gameObject.activeSelf);
+                   ability = a;
+                
+            }
+        }
+    }
 
+    public void Equip(string input) {
+       
+        if (ability == null)
+        {
+            Debug.Log("ability is not selected");
+            return;
+        }
+        switch (input) {
+            case "Q": playerAttackScript.SelectQAbility(ability); 
+                      ability.gameObject.SetActive(true);
+                break;
+            case "E": playerAttackScript.SelectEAbility(ability);
+                        ability.gameObject.SetActive(true);
+
+                break;
+            default: break;
+        }
     }
 
 
