@@ -21,11 +21,13 @@ public class ShopScript : MonoBehaviour
     void OnEnable()
     {
         GameMaster.OnGameOver += HandleGameOver;
+        GameMaster.OnGameCompleted += HandleGameOver;
     }
 
     void OnDisable()
     {
         GameMaster.OnGameOver -= HandleGameOver;
+        GameMaster.OnGameCompleted -= HandleGameOver;
     }
 
     private void HandleGameOver()
