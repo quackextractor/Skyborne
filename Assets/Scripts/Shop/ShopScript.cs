@@ -73,6 +73,8 @@ public class ShopScript : MonoBehaviour
         ShopUi.SetActive(!ShopUi.activeSelf);
         EquipUI.SetActive(!EquipUI.activeSelf);
     }
+
+
     Ability ability;
     public void SelectAbility(string AbilityName)
     {
@@ -80,9 +82,7 @@ public class ShopScript : MonoBehaviour
         {
             if (a.name == AbilityName && a.Bought)
             {
-                //a.gameObject.SetActive(!a.gameObject.activeSelf);
                    ability = a;
-                
             }
         }
     }
