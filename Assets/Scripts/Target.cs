@@ -242,7 +242,7 @@ public class Target : MonoBehaviour
 
             if (_currencyManager != null)
             {
-                CurrencyManager.Instance.AddMoney(_enemy.Stats.moneyReward);
+                _currencyManager.AddMoney(_enemy.Stats.moneyReward);
             }
 
             foreach (var beh in GetComponents<Behaviour>())

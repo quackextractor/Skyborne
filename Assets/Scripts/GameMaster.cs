@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 
@@ -15,6 +16,9 @@ public class GameMaster : MonoBehaviour
     public static event Action<int> OnEnemyCountChanged;
     public static event Action       OnLevelCompleted;
     public static event Action       OnGameCompleted;
+
+    // NEW: fired after every level scene finishes loading
+    public static event Action       OnLevelLoaded;
 
     private static GameMaster _instance;
     public static GameMaster Instance
@@ -43,6 +47,24 @@ public class GameMaster : MonoBehaviour
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Hook into Unity's sceneLoaded event
+        SceneManager.sceneLoaded += HandleSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe to avoid leaks
+        SceneManager.sceneLoaded -= HandleSceneLoaded;
+    }
+
+    private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Reset enemy tracking for the fresh level
+        Initialize();
+
+        // Notify listeners that a new level is active
+        OnLevelLoaded?.Invoke();
     }
 
     private void OnEnable()
@@ -61,7 +83,6 @@ public class GameMaster : MonoBehaviour
         UpdateEnemyCount();
     }
 
-    // This is your callback from Enemy.OnEnemySpawned
     private void HandleEnemySpawned()
     {
         enemyCount++;
@@ -69,7 +90,6 @@ public class GameMaster : MonoBehaviour
         Debug.Log($"Enemy spawned. Total enemies: {enemyCount}");
     }
 
-    // You’ll need to invoke this from wherever you detect an enemy’s death:
     public void OnEnemyDefeated()
     {
         enemyCount--;
@@ -103,7 +123,7 @@ public class GameMaster : MonoBehaviour
 
     private IEnumerator StartLevelTransition()
     {
-        yield return new WaitForSeconds(2f);    // small pause
+        yield return new WaitForSeconds(2f);
 
         if (levelTransitionController != null)
             levelTransitionController.StartTransition();
