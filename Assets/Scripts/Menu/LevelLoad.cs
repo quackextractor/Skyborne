@@ -31,6 +31,7 @@ namespace Menu
             // Turn off particle emission on start
             var emission = motionLinesParticleSystem.emission;
             emission.enabled = false;
+            Time.timeScale = 1f;
         }
 
         public void LoadLevel()

@@ -113,6 +113,8 @@ public class ProgressionUI : MonoBehaviour
 
     private void ShowGameCompleted()
     {
+        completionMessage?.SetActive(false);
+        gameCompletedMessage?.SetActive(false);
         gameCompletedMessage?.SetActive(true);
     }
     
@@ -120,9 +122,7 @@ public class ProgressionUI : MonoBehaviour
     {
         completionMessage?.SetActive(false);
         gameCompletedMessage?.SetActive(false);
-
-        if (gameOverMessage != null)
-            gameOverMessage.SetActive(true);
+        gameOverMessage?.SetActive(true);
     }
 
     private void Update()
