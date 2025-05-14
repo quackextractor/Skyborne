@@ -48,7 +48,6 @@ public class PlayerAttackScript : MonoBehaviour
         if (abilities[0] != null && Input.GetKeyDown(KeyCode.Q))
         {
             abilities[0].AttackEffect();
-            Debug.Log("Gust");
         }
 
         if (abilities[1] != null && Input.GetKeyDown(KeyCode.E))
@@ -80,8 +79,11 @@ public class PlayerAttackScript : MonoBehaviour
         }
     }
     public void SelectQAbility(Ability a) {
-
-        abilities[0].gameObject.SetActive(false);
+        if (abilities[0] != null)
+        {
+            abilities[0].gameObject.SetActive(false);
+        }
+       
         if (abilities[1] != a)
         {
             abilities[0] = a;
@@ -90,10 +92,16 @@ public class PlayerAttackScript : MonoBehaviour
     }
     public void SelectEAbility(Ability a)
     {
-        abilities[1].gameObject.SetActive(false);
-        if (abilities[0] != a) {
+        if (abilities[1]!= null) {
+            abilities[1].gameObject.SetActive(false);
+        }
+        if (abilities[0] != a)
+        {
             abilities[1] = a;
             abilities[1].gameObject.SetActive(true);
+        }
+        else {
+            Debug.Log("");
         }
     }
 }
