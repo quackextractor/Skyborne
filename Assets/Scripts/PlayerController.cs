@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -94,26 +95,24 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, mouseX, 0);
     }
 
+    private Queue<float> dashCooldowns = new Queue<float>();
+
     private void HandleDashRefill()
     {
-        sliders[0].value = _dashRefillTimestamp - Time.time;
-        for (int i = 0; i> sliders.Length;i++)
-        {
-            if (i == 1)
-            {
+        // Update UI based on the next dash cooldown
+        if (dashCooldowns.Count > 0)
+            sliders[0].value = dashCooldowns.Peek() - Time.time;
+        else
+            sliders[0].value = 0;
 
-            }
-        }
-        if (amountDash < maxDash && Time.time >= _dashRefillTimestamp)
+        // Refill any dashes whose cooldown has expired
+        while (dashCooldowns.Count > 0 && Time.time >= dashCooldowns.Peek())
         {
-            if (amountDash != maxDash)
-            {
-                amountDash++;
-                _dashRefillTimestamp = Time.time + cooldown + moveLock;
-            }
+            dashCooldowns.Dequeue();
+            amountDash = Mathf.Min(amountDash + 1, maxDash);
         }
-        
     }
+
 
     private void HandleDashInput()
     {
@@ -128,13 +127,15 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
+        amountDash--;
+        dashCooldowns.Enqueue(Time.time + cooldown + moveLock);
         var inputDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         var dashDir = inputDir.magnitude > 0.1f
             ? transform.TransformDirection(inputDir.normalized)
             : transform.forward;
         _rb.velocity = Vector3.zero;
         _rb.AddForce(dashDir * dashForce, ForceMode.Impulse);
-        amountDash--;
+        
     }
 
     private void ToggleSpeedParticles()
