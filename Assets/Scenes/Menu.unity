@@ -2059,6 +2059,7 @@ MonoBehaviour:
   cameraFadeController: {fileID: 2113200273}
   motionLinesParticleSystem: {fileID: 648285985}
   cameraGameObject: {fileID: 2113200268}
+  uiComponentsToHide: {fileID: 1664410646}
   targetPoint: {fileID: 1960434350}
   rotateDuration: 0.5
   moveDuration: 1
