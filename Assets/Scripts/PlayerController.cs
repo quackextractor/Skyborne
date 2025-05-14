@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,7 +20,13 @@ public class PlayerController : MonoBehaviour
     private ParticleSystem speedParticles;
 
     [Tooltip("Start emitting particles when speed exceeds this value.")] [SerializeField]
+
+    [Header("Dash slider handle")]
+    public GameObject sliderParent;
+    private Slider[] sliders;
+
     private float speedThreshold = 10f;
+
 
     private readonly float _verticalRotationLimit = 80f;
     private float _dashRefillTimestamp;
@@ -32,6 +39,12 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+       sliders =  sliderParent.GetComponentsInChildren<Slider>();
+
+        foreach (Slider slider in sliders) { 
+            slider.maxValue = cooldown + moveLock;
+        }
+
         _rb = GetComponent<Rigidbody>();
         if (_rb == null) Debug.LogError("PlayerController: no Rigidbody found on this GameObject!");
 
@@ -82,11 +95,15 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDashRefill()
     {
+        sliders[0].value = _dashRefillTimestamp - Time.time;
         if (amountDash < 3 && Time.time >= _dashRefillTimestamp)
         {
             amountDash++;
             _dashRefillTimestamp = Time.time + cooldown + moveLock;
+            sliders[0].maxValue = _dashRefillTimestamp;
+            
         }
+        
     }
 
     private void HandleDashInput()
@@ -132,4 +149,5 @@ public class PlayerController : MonoBehaviour
                 _emissionModule.enabled = false;
         }
     }
+
 }

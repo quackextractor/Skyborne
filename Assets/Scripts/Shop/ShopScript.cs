@@ -8,11 +8,8 @@ public class ShopScript : MonoBehaviour
     /**
      TO DO: MARK BUTTONS WHEN ARENT BOUGHT 
             CASES FOR WHEN A ABILTY ISNT BOUGHT 
-            MAKE IT SO YOU CANT HAVE DUPLICATE ABILITY IN YOUR SLOTS 
-            MAKE UI PRETTIER
             Debug.Log("ability is not selected"); replace with something that shows on the screen maybe make unresponsive
-            Pause the game when turning on the shop
-            
+            Pause the game when turning on the shop       
      */
 
 
@@ -31,6 +28,7 @@ public class ShopScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         player = GameObject.FindGameObjectWithTag("Player");
         playerAttackScript = player.GetComponent<PlayerAttackScript>();
         Abilities = playerAttackScript.GetComponentsInChildren<Ability>();
