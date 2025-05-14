@@ -49,9 +49,13 @@ public class ShopScript : MonoBehaviour
             if (b)
             {
                 Cursor.lockState = CursorLockMode.None;
+                Time.timeScale = 0f;
+                player.GetComponent<PlayerController>().enabled = false;
             }
             else {
                 Cursor.lockState = CursorLockMode.Locked;
+                Time.timeScale = 1f;
+                player.GetComponent<PlayerController>().enabled = true;
                 EquipUI.SetActive(b);
             }
             ShopUi.SetActive(b);
@@ -96,12 +100,9 @@ public class ShopScript : MonoBehaviour
             return;
         }
         switch (input) {
-            case "Q": playerAttackScript.SelectQAbility(ability); 
-                      ability.gameObject.SetActive(true);
+            case "Q": playerAttackScript.SelectQAbility(ability);   
                 break;
             case "E": playerAttackScript.SelectEAbility(ability);
-                        ability.gameObject.SetActive(true);
-
                 break;
             default: break;
         }
