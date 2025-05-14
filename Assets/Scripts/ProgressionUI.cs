@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class ProgressionUI : MonoBehaviour
@@ -24,14 +23,6 @@ public class ProgressionUI : MonoBehaviour
         GameMaster.OnLevelCompleted     += ShowLevelCompleted;
         GameMaster.OnGameCompleted      += ShowGameCompleted;
         GameMaster.OnLevelLoaded        += UpdateLevelText;
-
-        _currency = CurrencyManager.Instance;
-        if (_currency != null)
-        {
-            _currency.OnBalanceChanged += UpdateBalance;
-            _currency.OnMoneyGained   += FlashGain;
-            _currency.OnMoneySpent    += FlashSpend;
-        }
     }
 
     private void OnDisable()
@@ -51,12 +42,22 @@ public class ProgressionUI : MonoBehaviour
 
     private void Start()
     {
-        // initial draw
+        // Ensure CurrencyManager.Instance is set before subscribing
+        _currency = CurrencyManager.Instance;
+        if (_currency != null)
+        {
+            _currency.OnBalanceChanged += UpdateBalance;
+            _currency.OnMoneyGained   += FlashGain;
+            _currency.OnMoneySpent    += FlashSpend;
+
+            // Initial draw of the current balance
+            UpdateBalance(_currency.Balance);
+        }
+
+        // Initial draw of level/UI state
         UpdateLevelText();
-        if (completionMessage != null)
-            completionMessage.SetActive(false);
-        if (gameCompletedMessage != null)
-            gameCompletedMessage.SetActive(false);
+        completionMessage?.SetActive(false);
+        gameCompletedMessage?.SetActive(false);
     }
 
     private void UpdateBalance(int newBal)
@@ -65,7 +66,7 @@ public class ProgressionUI : MonoBehaviour
             balanceText.text = $"${newBal}";
     }
 
-    private void FlashGain(int amount) => StartCoroutine(FlashColor(gainColor));
+    private void FlashGain(int amount)  => StartCoroutine(FlashColor(gainColor));
     private void FlashSpend(int amount) => StartCoroutine(FlashColor(spendColor));
 
     private IEnumerator FlashColor(Color c)
@@ -106,18 +107,18 @@ public class ProgressionUI : MonoBehaviour
 
     private void HideCompletionMessage()
     {
-        if (completionMessage != null)
-            completionMessage.SetActive(false);
+        completionMessage?.SetActive(false);
     }
 
     private void ShowGameCompleted()
     {
-        if (gameCompletedMessage != null)
-            gameCompletedMessage.SetActive(true);
+        gameCompletedMessage?.SetActive(true);
     }
 
     private void Update()
     {
+        // Optional: If level text needs constant refresh,
+        // but you can remove this if not necessary.
         UpdateLevelText();
     }
 }
