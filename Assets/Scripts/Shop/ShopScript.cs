@@ -18,9 +18,22 @@ public class ShopScript : MonoBehaviour
 
 
 
+    void OnEnable()
+    {
+        GameMaster.OnGameOver += HandleGameOver;
+    }
 
+    void OnDisable()
+    {
+        GameMaster.OnGameOver -= HandleGameOver;
+    }
 
-
+    private void HandleGameOver()
+    {
+        gameOver = true;
+        ShopUi.SetActive(false);
+        EquipUI.SetActive(false);
+    }
 
     public GameObject ShopUi;
     public GameObject EquipUI;
@@ -28,6 +41,7 @@ public class ShopScript : MonoBehaviour
     GameObject player;
     PlayerAttackScript playerAttackScript;
     bool b;
+    private bool gameOver = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +58,8 @@ public class ShopScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameOver)
+            return;
         if (Input.GetKeyDown(KeyCode.Tab)) { 
             b = !b;
             if (b)
