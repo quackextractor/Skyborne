@@ -8,6 +8,7 @@ public class Respawn : MonoBehaviour
 
     private Rigidbody _rb;
     private Transform _spawnPoint;
+    private const int respawnCost = 10;
 
     private void Start()
     {
@@ -24,6 +25,14 @@ public class Respawn : MonoBehaviour
     {
         if (transform.position.y <= -15f && _spawnPoint)
         {
+            // Attempt to charge the player
+            if (!CurrencyManager.Instance.SpendMoney(respawnCost))
+            {
+                GameMaster.Instance.TriggerGameOver();
+                enabled = false; 
+                return;
+            }
+
             // Reset position
             transform.position = _spawnPoint.position;
 

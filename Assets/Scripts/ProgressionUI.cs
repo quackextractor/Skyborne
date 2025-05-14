@@ -10,6 +10,7 @@ public class ProgressionUI : MonoBehaviour
     public TextMeshProUGUI enemyCountText;
     public GameObject completionMessage;
     public GameObject gameCompletedMessage;
+    public GameObject gameOverMessage;     
     public TextMeshProUGUI balanceText;
     public Color gainColor = Color.green;
     public Color spendColor = Color.red;
@@ -19,45 +20,45 @@ public class ProgressionUI : MonoBehaviour
 
     private void OnEnable()
     {
-        GameMaster.OnEnemyCountChanged  += UpdateEnemyCount;
-        GameMaster.OnLevelCompleted     += ShowLevelCompleted;
-        GameMaster.OnGameCompleted      += ShowGameCompleted;
-        GameMaster.OnLevelLoaded        += UpdateLevelText;
+        GameMaster.OnEnemyCountChanged += UpdateEnemyCount;
+        GameMaster.OnLevelCompleted += ShowLevelCompleted;
+        GameMaster.OnGameCompleted += ShowGameCompleted;
+        GameMaster.OnLevelLoaded += UpdateLevelText;
+        GameMaster.OnGameOver += ShowGameOverUI; 
     }
 
     private void OnDisable()
     {
-        GameMaster.OnEnemyCountChanged  -= UpdateEnemyCount;
-        GameMaster.OnLevelCompleted     -= ShowLevelCompleted;
-        GameMaster.OnGameCompleted      -= ShowGameCompleted;
-        GameMaster.OnLevelLoaded        -= UpdateLevelText;
+        GameMaster.OnEnemyCountChanged -= UpdateEnemyCount;
+        GameMaster.OnLevelCompleted -= ShowLevelCompleted;
+        GameMaster.OnGameCompleted -= ShowGameCompleted;
+        GameMaster.OnLevelLoaded -= UpdateLevelText;
+        GameMaster.OnGameOver -= ShowGameOverUI; 
 
         if (_currency != null)
         {
-            _currency.OnBalanceChanged  -= UpdateBalance;
-            _currency.OnMoneyGained     -= FlashGain;
-            _currency.OnMoneySpent      -= FlashSpend;
+            _currency.OnBalanceChanged -= UpdateBalance;
+            _currency.OnMoneyGained -= FlashGain;
+            _currency.OnMoneySpent -= FlashSpend;
         }
     }
 
     private void Start()
     {
-        // Ensure CurrencyManager.Instance is set before subscribing
         _currency = CurrencyManager.Instance;
         if (_currency != null)
         {
             _currency.OnBalanceChanged += UpdateBalance;
-            _currency.OnMoneyGained   += FlashGain;
-            _currency.OnMoneySpent    += FlashSpend;
+            _currency.OnMoneyGained += FlashGain;
+            _currency.OnMoneySpent += FlashSpend;
 
-            // Initial draw of the current balance
             UpdateBalance(_currency.Balance);
         }
 
-        // Initial draw of level/UI state
         UpdateLevelText();
         completionMessage?.SetActive(false);
         gameCompletedMessage?.SetActive(false);
+        gameOverMessage?.SetActive(false);
     }
 
     private void UpdateBalance(int newBal)
@@ -66,7 +67,7 @@ public class ProgressionUI : MonoBehaviour
             balanceText.text = $"${newBal}";
     }
 
-    private void FlashGain(int amount)  => StartCoroutine(FlashColor(gainColor));
+    private void FlashGain(int amount) => StartCoroutine(FlashColor(gainColor));
     private void FlashSpend(int amount) => StartCoroutine(FlashColor(spendColor));
 
     private IEnumerator FlashColor(Color c)
@@ -91,8 +92,8 @@ public class ProgressionUI : MonoBehaviour
         if (levelText != null && GameMaster.Instance?.levelLoader != null)
         {
             int currentLevel = GameMaster.Instance.levelLoader.GetCurrentLevelIndex() + 1;
-            int totalLevels  = GameMaster.Instance.levelLoader.GetTotalLevels();
-            levelText.text   = $"Level {currentLevel} / {totalLevels}";
+            int totalLevels = GameMaster.Instance.levelLoader.GetTotalLevels();
+            levelText.text = $"Level {currentLevel} / {totalLevels}";
         }
     }
 
@@ -114,11 +115,18 @@ public class ProgressionUI : MonoBehaviour
     {
         gameCompletedMessage?.SetActive(true);
     }
+    
+    private void ShowGameOverUI()
+    {
+        completionMessage?.SetActive(false);
+        gameCompletedMessage?.SetActive(false);
+
+        if (gameOverMessage != null)
+            gameOverMessage.SetActive(true);
+    }
 
     private void Update()
     {
-        // Optional: If level text needs constant refresh,
-        // but you can remove this if not necessary.
         UpdateLevelText();
     }
 }

@@ -16,6 +16,7 @@ public class GameMaster : MonoBehaviour
     public static event Action<int> OnEnemyCountChanged;
     public static event Action       OnLevelCompleted;
     public static event Action       OnGameCompleted;
+    public static event Action       OnGameOver; // NEW: fired when player can't afford respawn
 
     // NEW: fired after every level scene finishes loading
     public static event Action       OnLevelLoaded;
@@ -138,5 +139,14 @@ public class GameMaster : MonoBehaviour
     {
         Initialize();
         levelLoader.LoadLevel();
+    }
+    
+    public void TriggerGameOver()
+    {
+        Debug.Log("Game Over – player couldn't afford respawn.");
+        OnGameOver?.Invoke();
+        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
