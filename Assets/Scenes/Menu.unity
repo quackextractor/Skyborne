@@ -2335,8 +2335,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LevelLoad, Assembly-CSharp
+      - m_Target: {fileID: 985808187616688137}
+        m_TargetAssemblyTypeName: Menu.LevelLoad, Assembly-CSharp
         m_MethodName: Terminate
         m_Mode: 1
         m_Arguments:
