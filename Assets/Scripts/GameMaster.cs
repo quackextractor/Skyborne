@@ -47,7 +47,7 @@ public class GameMaster : MonoBehaviour
             return;
         }
         _instance = this;
-        DontDestroyOnLoad(gameObject);
+      //  DontDestroyOnLoad(gameObject);
 
         // Hook into Unity's sceneLoaded event
         SceneManager.sceneLoaded += HandleSceneLoaded;
