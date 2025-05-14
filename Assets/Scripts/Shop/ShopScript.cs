@@ -38,7 +38,7 @@ public class ShopScript : MonoBehaviour
         {
                 a.gameObject.SetActive(!a.gameObject.activeSelf);
         }
-        b = true;
+        b = false;
     }
 
     // Update is called once per frame
