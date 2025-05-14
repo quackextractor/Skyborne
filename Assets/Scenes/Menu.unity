@@ -2025,6 +2025,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0d175c512cd3514086af34c74cd0f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraFadeController: {fileID: 2113200273}
+  motionLinesParticleSystem: {fileID: 648285985}
+  cameraGameObject: {fileID: 2113200268}
+  targetPosition: {x: 0, y: 0, z: 0}
+  targetEulerAngles: {x: 0, y: 0, z: 0}
+  moveDuration: 1
+  rotateDuration: 2
+  postFadeDelay: 0.1
 --- !u!224 &2598024123929634375
 RectTransform:
   m_ObjectHideFlags: 0
