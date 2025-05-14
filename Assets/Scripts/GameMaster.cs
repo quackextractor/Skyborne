@@ -16,7 +16,7 @@ public class GameMaster : MonoBehaviour
     public static event Action<int> OnEnemyCountChanged;
     public static event Action       OnLevelCompleted;
     public static event Action       OnGameCompleted;
-    public static event Action       OnGameOver; // NEW: fired when player can't afford respawn
+    public static event Action       OnGameOver;
 
     // NEW: fired after every level scene finishes loading
     public static event Action       OnLevelLoaded;
