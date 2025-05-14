@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,47 @@ public class ProgressionUI : MonoBehaviour
     public float flashDuration = 0.5f;
 
     private CurrencyManager _currency;
+
+    private void OnEnable()
+    {
+        GameMaster.OnEnemyCountChanged  += UpdateEnemyCount;
+        GameMaster.OnLevelCompleted     += ShowLevelCompleted;
+        GameMaster.OnGameCompleted      += ShowGameCompleted;
+        GameMaster.OnLevelLoaded        += UpdateLevelText;
+
+        _currency = CurrencyManager.Instance;
+        if (_currency != null)
+        {
+            _currency.OnBalanceChanged += UpdateBalance;
+            _currency.OnMoneyGained   += FlashGain;
+            _currency.OnMoneySpent    += FlashSpend;
+        }
+    }
+
+    private void OnDisable()
+    {
+        GameMaster.OnEnemyCountChanged  -= UpdateEnemyCount;
+        GameMaster.OnLevelCompleted     -= ShowLevelCompleted;
+        GameMaster.OnGameCompleted      -= ShowGameCompleted;
+        GameMaster.OnLevelLoaded        -= UpdateLevelText;
+
+        if (_currency != null)
+        {
+            _currency.OnBalanceChanged  -= UpdateBalance;
+            _currency.OnMoneyGained     -= FlashGain;
+            _currency.OnMoneySpent      -= FlashSpend;
+        }
+    }
+
+    private void Start()
+    {
+        // initial draw
+        UpdateLevelText();
+        if (completionMessage != null)
+            completionMessage.SetActive(false);
+        if (gameCompletedMessage != null)
+            gameCompletedMessage.SetActive(false);
+    }
 
     private void UpdateBalance(int newBal)
     {
@@ -36,56 +78,11 @@ public class ProgressionUI : MonoBehaviour
         yield return new WaitForSeconds(flashDuration);
         balanceText.color = orig;
     }
-    
-    private void OnEnable()
-    {
-        // Subscribe to GameMaster events (static)
-        GameMaster.OnEnemyCountChanged  += UpdateEnemyCount;
-        GameMaster.OnLevelCompleted     += ShowLevelCompleted;
-        GameMaster.OnGameCompleted      += ShowGameCompleted;
-
-        // Cache and subscribe to CurrencyManager events
-        _currency = CurrencyManager.Instance;
-        if (_currency != null)
-        {
-            _currency.OnBalanceChanged += UpdateBalance;
-            _currency.OnMoneyGained   += FlashGain;
-            _currency.OnMoneySpent    += FlashSpend;
-        }
-    }
-
-    private void OnDisable()
-    {
-        // Unsubscribe GameMaster events
-        GameMaster.OnEnemyCountChanged  -= UpdateEnemyCount;
-        GameMaster.OnLevelCompleted     -= ShowLevelCompleted;
-        GameMaster.OnGameCompleted      -= ShowGameCompleted;
-
-        // Unsubscribe CurrencyManager events if still valid
-        if (_currency != null)
-        {
-            _currency.OnBalanceChanged  -= UpdateBalance;
-            _currency.OnMoneyGained     -= FlashGain;
-            _currency.OnMoneySpent      -= FlashSpend;
-        }
-    }
-
-    private void Start()
-    {
-        UpdateLevelText();
-
-        if (completionMessage != null)
-            completionMessage.SetActive(false);
-        if (gameCompletedMessage != null)
-            gameCompletedMessage.SetActive(false);
-    }
 
     private void UpdateEnemyCount(int count)
     {
         if (enemyCountText != null)
-        {
             enemyCountText.text = $"Enemies: {count}";
-        }
     }
 
     private void UpdateLevelText()
@@ -93,8 +90,8 @@ public class ProgressionUI : MonoBehaviour
         if (levelText != null && GameMaster.Instance?.levelLoader != null)
         {
             int currentLevel = GameMaster.Instance.levelLoader.GetCurrentLevelIndex() + 1;
-            int totalLevels = GameMaster.Instance.levelLoader.GetTotalLevels();
-            levelText.text = $"Level {currentLevel} / {totalLevels}";
+            int totalLevels  = GameMaster.Instance.levelLoader.GetTotalLevels();
+            levelText.text   = $"Level {currentLevel} / {totalLevels}";
         }
     }
 
@@ -103,7 +100,6 @@ public class ProgressionUI : MonoBehaviour
         if (completionMessage != null)
         {
             completionMessage.SetActive(true);
-            // Hide after 3 seconds
             Invoke(nameof(HideCompletionMessage), 3f);
         }
     }
@@ -117,8 +113,11 @@ public class ProgressionUI : MonoBehaviour
     private void ShowGameCompleted()
     {
         if (gameCompletedMessage != null)
-        {
             gameCompletedMessage.SetActive(true);
-        }
+    }
+
+    private void Update()
+    {
+        UpdateLevelText();
     }
 }
