@@ -24,6 +24,7 @@ public class TestManager : MonoBehaviour
     private void Start()
     {
         SpawnEnemies(initialEnemies);
+        levelTransitionController.levelLoader.LoadNextLevel();
     }
 
     private void Update()

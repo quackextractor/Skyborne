@@ -18,11 +18,19 @@ namespace Abilities
             if (ps == null)
                 Debug.LogError("Gust: no ParticleSystem on GustParticlesGameObject!");
         }
+        
+        private void OnEnable()
+        {
+            ps.Stop(withChildren: false, ParticleSystemStopBehavior.StopEmitting);
+        }
 
         public override void AttackEffect()
         {
             if (!isAttacking)
+            {
                 StartCoroutine(DoGust());
+                StartCoroutine(Attack());
+            }
         }
 
         private IEnumerator DoGust()

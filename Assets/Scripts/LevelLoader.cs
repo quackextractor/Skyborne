@@ -78,7 +78,7 @@ public class LevelLoader : MonoBehaviour
         }
 
         // Clear existing enemies before spawning new ones
-        ClearExistingEnemies();
+        // ClearExistingEnemies();
 
         Debug.Log($"Loading level {currentLevelIndex + 1} of {levelDataList.Count}");
 

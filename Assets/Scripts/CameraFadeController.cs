@@ -15,6 +15,12 @@ public class CameraFadeController : MonoBehaviour
     private bool _manualOverride = false;
 
     public event Action<float> OnFadeValueChanged;
+    
+    private void Awake()
+    {
+        Alpha = 1f;
+        OnFadeValueChanged?.Invoke(Alpha);
+    }
 
     private void Update()
     {
