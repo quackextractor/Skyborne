@@ -45,11 +45,16 @@ public class PlayerAttackScript : MonoBehaviour
 
         
            
-                if (abilities[0] != null && Input.GetKeyDown(KeyCode.Q))
-                    abilities[0].AttackEffect();
+        if (abilities[0] != null && Input.GetKeyDown(KeyCode.Q))
+        {
+            abilities[0].AttackEffect();
+            Debug.Log("Gust");
+        }
 
-                if (abilities[1] != null && Input.GetKeyDown(KeyCode.E))
-                    abilities[1].AttackEffect();
+        if (abilities[1] != null && Input.GetKeyDown(KeyCode.E))
+        {
+            abilities[1].AttackEffect();
+        }
             
         
     }
@@ -68,7 +73,7 @@ public class PlayerAttackScript : MonoBehaviour
             currentAnimationState = null;
         }
     }
-    public void refreshInvetory() {
+    public void RefreshInvetory() {
         abilities = GetComponentsInChildren<Ability>();
         foreach (Ability ability in abilities) {
             Debug.Log(ability.name);

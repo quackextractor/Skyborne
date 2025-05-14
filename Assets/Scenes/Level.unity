@@ -2370,6 +2370,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e42dc48fbc5bbdb43bb2f897793f45bc, type: 3}
   m_PrefabInstance: {fileID: 427940993}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1651925433 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 821263544293657342, guid: 87b214c128c05dd47b03ffd93d550dc3, type: 3}
+  m_PrefabInstance: {fileID: 1803802705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1803802705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2390,6 +2395,14 @@ PrefabInstance:
       propertyPath: gameObject
       value: 
       objectReference: {fileID: 2718277886037297129, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+    - target: {fileID: 3056928656432897647, guid: 87b214c128c05dd47b03ffd93d550dc3, type: 3}
+      propertyPath: emissionDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056928656432897647, guid: 87b214c128c05dd47b03ffd93d550dc3, type: 3}
+      propertyPath: GustParticlesGameObject
+      value: 
+      objectReference: {fileID: 1651925433}
     - target: {fileID: 5049218541201142314, guid: 87b214c128c05dd47b03ffd93d550dc3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3209,6 +3222,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -87
       objectReference: {fileID: 0}
+    - target: {fileID: 7144486992724454111, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: GustParticlesGameObject
+      value: 
+      objectReference: {fileID: 1651925433}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 4410418500223894234, guid: a270a32ad4f877445947a294168be9fb, type: 3}
