@@ -733,6 +733,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: a1898ac74eb4c1741b6c8c8f4094a5a0, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a1898ac74eb4c1741b6c8c8f4094a5a0, type: 3}
       propertyPath: m_Name
       value: Steel Shortsword
