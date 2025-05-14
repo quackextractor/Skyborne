@@ -80,11 +80,20 @@ public class PlayerAttackScript : MonoBehaviour
         }
     }
     public void SelectQAbility(Ability a) {
-        abilities[0] = a;
 
+        abilities[0].gameObject.SetActive(false);
+        if (abilities[1] != a)
+        {
+            abilities[0] = a;
+            abilities[0].gameObject.SetActive(true);
+        }
     }
     public void SelectEAbility(Ability a)
     {
-        abilities[1] = a;
+        abilities[1].gameObject.SetActive(false);
+        if (abilities[0] != a) {
+            abilities[1] = a;
+            abilities[1].gameObject.SetActive(true);
+        }
     }
 }

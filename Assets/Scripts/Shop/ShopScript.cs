@@ -12,6 +12,7 @@ public class ShopScript : MonoBehaviour
             MAKE UI PRETTIER
             Debug.Log("ability is not selected"); replace with something that shows on the screen maybe make unresponsive
             Pause the game when turning on the shop
+            
      */
 
 
