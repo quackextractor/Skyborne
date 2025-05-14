@@ -1795,9 +1795,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1900358228}
     m_Modifications:
+    - target: {fileID: 2680497123958895605, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
+      propertyPath: m_text
+      value: Fireball
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646362109842280724, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
+      propertyPath: m_text
+      value: Burst
+      objectReference: {fileID: 0}
     - target: {fileID: 4533252331128753385, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
       propertyPath: m_Name
       value: shopUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5223118169441934438, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
+      propertyPath: m_text
+      value: Gust
       objectReference: {fileID: 0}
     - target: {fileID: 6056847216704524382, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
       propertyPath: m_Pivot.x
