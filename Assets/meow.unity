@@ -5073,7 +5073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3947483276497211146, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: cooldown
-      value: 10
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3947483276497211146, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: m_Enabled

@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float cooldown = 0.5f;
     [SerializeField] private float moveLock = 0.5f;
     [SerializeField] private int amountDash = 3;
+    [SerializeField] private int maxDash = 3;
 
     [Header("Speed Particles")] [Tooltip("Particle system to emit when moving fast.")] [SerializeField]
     private ParticleSystem speedParticles;
@@ -96,19 +97,27 @@ public class PlayerController : MonoBehaviour
     private void HandleDashRefill()
     {
         sliders[0].value = _dashRefillTimestamp - Time.time;
-        if (amountDash < 3 && Time.time >= _dashRefillTimestamp)
+        for (int i = 0; i> sliders.Length;i++)
         {
-            amountDash++;
-            _dashRefillTimestamp = Time.time + cooldown + moveLock;
-            sliders[0].maxValue = _dashRefillTimestamp;
-            
+            if (i == 1)
+            {
+
+            }
+        }
+        if (amountDash < maxDash && Time.time >= _dashRefillTimestamp)
+        {
+            if (amountDash != maxDash)
+            {
+                amountDash++;
+                _dashRefillTimestamp = Time.time + cooldown + moveLock;
+            }
         }
         
     }
 
     private void HandleDashInput()
     {
-        if (amountDash <= 0 || Time.time < _moveTimestamp) return;
+        if (amountDash < 0 || Time.time < _moveTimestamp) return;
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -123,10 +132,9 @@ public class PlayerController : MonoBehaviour
         var dashDir = inputDir.magnitude > 0.1f
             ? transform.TransformDirection(inputDir.normalized)
             : transform.forward;
-
-        amountDash--;
         _rb.velocity = Vector3.zero;
         _rb.AddForce(dashDir * dashForce, ForceMode.Impulse);
+        amountDash--;
     }
 
     private void ToggleSpeedParticles()
