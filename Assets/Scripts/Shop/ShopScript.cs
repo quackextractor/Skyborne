@@ -10,10 +10,8 @@ public class ShopScript : MonoBehaviour
             CASES FOR WHEN A ABILTY ISNT BOUGHT 
             MAKE IT SO YOU CANT HAVE DUPLICATE ABILITY IN YOUR SLOTS 
             MAKE UI PRETTIER
-            Debug.Log("ability is not selected"); replace with something that shows on the screen maybe make unresponsive 
-            
-     
-     
+            Debug.Log("ability is not selected"); replace with something that shows on the screen maybe make unresponsive
+            Pause the game when turning on the shop
      */
 
 
