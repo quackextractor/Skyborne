@@ -9,6 +9,7 @@ namespace Abilities
         public override void AttackEffect()
         {
             Instantiate(firePrefab);
+            
         }
     }
 }

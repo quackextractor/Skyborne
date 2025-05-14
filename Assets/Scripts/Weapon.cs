@@ -64,15 +64,17 @@ public class Weapon : MonoBehaviour
         _hitTargets.Clear();
         //  Debug.Log("hit" + _hitTargets);
         yield return new WaitForSeconds(windUpTime);
-
         weaponCollider.enabled = true;
         yield return new WaitForSeconds(activationTime);
         weaponCollider.enabled = false;
         yield return new WaitForSeconds(cooldownTime);
+        Debug.Log("done");
+        Debug.Log(cooldownTime);
         isAttacking = false;
     }
 
     public virtual void AttackEffect()
     {
+       
     }
 }

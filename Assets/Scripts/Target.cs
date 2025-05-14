@@ -103,7 +103,7 @@ public class Target : MonoBehaviour
     private void Update()
     {
         if (_isPlayer && playerHealthText)
-            playerHealthText.text = $"Current Knockback: {accumulatedKnockback}";
+            playerHealthText.text = $"Current Knockback: {accumulatedKnockback*100}%";
     }
 
     private void OnDestroy()

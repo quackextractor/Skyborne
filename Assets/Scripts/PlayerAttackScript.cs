@@ -24,7 +24,7 @@ public class PlayerAttackScript : MonoBehaviour
 
     private void Update()
     {
-        if (!_weapon.isAttacking)
+        if (!_weapon.isAttacking) {
             // Check for left mouse button press
             if (Input.GetMouseButtonDown(0))
                 // Trigger the attack
@@ -42,10 +42,10 @@ public class PlayerAttackScript : MonoBehaviour
                         attackCount = true;
                     }
                 }
+        }
+       
 
-        
-           
-        if (abilities[0] != null && Input.GetKeyDown(KeyCode.Q))
+            if (abilities[0] != null && Input.GetKeyDown(KeyCode.Q)&& !abilities[0].isAttacking)
         {
             abilities[0].AttackEffect();
         }
@@ -79,29 +79,28 @@ public class PlayerAttackScript : MonoBehaviour
         }
     }
     public void SelectQAbility(Ability a) {
-        if (abilities[0] != null)
-        {
-            abilities[0].gameObject.SetActive(false);
-        }
+       
        
         if (abilities[1] != a)
         {
+            if (abilities[0] != null)
+            {
+                abilities[0].gameObject.SetActive(false);
+            }
             abilities[0] = a;
             abilities[0].gameObject.SetActive(true);
         }
     }
     public void SelectEAbility(Ability a)
     {
-        if (abilities[1]!= null) {
-            abilities[1].gameObject.SetActive(false);
-        }
         if (abilities[0] != a)
         {
+            if (abilities[1] != null)
+            {
+                abilities[1].gameObject.SetActive(false);
+            }
             abilities[1] = a;
             abilities[1].gameObject.SetActive(true);
-        }
-        else {
-            Debug.Log("");
         }
     }
 }

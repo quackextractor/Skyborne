@@ -26,6 +26,7 @@ namespace Abilities
 
         public override void AttackEffect()
         {
+        
             if (!isAttacking)
             {
                 StartCoroutine(DoGust());
@@ -35,7 +36,7 @@ namespace Abilities
 
         private IEnumerator DoGust()
         {
-            isAttacking = true;
+           
 
             // start emitting
             ps.Play();
@@ -49,7 +50,7 @@ namespace Abilities
             // (optional) if you want to immediately clear all particles instead:
             // ps.Stop(withChildren: false, ParticleSystemStopBehavior.StopEmittingAndClear);
 
-            isAttacking = false;
+            
         }
     }
 }

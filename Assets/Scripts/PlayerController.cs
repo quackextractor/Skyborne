@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     private float speedThreshold = 10f;
 
+    private float[] dashTimers;
 
     private readonly float _verticalRotationLimit = 80f;
     private float _dashRefillTimestamp;
@@ -42,11 +43,15 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
        sliders =  sliderParent.GetComponentsInChildren<Slider>();
-
-        foreach (Slider slider in sliders) { 
+        dashTimers = new float[maxDash];
+        foreach (Slider slider in sliders) {
+            int i = 0;
+            dashTimers[i] = 0f;
             slider.maxValue = cooldown + moveLock;
+            slider.value = 0f;
+            i++;
         }
-
+        
         _rb = GetComponent<Rigidbody>();
         if (_rb == null) Debug.LogError("PlayerController: no Rigidbody found on this GameObject!");
 
@@ -95,26 +100,30 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, mouseX, 0);
     }
 
-    private Queue<float> dashCooldowns = new Queue<float>();
+   
+
 
     private void HandleDashRefill()
     {
-        // Update UI based on the next dash cooldown
-        if (dashCooldowns.Count > 0)
-            sliders[0].value = dashCooldowns.Peek() - Time.time;
-        else
-            sliders[0].value = 0;
-
-        // Refill any dashes whose cooldown has expired
-        while (dashCooldowns.Count > 0 && Time.time >= dashCooldowns.Peek())
+    
+        for (int i = 0; i < maxDash; i++)
         {
-            dashCooldowns.Dequeue();
-            amountDash = Mathf.Min(amountDash + 1, maxDash);
-        }
+            float remaining = dashTimers[i] - Time.time;
+
+            if (remaining <= 0f)
+            {
+                amountDash++;
+                sliders[i].value = 0f;
+            }
+            else
+            {
+                sliders[i].value = remaining;
+            }
     }
+}
 
 
-    private void HandleDashInput()
+private void HandleDashInput()
     {
         if (amountDash < 0 || Time.time < _moveTimestamp) return;
 
@@ -127,15 +136,23 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        amountDash--;
-        dashCooldowns.Enqueue(Time.time + cooldown + moveLock);
-        var inputDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        var dashDir = inputDir.magnitude > 0.1f
-            ? transform.TransformDirection(inputDir.normalized)
-            : transform.forward;
-        _rb.velocity = Vector3.zero;
-        _rb.AddForce(dashDir * dashForce, ForceMode.Impulse);
-        
+        for (int i = 0; i < maxDash; i++)
+        {
+            if (Time.time >= dashTimers[i])
+            {
+                dashTimers[i] = Time.time + cooldown + moveLock;
+
+                amountDash--;
+               
+                var inputDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                var dashDir = inputDir.magnitude > 0.1f
+                    ? transform.TransformDirection(inputDir.normalized)
+                    : transform.forward;
+                _rb.velocity = Vector3.zero;
+                _rb.AddForce(dashDir * dashForce, ForceMode.Impulse);
+                break;
+            }
+        }
     }
 
     private void ToggleSpeedParticles()
