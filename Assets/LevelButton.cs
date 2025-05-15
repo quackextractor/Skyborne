@@ -21,6 +21,12 @@ public class LevelButton : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void SaveAndLoadMenu()
+    {
+        // TODO ADD SAVING
+        LoadMenu();
+    }
     
     public void RestartLevel()
     {
