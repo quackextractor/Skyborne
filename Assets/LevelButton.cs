@@ -21,4 +21,9 @@ public class LevelButton : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+    
+    public void RestartLevel()
+    {
+        GameMaster.Instance.ResetLevel();
+    }
 }

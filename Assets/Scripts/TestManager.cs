@@ -70,6 +70,6 @@ public class TestManager : MonoBehaviour
 
     private void ResetScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameMaster.Instance.ResetLevel();
     }
 }
