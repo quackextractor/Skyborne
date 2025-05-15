@@ -9,12 +9,12 @@ public class Weapon : MonoBehaviour
     private float knockback = 10f;
 
     [SerializeField] private float damage = 5f;
-    [SerializeField] public float windUpTime = 0.3f;
+    [SerializeField] private float windUpTime = 0.3f;
     [SerializeField] private float activationTime = 0.2f;
     [SerializeField] private float cooldownTime = 0.5f;
-    [SerializeField] private Collider weaponCollider;
+    [SerializeField] protected Collider weaponCollider;
     [FormerlySerializedAs("_isAttacking")] public bool isAttacking;
-    private readonly HashSet<Target> _hitTargets = new();
+    protected readonly HashSet<Target> _hitTargets = new();
 
     private Transform _attacker;
     private bool _hasHitEffectSpawner;
@@ -31,6 +31,9 @@ public class Weapon : MonoBehaviour
         get => damage;
         set => damage = value;
     }
+    public float WindUpTime { get => windUpTime; set => windUpTime = value; }
+    public float ActivationTime { get => activationTime; set => activationTime = value; }
+    public float CooldownTime { get => cooldownTime; set => cooldownTime = value; }
 
     private void Start()
     {
@@ -63,13 +66,12 @@ public class Weapon : MonoBehaviour
         isAttacking = true;
         _hitTargets.Clear();
         //  Debug.Log("hit" + _hitTargets);
-        yield return new WaitForSeconds(windUpTime);
+        yield return new WaitForSeconds(WindUpTime);
         weaponCollider.enabled = true;
-        yield return new WaitForSeconds(activationTime);
+        yield return new WaitForSeconds(ActivationTime);
         weaponCollider.enabled = false;
-        yield return new WaitForSeconds(cooldownTime);
-        Debug.Log("done");
-        Debug.Log(cooldownTime);
+        yield return new WaitForSeconds(CooldownTime);
+  
         isAttacking = false;
     }
 

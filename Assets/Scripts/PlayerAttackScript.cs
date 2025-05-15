@@ -1,5 +1,7 @@
 using Abilities;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttackScript : MonoBehaviour
 {
@@ -12,12 +14,14 @@ public class PlayerAttackScript : MonoBehaviour
     private Weapon _weapon;
     private bool attackCount = true;
     private string currentAnimationState;
-
+    public GameObject sliderParent;
+    private Slider[] sliders; 
     private void Awake()
     {
+        sliders = sliderParent.GetComponentsInChildren<Slider>();
         _weapon = GetComponentInChildren<Weapon>();
        // abilities = GetComponentsInChildren<Ability>();
-
+       
         if (_weapon == null) Debug.LogError("PlayerAttackScript: No Weapon component found in children!");
       //  if (abilities == null) Debug.LogError("PlayerAttackScript: No Ability component found in children!");
     }
@@ -43,19 +47,23 @@ public class PlayerAttackScript : MonoBehaviour
                     }
                 }
         }
-       
+        foreach (Slider slider in sliders) {
+            slider.value -= Time.deltaTime; 
+        }
 
             if (abilities[0] != null && Input.GetKeyDown(KeyCode.Q)&& !abilities[0].isAttacking)
         {
             abilities[0].AttackEffect();
+            sliders[0].value = sliders[0].maxValue;
         }
 
-        if (abilities[1] != null && Input.GetKeyDown(KeyCode.E))
+        if (abilities[1] != null && Input.GetKeyDown(KeyCode.E) && !abilities[1].isAttacking)
         {
             abilities[1].AttackEffect();
+            sliders[1].value = sliders[1].maxValue;
         }
-            
-        
+
+
     }
 
     private void ChangeAnimationState(string newState)
@@ -68,7 +76,7 @@ public class PlayerAttackScript : MonoBehaviour
         {
             // PLAY THE ANIMATION //
             currentAnimationState = newState;
-            animator.CrossFadeInFixedTime(currentAnimationState, _weapon.windUpTime);
+            animator.CrossFadeInFixedTime(currentAnimationState, _weapon.WindUpTime);
             currentAnimationState = null;
         }
     }
@@ -78,9 +86,11 @@ public class PlayerAttackScript : MonoBehaviour
             Debug.Log(ability.name);
         }
     }
+
+    //yucky code
     public void SelectQAbility(Ability a) {
-       
-       
+        sliders[0].maxValue= a.CooldownTime + a.WindUpTime + a.ActivationTime;
+
         if (abilities[1] != a)
         {
             if (abilities[0] != null)
@@ -93,6 +103,7 @@ public class PlayerAttackScript : MonoBehaviour
     }
     public void SelectEAbility(Ability a)
     {
+        sliders[1].maxValue = a.CooldownTime + a.WindUpTime + a.ActivationTime;
         if (abilities[0] != a)
         {
             if (abilities[1] != null)

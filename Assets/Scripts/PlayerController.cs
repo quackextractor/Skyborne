@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveLock = 0.5f;
     [SerializeField] private int amountDash = 3;
     [SerializeField] private int maxDash = 3;
+    [SerializeField] private float iFrames = 0.1f;
 
     [Header("Speed Particles")] [Tooltip("Particle system to emit when moving fast.")] [SerializeField]
     private ParticleSystem speedParticles;
@@ -129,13 +131,16 @@ private void HandleDashInput()
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            Dash();
+            StartCoroutine(Dash());
             _moveTimestamp = Time.time + moveLock;
         }
     }
 
-    private void Dash()
+    private IEnumerator Dash()
     {
+       
+        this.gameObject.GetComponent<Target>().enabled = false;
+
         for (int i = 0; i < maxDash; i++)
         {
             if (Time.time >= dashTimers[i])
@@ -153,6 +158,9 @@ private void HandleDashInput()
                 break;
             }
         }
+        yield return new WaitForSeconds(iFrames);
+        this.gameObject.GetComponent<Target>().enabled = true;
+
     }
 
     private void ToggleSpeedParticles()

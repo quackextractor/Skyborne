@@ -11,5 +11,6 @@ namespace Abilities
         public override void StartAttack()
         {
         }
+        
     }
 }
