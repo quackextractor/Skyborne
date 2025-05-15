@@ -3605,7 +3605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6258874705011148432, guid: 4f52076f0811dba428510afed8188a8f, type: 3}
       propertyPath: m_Name
-      value: E
+      value: Q
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5699,8 +5699,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 742813420}
     - target: {fileID: 3947483276497211146, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: iFrames
+      value: 0.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 3947483276497211146, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: cooldown
       value: 1.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 3947483276497211146, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: dashForce
+      value: 13.5
       objectReference: {fileID: 0}
     - target: {fileID: 3947483276497211146, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: sliderParent
