@@ -83,7 +83,7 @@ public class ShopScript : MonoBehaviour
 
         foreach (Ability a in Abilities)
         {
-            if (a.name == AbilityName && _currencyManager.SpendMoney(a.Cost))
+            if (a.name == AbilityName && _currencyManager.SpendMoney(a.Cost)&&!a.Bought)
             {
                 a.gameObject.SetActive(true);
                 a.Bought = true;
