@@ -19,6 +19,9 @@ public class PlayerAttackScript : MonoBehaviour
     private void Awake()
     {
         sliders = sliderParent.GetComponentsInChildren<Slider>();
+        foreach (Slider slider in sliders) { 
+           slider.gameObject.SetActive(false);
+        }
         _weapon = GetComponentInChildren<Weapon>();
 
        // abilities = GetComponentsInChildren<Ability>();
@@ -91,6 +94,8 @@ public class PlayerAttackScript : MonoBehaviour
     //yucky code
     public void SelectQAbility(Ability a) {
         Transform slider = sliders[0].transform;
+
+        sliders[0].gameObject.SetActive(true);
         sliders[0].maxValue= a.CooldownTime + a.WindUpTime + a.ActivationTime;
         Image backgroundImage = slider.Find("Background").GetComponent<Image>();
         Image fillAreaImage = slider.Find("FillArea").GetComponent<Image>();
@@ -111,6 +116,7 @@ public class PlayerAttackScript : MonoBehaviour
     public void SelectEAbility(Ability a)
     {
         Transform slider = sliders[1].transform;
+        sliders[1].gameObject.SetActive(true);
 
         sliders[1].maxValue = a.CooldownTime + a.WindUpTime + a.ActivationTime;
         Image backgroundImage = slider.Find("Background").GetComponent<Image>();
