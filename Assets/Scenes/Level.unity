@@ -2473,8 +2473,6 @@ MonoBehaviour:
   enemyCount: 0
   levelLoader: {fileID: 846177969}
   levelTransitionController: {fileID: 846177970}
-  fadeController: {fileID: 1584712445}
-  sceneReloadFadeDuration: 1
 --- !u!114 &846177972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5991,7 +5989,7 @@ PrefabInstance:
     - target: {fileID: 3171160599286406513, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: abilityImage
       value: 
-      objectReference: {fileID: 21300000, guid: dc806321595ddbd4bb1cb049cab2a3ee, type: 3}
+      objectReference: {fileID: 21300000, guid: 91b6fec49ae878a4789b924204dcd332, type: 3}
     - target: {fileID: 3171160599286406513, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: activationTime
       value: 0
@@ -6003,7 +6001,7 @@ PrefabInstance:
     - target: {fileID: 3734840380409176340, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: abilityImage
       value: 
-      objectReference: {fileID: 21300000, guid: 8315065947b7eca4883d8e30e54b157b, type: 3}
+      objectReference: {fileID: 21300000, guid: d461deaebdc5a86478fd054a344c1c47, type: 3}
     - target: {fileID: 3734840380409176340, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: cooldownTime
       value: 1.94
