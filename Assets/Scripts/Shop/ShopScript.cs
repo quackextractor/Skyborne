@@ -12,6 +12,7 @@ public class ShopScript : MonoBehaviour
             Pause the game when turning on the shop       
      */
 
+    private CurrencyManager _currencyManager;
 
 
 
@@ -44,7 +45,7 @@ public class ShopScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        _currencyManager = FindObjectOfType<CurrencyManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerAttackScript = player.GetComponent<PlayerAttackScript>();
         Abilities = playerAttackScript.GetComponentsInChildren<Ability>();
@@ -82,7 +83,7 @@ public class ShopScript : MonoBehaviour
 
         foreach (Ability a in Abilities)
         {
-            if (a.name == AbilityName)
+            if (a.name == AbilityName && _currencyManager.SpendMoney(a.Cost))
             {
                 a.gameObject.SetActive(true);
                 a.Bought = true;
