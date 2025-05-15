@@ -1,10 +1,15 @@
+using System.Drawing;
+using UnityEngine;
+
 namespace Abilities
 {
     public abstract class Ability : Weapon
     {
         bool bought = false;
+        public Sprite abilityImage;
 
         public bool Bought { get => bought; set => bought = value; }
+        public Sprite AbilityImage { get => abilityImage; set => abilityImage = value; }
 
         public abstract override void AttackEffect();
 

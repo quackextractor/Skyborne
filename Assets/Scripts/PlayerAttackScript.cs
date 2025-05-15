@@ -2,7 +2,6 @@ using Abilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class PlayerAttackScript : MonoBehaviour
 {
     public const string Idle = "Idle";
@@ -16,10 +15,12 @@ public class PlayerAttackScript : MonoBehaviour
     private string currentAnimationState;
     public GameObject sliderParent;
     private Slider[] sliders; 
+
     private void Awake()
     {
         sliders = sliderParent.GetComponentsInChildren<Slider>();
         _weapon = GetComponentInChildren<Weapon>();
+
        // abilities = GetComponentsInChildren<Ability>();
        
         if (_weapon == null) Debug.LogError("PlayerAttackScript: No Weapon component found in children!");
@@ -89,7 +90,13 @@ public class PlayerAttackScript : MonoBehaviour
 
     //yucky code
     public void SelectQAbility(Ability a) {
+        Transform slider = sliders[0].transform;
         sliders[0].maxValue= a.CooldownTime + a.WindUpTime + a.ActivationTime;
+        Image backgroundImage = slider.Find("Background").GetComponent<Image>();
+        Image fillAreaImage = slider.Find("Fill Area").GetComponent<Image>();
+
+        backgroundImage.sprite = a.AbilityImage;
+        fillAreaImage.sprite = a.AbilityImage;
 
         if (abilities[1] != a)
         {
@@ -103,7 +110,15 @@ public class PlayerAttackScript : MonoBehaviour
     }
     public void SelectEAbility(Ability a)
     {
+        Transform slider = sliders[1].transform;
+
         sliders[1].maxValue = a.CooldownTime + a.WindUpTime + a.ActivationTime;
+        Image backgroundImage = slider.Find("Background").GetComponent<Image>();
+        Image fillAreaImage = slider.Find("Fill Area").GetComponent<Image>();
+
+        backgroundImage.sprite = a.AbilityImage;
+        fillAreaImage.sprite = a.AbilityImage;
+
         if (abilities[0] != a)
         {
             if (abilities[1] != null)
