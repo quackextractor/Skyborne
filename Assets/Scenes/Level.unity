@@ -2428,7 +2428,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
   - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
   currentLevelIndex: -1
-  enemyParent: {fileID: 0}
+  enemyParent: {fileID: 1875653033}
   spawnHeight: 0
   navMeshSampleDistance: 5
   fallbackSpawnPosition: {x: 0, y: 0, z: 0}
@@ -5251,6 +5251,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5294a0c24de0e7479e856d2a608d6e4, type: 3}
+--- !u!1 &1875653032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1875653033}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1875653033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875653032}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.224578, y: 0.37078455, z: 5.42461}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1885325821 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3138820233878061900, guid: 4f52076f0811dba428510afed8188a8f, type: 3}
@@ -6245,3 +6276,4 @@ SceneRoots:
   - {fileID: 522765934}
   - {fileID: 4652366356718802568}
   - {fileID: 1872582355}
+  - {fileID: 1875653033}
