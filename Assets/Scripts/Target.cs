@@ -223,7 +223,7 @@ public class Target : MonoBehaviour
         return Physics.Raycast(origin, dir, out var hit, force, platformEdgeLayer);
     }
 
-    private void EnableRagdoll(Vector3 dir, float force)
+    public void EnableRagdoll(Vector3 dir, float force)
     {
         _rb.constraints = RigidbodyConstraints.None;
 

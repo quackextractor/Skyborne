@@ -73,6 +73,11 @@ public class GameMaster : MonoBehaviour
         Enemy.OnEnemySpawned += HandleEnemySpawned;
     }
 
+    public void ClearLevel()
+    {
+        levelLoader.ClearExistingEnemies();
+    }
+
     private void OnDisable()
     {
         Enemy.OnEnemySpawned -= HandleEnemySpawned;

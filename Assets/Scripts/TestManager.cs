@@ -51,6 +51,16 @@ public class TestManager : MonoBehaviour
         {
             SpawnEnemies(1);
         }
+        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            GameMaster.Instance.ClearLevel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            CurrencyManager.Instance.AddMoney(10);
+        }
     }
 
     private void SpawnEnemies(int count)

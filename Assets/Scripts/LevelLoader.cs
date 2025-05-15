@@ -141,13 +141,13 @@ public class LevelLoader : MonoBehaviour
         LoadLevel();
     }
 
-    private void ClearExistingEnemies()
+    public void ClearExistingEnemies()
     {
         if (enemyParent != null)
         {
             foreach (Transform child in enemyParent)
             {
-                Destroy(child.gameObject);
+                child.gameObject.GetComponent<Target>().EnableRagdoll(new Vector3(0, 1, 0), 0);
             }
         }
         else
@@ -156,7 +156,7 @@ public class LevelLoader : MonoBehaviour
             Enemy[] existingEnemies = FindObjectsOfType<Enemy>();
             foreach (Enemy enemy in existingEnemies)
             {
-                Destroy(enemy.gameObject);
+                enemy.gameObject.GetComponent<Target>().EnableRagdoll(new Vector3(0, 1, 0), 0);
             }
         }
     }
