@@ -93,7 +93,7 @@ public class PlayerAttackScript : MonoBehaviour
         Transform slider = sliders[0].transform;
         sliders[0].maxValue= a.CooldownTime + a.WindUpTime + a.ActivationTime;
         Image backgroundImage = slider.Find("Background").GetComponent<Image>();
-        Image fillAreaImage = slider.Find("Fill Area").GetComponent<Image>();
+        Image fillAreaImage = slider.Find("FillArea").GetComponent<Image>();
 
         backgroundImage.sprite = a.AbilityImage;
         fillAreaImage.sprite = a.AbilityImage;
@@ -114,7 +114,7 @@ public class PlayerAttackScript : MonoBehaviour
 
         sliders[1].maxValue = a.CooldownTime + a.WindUpTime + a.ActivationTime;
         Image backgroundImage = slider.Find("Background").GetComponent<Image>();
-        Image fillAreaImage = slider.Find("Fill Area").GetComponent<Image>();
+        Image fillAreaImage = slider.Find("FillArea").GetComponent<Image>();
 
         backgroundImage.sprite = a.AbilityImage;
         fillAreaImage.sprite = a.AbilityImage;
