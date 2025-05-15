@@ -3985,6 +3985,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: burstButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2680497123958895605, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
+      propertyPath: m_text
+      value: "Fireball \n 2$"
+      objectReference: {fileID: 0}
     - target: {fileID: 3088606667537092107, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
       propertyPath: m_Name
       value: fireballButton
@@ -3996,6 +4000,12 @@ PrefabInstance:
     - target: {fileID: 3509768541062528279, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -63
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646362109842280724, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
+      propertyPath: m_text
+      value: 'Burst
+
+        1$'
       objectReference: {fileID: 0}
     - target: {fileID: 3829827643495811615, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
       propertyPath: m_IsActive
@@ -4052,6 +4062,12 @@ PrefabInstance:
     - target: {fileID: 4533252331128753385, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5223118169441934438, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
+      propertyPath: m_text
+      value: 'Gust
+
+        1$'
       objectReference: {fileID: 0}
     - target: {fileID: 5847440084804819163, guid: eee73536f9a31a147b570c8f033f4f92, type: 3}
       propertyPath: m_IsActive
