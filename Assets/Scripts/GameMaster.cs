@@ -48,7 +48,7 @@ public class GameMaster : MonoBehaviour
         }
         _instance = this;
       //  DontDestroyOnLoad(gameObject);
-
+      Time.timeScale = 1f;
         // Hook into Unity's sceneLoaded event
         SceneManager.sceneLoaded += HandleSceneLoaded;
     }
@@ -137,8 +137,7 @@ public class GameMaster : MonoBehaviour
 
     public void ResetLevel()
     {
-        Initialize();
-        levelLoader.LoadLevel();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     
     public void TriggerGameOver()
