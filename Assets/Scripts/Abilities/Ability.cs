@@ -5,7 +5,7 @@ namespace Abilities
 {
     public abstract class Ability : Weapon
     {
-        bool bought = false;
+       [SerializeField] bool bought = false;
         [SerializeField]  private Sprite abilityImage;
         [SerializeField] private int cost;
 
