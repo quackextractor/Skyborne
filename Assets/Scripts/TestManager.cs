@@ -20,11 +20,22 @@ public class TestManager : MonoBehaviour
     [Header("Level Transition")]
     [Tooltip("Reference to the LevelTransitionController in the scene.")]
     [SerializeField] private LevelTransitionController levelTransitionController;
+    
+    private GameObject _player;
+    private Target _targetComponent;
+    private bool _isGodMode = false;
+
 
     private void Start()
     {
         SpawnEnemies(initialEnemies);
         levelTransitionController.levelLoader.LoadNextLevel();
+        
+        _player = GameObject.FindGameObjectWithTag("Player");
+        if (_player != null)
+        {
+            _targetComponent = _player.GetComponent<Target>();
+        }
     }
 
     private void Update()
@@ -60,6 +71,13 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             CurrencyManager.Instance.AddMoney(10);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.G) && _targetComponent != null)
+        {
+            _isGodMode = !_isGodMode;
+            _targetComponent.KnockbackMultiplier = (_isGodMode ? 0 : 1);
+            Debug.Log("God Mode: " + (_isGodMode ? "ON" : "OFF"));
         }
     }
 
