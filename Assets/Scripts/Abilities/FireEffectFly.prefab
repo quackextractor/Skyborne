@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifetime: 4
-  attack: 4
-  knockback: 4
+  attack: 30
+  knockback: 30
   speed: 50
   enemyFireParticles: {fileID: 7527166971503057138, guid: 2b73eb743043aa44ca50dae592397d96, type: 3}
   explosionParticles: {fileID: 7836020665221254047, guid: f5dab0116ba30e943b7c00cf88af828a, type: 3}
