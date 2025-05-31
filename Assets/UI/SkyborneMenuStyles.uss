@@ -1,0 +1,460 @@
+/* ===== GLOBAL STYLES ===== */
+.main-menu-container,
+.tutorial-container,
+.options-container,
+.credits-container {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(240, 249, 255);
+    background-image: linear-gradient(135deg, rgb(224, 242, 254) 0%, rgb(255, 255, 255) 50%, rgb(239, 246, 255) 100%);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ===== MAIN MENU STYLES ===== */
+.title-section {
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.game-title {
+    font-size: 80px;
+    -unity-font-style: bold;
+    color: rgb(37, 99, 235);
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-subtitle {
+    font-size: 24px;
+    color: rgb(75, 85, 99);
+    -unity-text-align: middle-center;
+    -unity-font-style: normal;
+}
+
+.button-container {
+    width: 300px;
+    align-items: center;
+}
+
+.menu-button {
+    width: 100%;
+    height: 56px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    transition-duration: 0.3s;
+    border-width: 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.primary-button {
+    background-color: rgb(59, 130, 246);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.primary-button:hover {
+    background-color: rgb(37, 99, 235);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    scale: 1.02;
+}
+
+.secondary-button {
+    background-color: white;
+    color: rgb(59, 130, 246);
+    border-width: 2px;
+    border-color: rgb(191, 219, 254);
+}
+
+.secondary-button:hover {
+    background-color: rgb(239, 246, 255);
+    border-color: rgb(147, 197, 253);
+    scale: 1.02;
+}
+
+.quit-button {
+    background-color: transparent;
+    color: rgb(107, 114, 128);
+}
+
+.quit-button:hover {
+    background-color: rgb(243, 244, 246);
+    color: rgb(55, 65, 81);
+}
+
+.button-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+/* ===== TUTORIAL STYLES ===== */
+.tutorial-card {
+    width: 800px;
+    max-width: 90%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 32px;
+}
+
+.tutorial-header {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.tutorial-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: rgb(31, 41, 55);
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+.slide-counter {
+    font-size: 16px;
+    color: rgb(107, 114, 128);
+    -unity-text-align: middle-center;
+}
+
+.tutorial-content {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.slide-image {
+    width: 500px;
+    height: 300px;
+    background-color: rgb(243, 244, 246);
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.slide-title {
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: rgb(31, 41, 55);
+    -unity-text-align: middle-center;
+    margin-bottom: 16px;
+}
+
+.slide-description {
+    font-size: 16px;
+    color: rgb(107, 114, 128);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    max-width: 600px;
+    line-height: 24px;
+}
+
+.tutorial-navigation {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.nav-button {
+    height: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 6px;
+    background-color: white;
+    border-width: 1px;
+    border-color: rgb(209, 213, 219);
+    color: rgb(55, 65, 81);
+    flex-direction: row;
+    align-items: center;
+}
+
+.nav-button:hover {
+    background-color: rgb(249, 250, 251);
+}
+
+.nav-button:disabled {
+    opacity: 0.5;
+}
+
+.slide-indicators {
+    flex-direction: row;
+}
+
+.slide-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    background-color: rgb(209, 213, 219);
+    margin-left: 4px;
+    margin-right: 4px;
+    transition-duration: 0.3s;
+}
+
+.slide-indicator.active {
+    background-color: rgb(59, 130, 246);
+}
+
+.tutorial-footer {
+    align-items: center;
+}
+
+.back-button {
+    height: 48px;
+    padding-left: 24px;
+    padding-right: 24px;
+    border-radius: 8px;
+    background-color: rgb(59, 130, 246);
+    color: white;
+    font-size: 16px;
+    -unity-font-style: bold;
+    border-width: 0;
+}
+
+.back-button:hover {
+    background-color: rgb(37, 99, 235);
+}
+
+/* ===== OPTIONS STYLES ===== */
+.options-card {
+    width: 600px;
+    max-width: 90%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 32px;
+}
+
+.options-header {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.options-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: rgb(31, 41, 55);
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+.options-subtitle {
+    font-size: 16px;
+    color: rgb(107, 114, 128);
+    -unity-text-align: middle-center;
+}
+
+.options-content {
+    margin-bottom: 32px;
+}
+
+.options-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(229, 231, 235);
+}
+
+.option-group {
+    margin-bottom: 24px;
+}
+
+.toggle-group {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.option-label {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: rgb(31, 41, 55);
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.option-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.slider-container {
+    flex-direction: row;
+    align-items: center;
+}
+
+.volume-slider {
+    flex-grow: 1;
+    margin-right: 16px;
+}
+
+.volume-value {
+    width: 48px;
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(55, 65, 81);
+    -unity-text-align: middle-center;
+}
+
+.option-toggle {
+    scale: 1.2;
+}
+
+.options-footer {
+    align-items: center;
+}
+
+/* ===== CREDITS STYLES ===== */
+.credits-card {
+    width: 600px;
+    max-width: 90%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 32px;
+    max-height: 80%;
+}
+
+.credits-header {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.credits-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: rgb(31, 41, 55);
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+.credits-subtitle {
+    font-size: 16px;
+    color: rgb(107, 114, 128);
+    -unity-text-align: middle-center;
+}
+
+.credits-content {
+    flex-grow: 1;
+    margin-bottom: 32px;
+}
+
+.team-section {
+    margin-bottom: 24px;
+}
+
+.credit-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgb(219, 234, 254);
+}
+
+.credit-item:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.credit-role {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(31, 41, 55);
+}
+
+.credit-name {
+    font-size: 16px;
+    color: rgb(107, 114, 128);
+}
+
+.special-thanks {
+    padding: 24px;
+    background-color: rgb(239, 246, 255);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgb(191, 219, 254);
+    align-items: center;
+}
+
+.thanks-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: rgb(31, 41, 55);
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+.thanks-text {
+    font-size: 14px;
+    color: rgb(107, 114, 128);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.credits-footer {
+    align-items: center;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 48px;
+    }
+    
+    .game-subtitle {
+        font-size: 18px;
+    }
+    
+    .button-container {
+        width: 250px;
+    }
+    
+    .tutorial-card,
+    .options-card,
+    .credits-card {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .slide-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 36px;
+    }
+    
+    .tutorial-title,
+    .options-title,
+    .credits-title {
+        font-size: 28px;
+    }
+    
+    .slide-title {
+        font-size: 20px;
+    }
+    
+    .tutorial-navigation {
+        flex-direction: column;
+    }
+    
+    .nav-button {
+        margin-bottom: 8px;
+    }
+    
+    .slide-indicators {
+        margin-bottom: 16px;
+    }
+}
