@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SkyborneMenuStyles.uss?fileID=7433441132597879392&amp;guid=6352289ea0789f94296ed0d34136c41b&amp;type=3#SkyborneMenuStyles" />
     <ui:VisualElement name="TutorialContainer" class="tutorial-container">
         <ui:VisualElement name="TutorialCard" class="tutorial-card">
             <ui:VisualElement name="TutorialHeader" class="tutorial-header">
