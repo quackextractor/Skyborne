@@ -1,0 +1,51 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SkyborneMenuStyles.uss?fileID=7433441132597879392&amp;guid=6352289ea0789f94296ed0d34136c41b&amp;type=3#SkyborneMenuStyles" />
+    <ui:VisualElement name="OptionsContainer" class="options-container">
+        <ui:VisualElement name="OptionsCard" class="options-card">
+            <ui:VisualElement name="OptionsHeader" class="options-header">
+                <ui:Label text="Options" name="OptionsTitle" class="options-title" />
+                <ui:Label text="Customize your game experience" name="OptionsSubtitle" class="options-subtitle" />
+            </ui:VisualElement>
+            
+            <ui:VisualElement name="OptionsContent" class="options-content">
+                <ui:VisualElement name="AudioSection" class="options-section">
+                    <ui:VisualElement name="VolumeGroup" class="option-group">
+                        <ui:Label text="Master Volume" name="MasterVolumeLabel" class="option-label">
+                            <ui:VisualElement name="VolumeIcon" class="option-icon volume-icon" />
+                        </ui:Label>
+                        <ui:VisualElement name="VolumeSliderContainer" class="slider-container">
+                            <ui:Slider name="MasterVolumeSlider" class="volume-slider" low-value="0" high-value="100" value="75" />
+                            <ui:Label text="75%" name="MasterVolumeValue" class="volume-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    
+                    <ui:VisualElement name="SFXGroup" class="option-group">
+                        <ui:Label text="SFX Volume" name="SFXVolumeLabel" class="option-label">
+                            <ui:VisualElement name="SFXIcon" class="option-icon sfx-icon" />
+                        </ui:Label>
+                        <ui:VisualElement name="SFXSliderContainer" class="slider-container">
+                            <ui:Slider name="SFXVolumeSlider" class="volume-slider" low-value="0" high-value="100" value="80" />
+                            <ui:Label text="80%" name="SFXVolumeValue" class="volume-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                
+                <ui:VisualElement name="GraphicsSection" class="options-section">
+                    <ui:VisualElement name="FullscreenGroup" class="option-group toggle-group">
+                        <ui:Label text="Fullscreen Mode" name="FullscreenLabel" class="option-label" />
+                        <ui:Toggle name="FullscreenToggle" class="option-toggle" value="false" />
+                    </ui:VisualElement>
+                    
+                    <ui:VisualElement name="VSyncGroup" class="option-group toggle-group">
+                        <ui:Label text="V-Sync" name="VSyncLabel" class="option-label" />
+                        <ui:Toggle name="VSyncToggle" class="option-toggle" value="true" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            
+            <ui:VisualElement name="OptionsFooter" class="options-footer">
+                <ui:Button text="Back to Main Menu" name="BackToMainButton" class="back-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

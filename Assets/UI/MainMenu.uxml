@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SkyborneMenuStyles.uss?fileID=7433441132597879392&amp;guid=6352289ea0789f94296ed0d34136c41b&amp;type=3#SkyborneMenuStyles" />
+    <ui:VisualElement name="MainMenuContainer" class="main-menu-container">
+        <ui:VisualElement name="TitleSection" class="title-section">
+            <ui:Label text="SKYBORNE" name="GameTitle" class="game-title" />
+            <ui:Label text="Soar Beyond the Clouds" name="GameSubtitle" class="game-subtitle" />
+        </ui:VisualElement>
+        
+        <ui:VisualElement name="ButtonContainer" class="button-container">
+            <ui:Button text="Play" name="PlayButton" class="menu-button primary-button">
+                <ui:VisualElement name="PlayIcon" class="button-icon play-icon" />
+            </ui:Button>
+            
+            <ui:Button text="Tutorial" name="TutorialButton" class="menu-button secondary-button">
+                <ui:VisualElement name="TutorialIcon" class="button-icon tutorial-icon" />
+            </ui:Button>
+            
+            <ui:Button text="Options" name="OptionsButton" class="menu-button secondary-button">
+                <ui:VisualElement name="OptionsIcon" class="button-icon options-icon" />
+            </ui:Button>
+            
+            <ui:Button text="Credits" name="CreditsButton" class="menu-button secondary-button">
+                <ui:VisualElement name="CreditsIcon" class="button-icon credits-icon" />
+            </ui:Button>
+            
+            <ui:Button text="Quit" name="QuitButton" class="menu-button quit-button">
+                <ui:VisualElement name="QuitIcon" class="button-icon quit-icon" />
+            </ui:Button>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

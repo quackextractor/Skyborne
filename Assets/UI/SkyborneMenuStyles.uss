@@ -1,0 +1,443 @@
+/* ===== GLOBAL STYLES ===== */
+.main-menu-container,
+.tutorial-container,
+.options-container,
+.credits-container {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0); /* Completely transparent background */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ===== MAIN MENU STYLES ===== */
+.title-section {
+    align-items: center;
+    margin-bottom: 60px;
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent dark background */
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.game-title {
+    font-size: 80px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255); /* White text for better contrast */
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Stronger text shadow */
+}
+
+.game-subtitle {
+    font-size: 24px;
+    color: rgb(220, 220, 220); /* Light gray for subtitle */
+    -unity-text-align: middle-center;
+    -unity-font-style: normal;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.button-container {
+    width: 300px;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent background */
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.menu-button {
+    width: 100%;
+    height: 56px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    transition-duration: 0.3s;
+    border-width: 2px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.primary-button {
+    background-color: rgba(59, 130, 246, 0.8); /* Semi-transparent blue */
+    color: white;
+    border-color: rgba(59, 130, 246, 1);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.primary-button:hover {
+    background-color: rgba(37, 99, 235, 0.9);
+    border-color: rgba(37, 99, 235, 1);
+    scale: 1.02;
+}
+
+.secondary-button {
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    color: white;
+    border-color: rgba(255, 255, 255, 0.5);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.secondary-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.8);
+    scale: 1.02;
+}
+
+.quit-button {
+    background-color: rgba(220, 38, 38, 0.2); /* Semi-transparent red */
+    color: rgb(255, 200, 200);
+    border-color: rgba(220, 38, 38, 0.5);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.quit-button:hover {
+    background-color: rgba(220, 38, 38, 0.4);
+    border-color: rgba(220, 38, 38, 0.8);
+    color: white;
+}
+
+.button-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+/* ===== TUTORIAL STYLES ===== */
+.tutorial-card {
+    width: 800px;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark background */
+    border-radius: 12px;
+    padding: 32px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tutorial-header {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.tutorial-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.slide-counter {
+    font-size: 16px;
+    color: rgb(200, 200, 200);
+    -unity-text-align: middle-center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.tutorial-content {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.slide-image {
+    width: 500px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.slide-title {
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-bottom: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.slide-description {
+    font-size: 16px;
+    color: rgb(220, 220, 220);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.tutorial-navigation {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.nav-button {
+    height: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.4);
+    color: white;
+    flex-direction: row;
+    align-items: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.nav-button:disabled {
+    opacity: 0.3;
+}
+
+.slide-indicators {
+    flex-direction: row;
+}
+
+.slide-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin-left: 4px;
+    margin-right: 4px;
+    transition-duration: 0.3s;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.slide-indicator.active {
+    background-color: rgba(59, 130, 246, 0.8);
+    border-color: rgba(59, 130, 246, 1);
+}
+
+.tutorial-footer {
+    align-items: center;
+}
+
+.back-button {
+    height: 48px;
+    padding-left: 24px;
+    padding-right: 24px;
+    border-radius: 8px;
+    background-color: rgba(59, 130, 246, 0.8);
+    color: white;
+    font-size: 16px;
+    -unity-font-style: bold;
+    border-width: 2px;
+    border-color: rgba(59, 130, 246, 1);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.back-button:hover {
+    background-color: rgba(37, 99, 235, 0.9);
+    border-color: rgba(37, 99, 235, 1);
+}
+
+/* ===== OPTIONS STYLES ===== */
+.options-card {
+    width: 600px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 32px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.options-header {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.options-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.options-subtitle {
+    font-size: 16px;
+    color: rgb(200, 200, 200);
+    -unity-text-align: middle-center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.options-content {
+    margin-bottom: 32px;
+}
+
+.options-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.option-group {
+    margin-bottom: 24px;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-group {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.option-label {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: white;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.option-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.slider-container {
+    flex-direction: row;
+    align-items: center;
+}
+
+.volume-slider {
+    flex-grow: 1;
+    margin-right: 16px;
+}
+
+.volume-value {
+    width: 48px;
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: white;
+    -unity-text-align: middle-center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.option-toggle {
+    scale: 1.2;
+}
+
+.options-footer {
+    align-items: center;
+}
+
+/* ===== CREDITS STYLES ===== */
+.credits-card {
+    width: 600px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 32px;
+    max-height: 80%;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.credits-header {
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.credits-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.credits-subtitle {
+    font-size: 16px;
+    color: rgb(200, 200, 200);
+    -unity-text-align: middle-center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.credits-content {
+    flex-grow: 1;
+    margin-bottom: 32px;
+}
+
+.team-section {
+    margin-bottom: 24px;
+}
+
+.credit-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.credit-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.credit-role {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.credit-name {
+    font-size: 16px;
+    color: rgb(200, 200, 200);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.special-thanks {
+    padding: 24px;
+    background-color: rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(59, 130, 246, 0.4);
+    align-items: center;
+}
+
+.thanks-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.thanks-text {
+    font-size: 14px;
+    color: rgb(220, 220, 220);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.credits-footer {
+    align-items: center;
+}

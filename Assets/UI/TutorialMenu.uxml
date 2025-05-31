@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SkyborneMenuStyles.uss?fileID=7433441132597879392&amp;guid=6352289ea0789f94296ed0d34136c41b&amp;type=3#SkyborneMenuStyles" />
+    <ui:VisualElement name="TutorialContainer" class="tutorial-container">
+        <ui:VisualElement name="TutorialCard" class="tutorial-card">
+            <ui:VisualElement name="TutorialHeader" class="tutorial-header">
+                <ui:Label text="Tutorial" name="TutorialTitle" class="tutorial-title" />
+                <ui:Label text="Slide 1 of 5" name="SlideCounter" class="slide-counter" />
+            </ui:VisualElement>
+            
+            <ui:VisualElement name="TutorialContent" class="tutorial-content">
+                <ui:VisualElement name="SlideImage" class="slide-image" />
+                <ui:Label text="Welcome to Skyborne" name="SlideTitle" class="slide-title" />
+                <ui:Label text="Embark on an epic aerial adventure in the floating islands of Aetheria. Master the art of flight and discover ancient secrets hidden in the clouds." name="SlideDescription" class="slide-description" />
+            </ui:VisualElement>
+            
+            <ui:VisualElement name="TutorialNavigation" class="tutorial-navigation">
+                <ui:Button text="Previous" name="PreviousButton" class="nav-button previous-button">
+                    <ui:VisualElement name="PrevIcon" class="nav-icon prev-icon" />
+                </ui:Button>
+                
+                <ui:VisualElement name="SlideIndicators" class="slide-indicators">
+                    <ui:VisualElement name="Indicator0" class="slide-indicator active" />
+                    <ui:VisualElement name="Indicator1" class="slide-indicator" />
+                    <ui:VisualElement name="Indicator2" class="slide-indicator" />
+                    <ui:VisualElement name="Indicator3" class="slide-indicator" />
+                    <ui:VisualElement name="Indicator4" class="slide-indicator" />
+                </ui:VisualElement>
+                
+                <ui:Button text="Next" name="NextButton" class="nav-button next-button">
+                    <ui:VisualElement name="NextIcon" class="nav-icon next-icon" />
+                </ui:Button>
+            </ui:VisualElement>
+            
+            <ui:VisualElement name="TutorialFooter" class="tutorial-footer">
+                <ui:Button text="Back to Main Menu" name="BackToMainButton" class="back-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

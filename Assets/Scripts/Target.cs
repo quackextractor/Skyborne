@@ -12,8 +12,10 @@ public class Target : MonoBehaviour
     private EnemyAnimationController _animController;
     private CurrencyManager _currencyManager;
 
-    [Header("Knockback Settings")]
-    [SerializeField] private float knockbackMultiplier = 1f; // 100% default
+    [field: Header("Knockback Settings")]
+    [field: SerializeField]
+    public float KnockbackMultiplier { get; set; } = 1f;
+
     [SerializeField] private LayerMask platformEdgeLayer;
     [SerializeField] private TextMeshProUGUI playerHealthText;
 
@@ -117,7 +119,7 @@ public class Target : MonoBehaviour
     public void TakeAttack(Attack attack)
     {
         var dir = (transform.position - attack.originPosition).normalized;
-        var totalKb = attack.knockbackValue * accumulatedKnockback * knockbackMultiplier;
+        var totalKb = attack.knockbackValue * accumulatedKnockback * KnockbackMultiplier;
         accumulatedKnockback = Mathf.Min(5f, accumulatedKnockback + attack.damageValue / 100f);
 
         ApplyKnockbackForce(dir, totalKb);
@@ -132,7 +134,7 @@ public class Target : MonoBehaviour
     public void TakeAttack(Vector3 attackDir, float damage, float knockback)
     {
         accumulatedKnockback = Mathf.Min(5f, accumulatedKnockback + damage / 100f);
-        var totalKb = knockback * accumulatedKnockback * knockbackMultiplier;
+        var totalKb = knockback * accumulatedKnockback * KnockbackMultiplier;
 
         ApplyKnockbackForce(attackDir.normalized, totalKb);
 
@@ -295,6 +297,6 @@ public class Target : MonoBehaviour
 
     public void SetKnockbackMultiplier(float m)
     {
-        knockbackMultiplier = m;
+        KnockbackMultiplier = m;
     }
 }
