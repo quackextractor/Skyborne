@@ -17,6 +17,12 @@ namespace UI
     
         private VisualElement currentMenu;
         private int currentSlideIndex = 0;
+
+        // Track initialization status for each menu
+        private bool isMainMenuInitialized = false;
+        private bool isTutorialMenuInitialized = false;
+        private bool isOptionsMenuInitialized = false;
+        private bool isCreditsMenuInitialized = false;
     
         // Tutorial slide data structure
         [System.Serializable]
@@ -46,7 +52,8 @@ namespace UI
     
         private void Start()
         {
-            InitializeMenus();
+            // Initialize all menus as inactive first
+            HideAllMenus();
             ShowMainMenu();
         }
     
@@ -56,13 +63,14 @@ namespace UI
             
             foreach (UIDocument doc in allUIDocuments)
             {
-                if (doc.name.ToLower().Contains("main") && mainMenuDocument == null)
+                string docName = doc.name.ToLower();
+                if (docName.Contains("main") && mainMenuDocument == null)
                     mainMenuDocument = doc;
-                else if (doc.name.ToLower().Contains("tutorial") && tutorialDocument == null)
+                else if (docName.Contains("tutorial") && tutorialDocument == null)
                     tutorialDocument = doc;
-                else if (doc.name.ToLower().Contains("options") && optionsDocument == null)
+                else if (docName.Contains("options") && optionsDocument == null)
                     optionsDocument = doc;
-                else if (doc.name.ToLower().Contains("credits") && creditsDocument == null)
+                else if (docName.Contains("credits") && creditsDocument == null)
                     creditsDocument = doc;
             }
             
@@ -96,23 +104,6 @@ namespace UI
                 title = "Ready to Fly", 
                 description = "You're now ready to begin your adventure in Skyborne. Take to the skies and become the ultimate sky pilot!" 
             });
-        }
-    
-        private void InitializeMenus()
-        {
-            if (mainMenuDocument != null) SetupMainMenu();
-            else Debug.LogError("Main Menu UI Document not found!");
-            
-            if (tutorialDocument != null) SetupTutorialMenu();
-            else Debug.LogError("Tutorial UI Document not found!");
-            
-            if (optionsDocument != null) SetupOptionsMenu();
-            else Debug.LogError("Options UI Document not found!");
-            
-            if (creditsDocument != null) SetupCreditsMenu();
-            else Debug.LogError("Credits UI Document not found!");
-        
-            HideAllMenus();
         }
     
         private void SetupMainMenu()
@@ -155,8 +146,6 @@ namespace UI
             SetupButton(root, "PreviousButton", PreviousSlide);
             SetupButton(root, "NextButton", NextSlide);
             SetupButton(root, "BackToMainButton", ShowMainMenu);
-    
-            UpdateTutorialSlide();
         }
     
         private void SetupOptionsMenu()
@@ -167,23 +156,31 @@ namespace UI
             // Setup volume sliders
             var masterVolumeSlider = root.Q<Slider>("MasterVolumeSlider");
             var sfxVolumeSlider = root.Q<Slider>("SFXVolumeSlider");
-    
+            var masterVolumeValue = root.Q<Label>("MasterVolumeValue");
+            var sfxVolumeValue = root.Q<Label>("SFXVolumeValue");
+
             if (masterVolumeSlider != null)
             {
+                // Initialize label
+                if (masterVolumeValue != null)
+                    masterVolumeValue.text = $"{masterVolumeSlider.value:F0}%";
+                
                 masterVolumeSlider.RegisterValueChangedCallback(evt => {
-                    var valueLabel = root.Q<Label>("MasterVolumeValue");
-                    if (valueLabel != null)
-                        valueLabel.text = $"{evt.newValue:F0}%";
+                    if (masterVolumeValue != null)
+                        masterVolumeValue.text = $"{evt.newValue:F0}%";
                     AudioListener.volume = evt.newValue / 100f;
                 });
             }
     
             if (sfxVolumeSlider != null)
             {
+                // Initialize label
+                if (sfxVolumeValue != null)
+                    sfxVolumeValue.text = $"{sfxVolumeSlider.value:F0}%";
+                
                 sfxVolumeSlider.RegisterValueChangedCallback(evt => {
-                    var valueLabel = root.Q<Label>("SFXVolumeValue");
-                    if (valueLabel != null)
-                        valueLabel.text = $"{evt.newValue:F0}%";
+                    if (sfxVolumeValue != null)
+                        sfxVolumeValue.text = $"{evt.newValue:F0}%";
                 });
             }
     
@@ -224,11 +221,10 @@ namespace UI
             if (button != null)
             {
                 button.clicked += callback;
-               // Debug.Log($"Successfully set up button: {buttonName}");
             }
             else
             {
-                Debug.LogError($"Button '{buttonName}' not found in UI!");
+                Debug.LogError($"Button '{buttonName}' not found in {root.name} UI!");
             }
         }
     
@@ -236,10 +232,17 @@ namespace UI
         {
             Debug.Log("Showing Main Menu");
             HideAllMenus();
+            
             if (mainMenuDocument != null)
             {
                 mainMenuDocument.gameObject.SetActive(true);
                 currentMenu = mainMenuDocument.rootVisualElement;
+                
+                if (!isMainMenuInitialized)
+                {
+                    SetupMainMenu();
+                    isMainMenuInitialized = true;
+                }
             }
         }
     
@@ -247,10 +250,18 @@ namespace UI
         {
             Debug.Log("Showing Tutorial Menu");
             HideAllMenus();
+            
             if (tutorialDocument != null)
             {
                 tutorialDocument.gameObject.SetActive(true);
                 currentMenu = tutorialDocument.rootVisualElement;
+                
+                if (!isTutorialMenuInitialized)
+                {
+                    SetupTutorialMenu();
+                    isTutorialMenuInitialized = true;
+                }
+                
                 currentSlideIndex = 0;
                 UpdateTutorialSlide();
             }
@@ -260,10 +271,17 @@ namespace UI
         {
             Debug.Log("Showing Options Menu");
             HideAllMenus();
+            
             if (optionsDocument != null)
             {
                 optionsDocument.gameObject.SetActive(true);
                 currentMenu = optionsDocument.rootVisualElement;
+                
+                if (!isOptionsMenuInitialized)
+                {
+                    SetupOptionsMenu();
+                    isOptionsMenuInitialized = true;
+                }
             }
         }
     
@@ -271,10 +289,17 @@ namespace UI
         {
             Debug.Log("Showing Credits Menu");
             HideAllMenus();
+            
             if (creditsDocument != null)
             {
                 creditsDocument.gameObject.SetActive(true);
                 currentMenu = creditsDocument.rootVisualElement;
+                
+                if (!isCreditsMenuInitialized)
+                {
+                    SetupCreditsMenu();
+                    isCreditsMenuInitialized = true;
+                }
             }
         }
     
@@ -306,7 +331,8 @@ namespace UI
     
         private void UpdateTutorialSlide()
         {
-            if (tutorialDocument == null || tutorialSlides.Count == 0) return;
+            if (tutorialDocument == null || !tutorialDocument.gameObject.activeInHierarchy || tutorialSlides.Count == 0) 
+                return;
             
             var root = tutorialDocument.rootVisualElement;
             
@@ -324,9 +350,11 @@ namespace UI
             
                 // Update slide image
                 var slideImage = root.Q<VisualElement>("SlideImage");
-                if (slideImage != null && slide.slideImage != null)
+                if (slideImage != null)
                 {
-                    slideImage.style.backgroundImage = new StyleBackground(slide.slideImage);
+                    slideImage.style.backgroundImage = slide.slideImage != null 
+                        ? new StyleBackground(slide.slideImage) 
+                        : StyleKeyword.Null;
                 }
             
                 // Update navigation buttons
