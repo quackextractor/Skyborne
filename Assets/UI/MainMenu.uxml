@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement name="Container" style="flex-grow: 1;">
+            <ui:Button text="Play" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+            <ui:Button text="Credits" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+            <ui:Button text="Quit" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+    </ui:VisualElement>
+</ui:UXML>

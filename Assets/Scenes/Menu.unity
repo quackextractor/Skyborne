@@ -1841,6 +1841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thresholdY: -3
   fadeSpeed: 2
+  victoryFadeDuration: 2
 --- !u!1 &2123834387
 GameObject:
   m_ObjectHideFlags: 0
