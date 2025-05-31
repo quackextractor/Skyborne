@@ -161,7 +161,6 @@ namespace UI
 
             if (masterVolumeSlider != null)
             {
-                // Initialize label
                 if (masterVolumeValue != null)
                     masterVolumeValue.text = $"{masterVolumeSlider.value:F0}%";
                 
@@ -174,7 +173,6 @@ namespace UI
     
             if (sfxVolumeSlider != null)
             {
-                // Initialize label
                 if (sfxVolumeValue != null)
                     sfxVolumeValue.text = $"{sfxVolumeSlider.value:F0}%";
                 
@@ -305,10 +303,29 @@ namespace UI
     
         private void HideAllMenus()
         {
-            if (mainMenuDocument != null) mainMenuDocument.gameObject.SetActive(false);
-            if (tutorialDocument != null) tutorialDocument.gameObject.SetActive(false);
-            if (optionsDocument != null) optionsDocument.gameObject.SetActive(false);
-            if (creditsDocument != null) creditsDocument.gameObject.SetActive(false);
+            if (mainMenuDocument != null)
+            {
+                mainMenuDocument.gameObject.SetActive(false);
+                isMainMenuInitialized = false;
+            }
+
+            if (tutorialDocument != null)
+            {
+                tutorialDocument.gameObject.SetActive(false);
+                isTutorialMenuInitialized = false;
+            }
+
+            if (optionsDocument != null)
+            {
+                optionsDocument.gameObject.SetActive(false);
+                isOptionsMenuInitialized = false;
+            }
+
+            if (creditsDocument != null)
+            {
+                creditsDocument.gameObject.SetActive(false);
+                isCreditsMenuInitialized = false;
+            }
         }
     
         private void PreviousSlide()
@@ -381,11 +398,11 @@ namespace UI
     
         private void QuitGame()
         {
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-#else
+    #else
             Application.Quit();
-#endif
+    #endif
         }
     }
 }
