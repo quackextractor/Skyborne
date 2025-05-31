@@ -6,43 +6,38 @@
                 <ui:Label text="Options" name="OptionsTitle" class="options-title" />
                 <ui:Label text="Customize your game experience" name="OptionsSubtitle" class="options-subtitle" />
             </ui:VisualElement>
-            
             <ui:VisualElement name="OptionsContent" class="options-content">
                 <ui:VisualElement name="AudioSection" class="options-section">
                     <ui:VisualElement name="VolumeGroup" class="option-group">
                         <ui:Label text="Master Volume" name="MasterVolumeLabel" class="option-label">
                             <ui:VisualElement name="VolumeIcon" class="option-icon volume-icon" />
                         </ui:Label>
-                        <ui:VisualElement name="VolumeSliderContainer" class="slider-container">
-                            <ui:Slider name="MasterVolumeSlider" class="volume-slider" low-value="0" high-value="100" value="75" />
+                        <ui:VisualElement name="VolumeSliderContainer" class="slider-container" style="margin-right: 30px;">
+                            <ui:Slider name="MasterVolumeSlider" low-value="0" high-value="100" value="75" class="volume-slider" />
                             <ui:Label text="75%" name="MasterVolumeValue" class="volume-value" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    
                     <ui:VisualElement name="SFXGroup" class="option-group">
                         <ui:Label text="SFX Volume" name="SFXVolumeLabel" class="option-label">
                             <ui:VisualElement name="SFXIcon" class="option-icon sfx-icon" />
                         </ui:Label>
-                        <ui:VisualElement name="SFXSliderContainer" class="slider-container">
-                            <ui:Slider name="SFXVolumeSlider" class="volume-slider" low-value="0" high-value="100" value="80" />
+                        <ui:VisualElement name="SFXSliderContainer" class="slider-container" style="margin-right: 30px;">
+                            <ui:Slider name="SFXVolumeSlider" low-value="0" high-value="100" value="80" class="volume-slider" />
                             <ui:Label text="80%" name="SFXVolumeValue" class="volume-value" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                
                 <ui:VisualElement name="GraphicsSection" class="options-section">
                     <ui:VisualElement name="FullscreenGroup" class="option-group toggle-group">
                         <ui:Label text="Fullscreen Mode" name="FullscreenLabel" class="option-label" />
-                        <ui:Toggle name="FullscreenToggle" class="option-toggle" value="false" />
+                        <ui:Toggle name="FullscreenToggle" value="false" class="option-toggle" />
                     </ui:VisualElement>
-                    
                     <ui:VisualElement name="VSyncGroup" class="option-group toggle-group">
                         <ui:Label text="V-Sync" name="VSyncLabel" class="option-label" />
-                        <ui:Toggle name="VSyncToggle" class="option-toggle" value="true" />
+                        <ui:Toggle name="VSyncToggle" value="true" class="option-toggle" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            
             <ui:VisualElement name="OptionsFooter" class="options-footer">
                 <ui:Button text="Back to Main Menu" name="BackToMainButton" class="back-button" />
             </ui:VisualElement>

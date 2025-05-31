@@ -6,14 +6,14 @@ namespace UI
 {
     public class MenuController : MonoBehaviour
     {
-        [Header("UI Documents")]
+        [Header("UI Documents - Auto-assigned if left empty")]
         public UIDocument mainMenuDocument;
         public UIDocument tutorialDocument;
         public UIDocument optionsDocument;
         public UIDocument creditsDocument;
     
         [Header("Tutorial Data")]
-        public List<TutorialSlide> tutorialSlides;
+        public List<TutorialSlide> tutorialSlides = new List<TutorialSlide>();
     
         private VisualElement currentMenu;
         private int currentSlideIndex = 0;
@@ -22,10 +22,26 @@ namespace UI
         [System.Serializable]
         public class TutorialSlide
         {
-            public string title;
+            public string title = "Tutorial Slide";
             [TextArea(3, 5)]
-            public string description;
+            public string description = "This is a tutorial slide description.";
             public Texture2D slideImage;
+        }
+    
+        private void Awake()
+        {
+            // Auto-find UI Documents if not assigned
+            if (mainMenuDocument == null || tutorialDocument == null || 
+                optionsDocument == null || creditsDocument == null)
+            {
+                AutoAssignUIDocuments();
+            }
+            
+            // Create default tutorial slides if none exist
+            if (tutorialSlides.Count == 0)
+            {
+                CreateDefaultTutorialSlides();
+            }
         }
     
         private void Start()
@@ -34,149 +50,121 @@ namespace UI
             ShowMainMenu();
         }
     
+        private void AutoAssignUIDocuments()
+        {
+            UIDocument[] allUIDocuments = FindObjectsOfType<UIDocument>();
+            
+            foreach (UIDocument doc in allUIDocuments)
+            {
+                if (doc.name.ToLower().Contains("main") && mainMenuDocument == null)
+                    mainMenuDocument = doc;
+                else if (doc.name.ToLower().Contains("tutorial") && tutorialDocument == null)
+                    tutorialDocument = doc;
+                else if (doc.name.ToLower().Contains("options") && optionsDocument == null)
+                    optionsDocument = doc;
+                else if (doc.name.ToLower().Contains("credits") && creditsDocument == null)
+                    creditsDocument = doc;
+            }
+            
+            Debug.Log($"Auto-assigned UI Documents: Main={mainMenuDocument?.name}, Tutorial={tutorialDocument?.name}, Options={optionsDocument?.name}, Credits={creditsDocument?.name}");
+        }
+    
+        private void CreateDefaultTutorialSlides()
+        {
+            tutorialSlides.Add(new TutorialSlide 
+            { 
+                title = "Welcome to Skyborne", 
+                description = "Embark on an epic aerial adventure in the floating islands of Aetheria. Master the art of flight and discover ancient secrets hidden in the clouds." 
+            });
+            tutorialSlides.Add(new TutorialSlide 
+            { 
+                title = "Flight Controls", 
+                description = "Use WASD to move your aircraft. Hold Shift to boost and Space to brake. Master these controls to navigate through challenging aerial courses." 
+            });
+            tutorialSlides.Add(new TutorialSlide 
+            { 
+                title = "Combat System", 
+                description = "Left click to fire your primary weapon. Right click for secondary weapons. Use the mouse to aim and target enemies in thrilling dogfights." 
+            });
+            tutorialSlides.Add(new TutorialSlide 
+            { 
+                title = "Exploration", 
+                description = "Discover hidden islands, ancient ruins, and mysterious artifacts. Each location holds secrets that will help you on your journey." 
+            });
+            tutorialSlides.Add(new TutorialSlide 
+            { 
+                title = "Ready to Fly", 
+                description = "You're now ready to begin your adventure in Skyborne. Take to the skies and become the ultimate sky pilot!" 
+            });
+        }
+    
         private void InitializeMenus()
         {
-            // Initialize Main Menu
-            SetupMainMenu();
+            if (mainMenuDocument != null) SetupMainMenu();
+            else Debug.LogError("Main Menu UI Document not found!");
+            
+            if (tutorialDocument != null) SetupTutorialMenu();
+            else Debug.LogError("Tutorial UI Document not found!");
+            
+            if (optionsDocument != null) SetupOptionsMenu();
+            else Debug.LogError("Options UI Document not found!");
+            
+            if (creditsDocument != null) SetupCreditsMenu();
+            else Debug.LogError("Credits UI Document not found!");
         
-            // Initialize Tutorial Menu
-            SetupTutorialMenu();
-        
-            // Initialize Options Menu
-            SetupOptionsMenu();
-        
-            // Initialize Credits Menu
-            SetupCreditsMenu();
-        
-            // Hide all menus initially
             HideAllMenus();
         }
     
         private void SetupMainMenu()
         {
             var root = mainMenuDocument.rootVisualElement;
+            Debug.Log("Setting up Main Menu...");
     
-            // Add null checks and error handling
-            var playButton = root.Q<Button>("PlayButton");
-            var tutorialButton = root.Q<Button>("TutorialButton");
-            var optionsButton = root.Q<Button>("OptionsButton");
-            var creditsButton = root.Q<Button>("CreditsButton");
-            var quitButton = root.Q<Button>("QuitButton");
+            SetupButton(root, "PlayButton", () => {
+                Debug.Log("Play button clicked - Starting Game...");
+                // Add your game start logic here
+                // SceneManager.LoadScene("GameScene");
+            });
     
-            if (playButton != null)
-            {
-                playButton.clicked += () => {
-                    Debug.Log("Play button clicked - Starting Game...");
-                    // Add game start logic here
-                };
-            }
-            else
-            {
-                Debug.LogError("PlayButton not found in MainMenu UXML");
-            }
+            SetupButton(root, "TutorialButton", () => {
+                Debug.Log("Tutorial button clicked");
+                ShowTutorialMenu();
+            });
     
-            if (tutorialButton != null)
-            {
-                tutorialButton.clicked += () => {
-                    Debug.Log("Tutorial button clicked");
-                    ShowTutorialMenu();
-                };
-            }
-            else
-            {
-                Debug.LogError("TutorialButton not found in MainMenu UXML");
-            }
+            SetupButton(root, "OptionsButton", () => {
+                Debug.Log("Options button clicked");
+                ShowOptionsMenu();
+            });
     
-            if (optionsButton != null)
-            {
-                optionsButton.clicked += () => {
-                    Debug.Log("Options button clicked");
-                    ShowOptionsMenu();
-                };
-            }
-            else
-            {
-                Debug.LogError("OptionsButton not found in MainMenu UXML");
-            }
+            SetupButton(root, "CreditsButton", () => {
+                Debug.Log("Credits button clicked");
+                ShowCreditsMenu();
+            });
     
-            if (creditsButton != null)
-            {
-                creditsButton.clicked += () => {
-                    Debug.Log("Credits button clicked");
-                    ShowCreditsMenu();
-                };
-            }
-            else
-            {
-                Debug.LogError("CreditsButton not found in MainMenu UXML");
-            }
-    
-            if (quitButton != null)
-            {
-                quitButton.clicked += () => {
-                    Debug.Log("Quit button clicked");
-                    QuitGame();
-                };
-            }
-            else
-            {
-                Debug.LogError("QuitButton not found in MainMenu UXML");
-            }
+            SetupButton(root, "QuitButton", () => {
+                Debug.Log("Quit button clicked");
+                QuitGame();
+            });
         }
     
         private void SetupTutorialMenu()
         {
             var root = tutorialDocument.rootVisualElement;
+            Debug.Log("Setting up Tutorial Menu...");
     
-            var previousButton = root.Q<Button>("PreviousButton");
-            var nextButton = root.Q<Button>("NextButton");
-            var backButton = root.Q<Button>("BackToMainButton");
+            SetupButton(root, "PreviousButton", PreviousSlide);
+            SetupButton(root, "NextButton", NextSlide);
+            SetupButton(root, "BackToMainButton", ShowMainMenu);
     
-            if (previousButton != null)
-            {
-                previousButton.clicked += () => {
-                    Debug.Log("Previous slide button clicked");
-                    PreviousSlide();
-                };
-            }
-            else
-            {
-                Debug.LogError("PreviousButton not found in TutorialMenu UXML");
-            }
-    
-            if (nextButton != null)
-            {
-                nextButton.clicked += () => {
-                    Debug.Log("Next slide button clicked");
-                    NextSlide();
-                };
-            }
-            else
-            {
-                Debug.LogError("NextButton not found in TutorialMenu UXML");
-            }
-    
-            if (backButton != null)
-            {
-                backButton.clicked += () => {
-                    Debug.Log("Back to main menu from tutorial clicked");
-                    ShowMainMenu();
-                };
-            }
-            else
-            {
-                Debug.LogError("BackToMainButton not found in TutorialMenu UXML");
-            }
-    
-            // Initialize tutorial content
             UpdateTutorialSlide();
         }
     
         private void SetupOptionsMenu()
         {
             var root = optionsDocument.rootVisualElement;
+            Debug.Log("Setting up Options Menu...");
     
-            // Setup volume sliders with null checks
+            // Setup volume sliders
             var masterVolumeSlider = root.Q<Slider>("MasterVolumeSlider");
             var sfxVolumeSlider = root.Q<Slider>("SFXVolumeSlider");
     
@@ -185,16 +173,9 @@ namespace UI
                 masterVolumeSlider.RegisterValueChangedCallback(evt => {
                     var valueLabel = root.Q<Label>("MasterVolumeValue");
                     if (valueLabel != null)
-                    {
                         valueLabel.text = $"{evt.newValue:F0}%";
-                    }
                     AudioListener.volume = evt.newValue / 100f;
-                    Debug.Log($"Master volume changed to: {evt.newValue}%");
                 });
-            }
-            else
-            {
-                Debug.LogError("MasterVolumeSlider not found in OptionsMenu UXML");
             }
     
             if (sfxVolumeSlider != null)
@@ -202,114 +183,107 @@ namespace UI
                 sfxVolumeSlider.RegisterValueChangedCallback(evt => {
                     var valueLabel = root.Q<Label>("SFXVolumeValue");
                     if (valueLabel != null)
-                    {
                         valueLabel.text = $"{evt.newValue:F0}%";
-                    }
-                    Debug.Log($"SFX volume changed to: {evt.newValue}%");
-                    // Set SFX volume here
                 });
             }
-            else
-            {
-                Debug.LogError("SFXVolumeSlider not found in OptionsMenu UXML");
-            }
     
-            // Setup toggles with null checks
+            // Setup toggles
             var fullscreenToggle = root.Q<Toggle>("FullscreenToggle");
             var vsyncToggle = root.Q<Toggle>("VSyncToggle");
     
             if (fullscreenToggle != null)
             {
+                fullscreenToggle.value = Screen.fullScreen;
                 fullscreenToggle.RegisterValueChangedCallback(evt => {
                     Screen.fullScreen = evt.newValue;
-                    Debug.Log($"Fullscreen toggled: {evt.newValue}");
                 });
-            }
-            else
-            {
-                Debug.LogError("FullscreenToggle not found in OptionsMenu UXML");
             }
     
             if (vsyncToggle != null)
             {
+                vsyncToggle.value = QualitySettings.vSyncCount > 0;
                 vsyncToggle.RegisterValueChangedCallback(evt => {
                     QualitySettings.vSyncCount = evt.newValue ? 1 : 0;
-                    Debug.Log($"VSync toggled: {evt.newValue}");
                 });
             }
-            else
-            {
-                Debug.LogError("VSyncToggle not found in OptionsMenu UXML");
-            }
     
-            var backButton = root.Q<Button>("BackToMainButton");
-            if (backButton != null)
-            {
-                backButton.clicked += () => {
-                    Debug.Log("Back to main menu from options clicked");
-                    ShowMainMenu();
-                };
-            }
-            else
-            {
-                Debug.LogError("BackToMainButton not found in OptionsMenu UXML");
-            }
+            SetupButton(root, "BackToMainButton", ShowMainMenu);
         }
     
         private void SetupCreditsMenu()
         {
             var root = creditsDocument.rootVisualElement;
-            var backButton = root.Q<Button>("BackToMainButton");
+            Debug.Log("Setting up Credits Menu...");
+            
+            SetupButton(root, "BackToMainButton", ShowMainMenu);
+        }
     
-            if (backButton != null)
+        private void SetupButton(VisualElement root, string buttonName, System.Action callback)
+        {
+            var button = root.Q<Button>(buttonName);
+            if (button != null)
             {
-                backButton.clicked += () => {
-                    Debug.Log("Back to main menu from credits clicked");
-                    ShowMainMenu();
-                };
+                button.clicked += callback;
+               // Debug.Log($"Successfully set up button: {buttonName}");
             }
             else
             {
-                Debug.LogError("BackToMainButton not found in CreditsMenu UXML");
+                Debug.LogError($"Button '{buttonName}' not found in UI!");
             }
         }
     
-        private void ShowMainMenu()
+        public void ShowMainMenu()
         {
+            Debug.Log("Showing Main Menu");
             HideAllMenus();
-            mainMenuDocument.gameObject.SetActive(true);
-            currentMenu = mainMenuDocument.rootVisualElement;
+            if (mainMenuDocument != null)
+            {
+                mainMenuDocument.gameObject.SetActive(true);
+                currentMenu = mainMenuDocument.rootVisualElement;
+            }
         }
     
-        private void ShowTutorialMenu()
+        public void ShowTutorialMenu()
         {
+            Debug.Log("Showing Tutorial Menu");
             HideAllMenus();
-            tutorialDocument.gameObject.SetActive(true);
-            currentMenu = tutorialDocument.rootVisualElement;
-            currentSlideIndex = 0;
-            UpdateTutorialSlide();
+            if (tutorialDocument != null)
+            {
+                tutorialDocument.gameObject.SetActive(true);
+                currentMenu = tutorialDocument.rootVisualElement;
+                currentSlideIndex = 0;
+                UpdateTutorialSlide();
+            }
         }
     
-        private void ShowOptionsMenu()
+        public void ShowOptionsMenu()
         {
+            Debug.Log("Showing Options Menu");
             HideAllMenus();
-            optionsDocument.gameObject.SetActive(true);
-            currentMenu = optionsDocument.rootVisualElement;
+            if (optionsDocument != null)
+            {
+                optionsDocument.gameObject.SetActive(true);
+                currentMenu = optionsDocument.rootVisualElement;
+            }
         }
     
-        private void ShowCreditsMenu()
+        public void ShowCreditsMenu()
         {
+            Debug.Log("Showing Credits Menu");
             HideAllMenus();
-            creditsDocument.gameObject.SetActive(true);
-            currentMenu = creditsDocument.rootVisualElement;
+            if (creditsDocument != null)
+            {
+                creditsDocument.gameObject.SetActive(true);
+                currentMenu = creditsDocument.rootVisualElement;
+            }
         }
     
         private void HideAllMenus()
         {
-            mainMenuDocument.gameObject.SetActive(false);
-            tutorialDocument.gameObject.SetActive(false);
-            optionsDocument.gameObject.SetActive(false);
-            creditsDocument.gameObject.SetActive(false);
+            if (mainMenuDocument != null) mainMenuDocument.gameObject.SetActive(false);
+            if (tutorialDocument != null) tutorialDocument.gameObject.SetActive(false);
+            if (optionsDocument != null) optionsDocument.gameObject.SetActive(false);
+            if (creditsDocument != null) creditsDocument.gameObject.SetActive(false);
         }
     
         private void PreviousSlide()
@@ -332,26 +306,35 @@ namespace UI
     
         private void UpdateTutorialSlide()
         {
+            if (tutorialDocument == null || tutorialSlides.Count == 0) return;
+            
             var root = tutorialDocument.rootVisualElement;
-        
-            if (tutorialSlides.Count > 0 && currentSlideIndex < tutorialSlides.Count)
+            
+            if (currentSlideIndex < tutorialSlides.Count)
             {
                 var slide = tutorialSlides[currentSlideIndex];
             
-                root.Q<Label>("SlideTitle").text = slide.title;
-                root.Q<Label>("SlideDescription").text = slide.description;
-                root.Q<Label>("SlideCounter").text = $"Slide {currentSlideIndex + 1} of {tutorialSlides.Count}";
+                var slideTitle = root.Q<Label>("SlideTitle");
+                var slideDescription = root.Q<Label>("SlideDescription");
+                var slideCounter = root.Q<Label>("SlideCounter");
+                
+                if (slideTitle != null) slideTitle.text = slide.title;
+                if (slideDescription != null) slideDescription.text = slide.description;
+                if (slideCounter != null) slideCounter.text = $"Slide {currentSlideIndex + 1} of {tutorialSlides.Count}";
             
                 // Update slide image
                 var slideImage = root.Q<VisualElement>("SlideImage");
-                if (slide.slideImage != null)
+                if (slideImage != null && slide.slideImage != null)
                 {
                     slideImage.style.backgroundImage = new StyleBackground(slide.slideImage);
                 }
             
                 // Update navigation buttons
-                root.Q<Button>("PreviousButton").SetEnabled(currentSlideIndex > 0);
-                root.Q<Button>("NextButton").SetEnabled(currentSlideIndex < tutorialSlides.Count - 1);
+                var prevButton = root.Q<Button>("PreviousButton");
+                var nextButton = root.Q<Button>("NextButton");
+                
+                if (prevButton != null) prevButton.SetEnabled(currentSlideIndex > 0);
+                if (nextButton != null) nextButton.SetEnabled(currentSlideIndex < tutorialSlides.Count - 1);
             
                 // Update slide indicators
                 for (int i = 0; i < 5; i++)
