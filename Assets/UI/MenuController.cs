@@ -86,28 +86,8 @@ namespace UI
         {
             tutorialSlides.Add(new TutorialSlide 
             { 
-                title = "Welcome to Skyborne", 
-                description = "Embark on an epic aerial adventure in the floating islands of Aetheria. Master the art of flight and discover ancient secrets hidden in the clouds." 
-            });
-            tutorialSlides.Add(new TutorialSlide 
-            { 
-                title = "Flight Controls", 
-                description = "Use WASD to move your aircraft. Hold Shift to boost and Space to brake. Master these controls to navigate through challenging aerial courses." 
-            });
-            tutorialSlides.Add(new TutorialSlide 
-            { 
-                title = "Combat System", 
-                description = "Left click to fire your primary weapon. Right click for secondary weapons. Use the mouse to aim and target enemies in thrilling dogfights." 
-            });
-            tutorialSlides.Add(new TutorialSlide 
-            { 
-                title = "Exploration", 
-                description = "Discover hidden islands, ancient ruins, and mysterious artifacts. Each location holds secrets that will help you on your journey." 
-            });
-            tutorialSlides.Add(new TutorialSlide 
-            { 
-                title = "Ready to Fly", 
-                description = "You're now ready to begin your adventure in Skyborne. Take to the skies and become the ultimate sky pilot!" 
+                title = "Dev forgot to setup the tutorial in the editor", 
+                description = "or an error occured while loading the tutorial." 
             });
         }
     
