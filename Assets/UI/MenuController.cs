@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Menu;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,6 +7,8 @@ namespace UI
 {
     public class MenuController : MonoBehaviour
     {
+        private LevelLoad _levelLoad;
+        
         [Header("UI Documents - Auto-assigned if left empty")]
         public UIDocument mainMenuDocument;
         public UIDocument tutorialDocument;
@@ -48,6 +51,8 @@ namespace UI
             {
                 CreateDefaultTutorialSlides();
             }
+
+            _levelLoad = FindObjectOfType<LevelLoad>();
         }
     
         private void Start()
@@ -113,8 +118,8 @@ namespace UI
     
             SetupButton(root, "PlayButton", () => {
                 Debug.Log("Play button clicked - Starting Game...");
-                // Add your game start logic here
-                // SceneManager.LoadScene("GameScene");
+                HideAllMenus();
+                _levelLoad.LoadLevel();
             });
     
             SetupButton(root, "TutorialButton", () => {
