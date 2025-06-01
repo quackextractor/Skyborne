@@ -2,6 +2,8 @@ using Abilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+
 
 public class ShopScript : MonoBehaviour
 {
@@ -9,7 +11,8 @@ public class ShopScript : MonoBehaviour
      TO DO: MARK BUTTONS WHEN ARENT BOUGHT 
             CASES FOR WHEN A ABILTY ISNT BOUGHT 
             Debug.Log("ability is not selected"); replace with something that shows on the screen maybe make unresponsive
-            Pause the game when turning on the shop       
+              un hard code button make the instatiate 
+              
      */
 
     private CurrencyManager _currencyManager;
@@ -37,6 +40,10 @@ public class ShopScript : MonoBehaviour
 
     public GameObject ShopUi;
     public GameObject EquipUI;
+
+    public UIDocument shopUI;
+    public UIDocument equipUI;
+
     Ability[] Abilities;
     GameObject player;
     PlayerAttackScript playerAttackScript;
@@ -65,12 +72,12 @@ public class ShopScript : MonoBehaviour
             b = !b;
             if (b)
             {
-                Cursor.lockState = CursorLockMode.None;
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
                 Time.timeScale = 0f;
                 player.GetComponent<PlayerController>().enabled = false;
             }
             else {
-                Cursor.lockState = CursorLockMode.Locked;
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
                 Time.timeScale = 1f;
                 player.GetComponent<PlayerController>().enabled = true;
                 EquipUI.SetActive(b);
@@ -125,6 +132,71 @@ public class ShopScript : MonoBehaviour
         }
     }
 
+    private void SetupShop()
+    {
+        var root = shopUI.rootVisualElement;
+        Debug.Log("Setting up Main Menu...");
 
+        SetupButton(root, "Fireball", () => {
+            EnableAbility("Fireball");
+        });
 
+        SetupButton(root, "Gust", () => {
+            EnableAbility("Gust");
+
+        });
+
+        SetupButton(root, "Burst", () => {
+            EnableAbility("Burst");
+
+        });
+
+        SetupButton(root, "Inventory", () => {
+            DisableShop();
+        });
+    }
+    private void SetupEquip()
+    {
+        var root = shopUI.rootVisualElement;
+        Debug.Log("Setting up Main Menu...");
+
+        SetupButton(root, "Fireball", () => {
+            SelectAbility("Fireball");
+        });
+
+        SetupButton(root, "Gust", () => {
+            SelectAbility("Gust");
+
+        });
+
+        SetupButton(root, "Burst", () => {
+            SelectAbility("Burst");
+
+        });
+        SetupButton(root, "Q", () => {
+            Equip("Q");
+
+        });
+        SetupButton(root, "E", () => {
+            Equip("E");
+
+        });
+
+        SetupButton(root, "Shop", () => {
+            DisableShop();
+        });
+    }
+    private void SetupButton(VisualElement root, string buttonName, System.Action callback)
+    {
+        var button = root.Q<Button>(buttonName);
+        if (button != null)
+        {
+            button.clicked += callback;
+            // Debug.Log($"Successfully set up button: {buttonName}");
+        }
+        else
+        {
+            Debug.LogError($"Button '{buttonName}' not found in UI!");
+        }
+    }
 }
