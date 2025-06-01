@@ -13,9 +13,11 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private EnemyStats stats;
     [SerializeField] private Weapon weapon;
+    [SerializeField] private float spawnDelay = 1f; // Duration to disable movement/attack after spawn
 
     private NavMeshAgent _agent;
     private float _attackCooldown;
+    private float _spawnTimer;
     private Transform _player;
     private Target _targetComponent;
     private Renderer _enemyRenderer;
@@ -33,22 +35,27 @@ public class Enemy : MonoBehaviour
         _targetComponent = GetComponent<Target>();
         _enemyRenderer = GetComponent<Renderer>();
         _anim = GetComponent<Animator>();
-        
+
         if (_enemyRenderer != null)
             _originalColor = _enemyRenderer.material.GetColor(BaseColor1);
     }
 
     private void Update()
     {
+        if (_spawnTimer > 0f)
+        {
+            _spawnTimer -= Time.deltaTime;
+            _agent.isStopped = true;
+            return;
+        }
+
         if (_attackCooldown > 0f)
             _attackCooldown -= Time.deltaTime;
 
         UpdateBurningVisuals();
 
-        // how far from player
         float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
 
-        // always stop agent when attacking
         if (distanceToPlayer <= stats.range)
         {
             _agent.isStopped = true;
@@ -57,7 +64,6 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // only move if Animator is in the Walking state
         var isWalking = _anim.GetBool(IsWalking);
         if (isWalking)
         {
@@ -67,13 +73,11 @@ public class Enemy : MonoBehaviour
                 _agent.SetDestination(_player.position);
             }
 
-            // rotate to face movement direction
             if (_agent.velocity.sqrMagnitude > 0.1f)
                 RotateTowardsVelocity();
         }
         else
         {
-            // animator isn’t walking → enforce no movement
             if (_agent.isOnNavMesh)
                 _agent.isStopped = true;
         }
@@ -85,13 +89,11 @@ public class Enemy : MonoBehaviour
         {
             if (_targetComponent.IsBurning)
             {
-                // Apply a reddish tint to burning enemies
                 Color burningColor = new Color(1.0f, 0.3f, 0.3f);
                 _enemyRenderer.material.SetColor(BaseColor1, Color.Lerp(_originalColor, burningColor, 0.6f));
             }
             else
             {
-                // Reset to original color when not burning
                 _enemyRenderer.material.SetColor(BaseColor1, _originalColor);
             }
         }
@@ -102,7 +104,6 @@ public class Enemy : MonoBehaviour
         stats = newStats;
         InitializeStats();
 
-        // Warp onto NavMesh if needed
         if (_agent != null)
         {
             if (NavMesh.SamplePosition(transform.position, out var hit, 2f, NavMesh.AllAreas))
@@ -111,15 +112,16 @@ public class Enemy : MonoBehaviour
                 Debug.LogWarning("Enemy not near a valid NavMesh area after spawn. Warp failed.");
         }
 
-        // Notify listeners that an enemy has been spawned
+        _spawnTimer = spawnDelay; // Disable movement/attacks temporarily after spawn
+
         OnEnemySpawned?.Invoke();
     }
 
     private void InitializeStats()
     {
         _agent.speed = stats.movementSpeed;
-        _agent.angularSpeed = stats.turnSpeed; // degrees per second
-        _agent.acceleration = stats.acceleration; // units per second²
+        _agent.angularSpeed = stats.turnSpeed;
+        _agent.acceleration = stats.acceleration;
 
         weapon.Damage = stats.weaponDamage;
         weapon.Knockback = stats.weaponKnockback;

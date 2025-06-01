@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4730293328926982561, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
+      propertyPath: spawnDelay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6934429786858040219, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -125,6 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tauntCooldown: 10
+  velocityDamping: 0.1
 --- !u!4 &3891678474402229647 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2401978911597124556, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
