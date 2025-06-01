@@ -20,6 +20,10 @@ namespace UI
 
         private VisualElement currentMenu;
         private int currentSlideIndex = 0;
+        
+        [Header("Slideshow Image constraints")] 
+        public int maxW = 500;
+        public int maxH = 300;
 
         // Track initialization status for each menu
         private bool isMainMenuInitialized = false;
@@ -362,9 +366,6 @@ namespace UI
                     {
                         int texW = slide.slideImage.width;
                         int texH = slide.slideImage.height;
-
-                        const int maxW = 500;
-                        const int maxH = 300;
 
                         float scale = Mathf.Min(
                             1f,
