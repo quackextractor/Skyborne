@@ -23,7 +23,8 @@ MonoBehaviour:
     slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
   - title: 'Survival '
     description: "Every hit accumulated makes you more vulnerable\u2014damage builds
-      knockback force, turning each strike into a potential death sentence."
+      knockback force, turning each strike into a potential death sentence. There
+      is a damage-meter on the bottom left of the HUD for your convenience."
     slideImage: {fileID: 2800000, guid: 01e726b22c61a8249a0fc4ffb108e6de, type: 3}
   - title: Finance
     description: 'Victory pays: send enemies flying off the platform to earn runes
@@ -31,7 +32,9 @@ MonoBehaviour:
     slideImage: {fileID: 2800000, guid: 01e726b22c61a8249a0fc4ffb108e6de, type: 3}
   - title: Gear Up
     description: "Survival demands evolution\u2014spend your hard-earned runes on
-      new abilities, weapons, and perks or face inevitable defeat on higher floors."
+      new abilities, weapons, and perks or face inevitable defeat on higher floors.
+      Equip abilities in the inventory. TAB>Shop>Inventory. Choose the slot from
+      there."
     slideImage: {fileID: 2800000, guid: 558c70b7b61678541b840f45fbc08d6e, type: 3}
   - title: Controls
     description: 'WASD - Movement
