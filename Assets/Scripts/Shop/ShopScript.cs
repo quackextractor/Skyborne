@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class ShopScript : MonoBehaviour
@@ -11,6 +12,7 @@ public class ShopScript : MonoBehaviour
 
     private VisualElement _shopRoot;
     private VisualElement _equipRoot;
+    private VisualElement _buttonRoot;
 
     private CurrencyManager _currencyManager;
     private Ability[] Abilities;
@@ -53,6 +55,9 @@ public class ShopScript : MonoBehaviour
 
         _shopRoot = shopUI.rootVisualElement;
         _equipRoot = equipUI.rootVisualElement;
+
+        SetupButton(_shopRoot, "ReturnToMenu", () => { SceneManager.LoadScene(0);  });
+        SetupButton(_shopRoot, "QuitGame", QuitGame);
 
         SetupShop();
         SetupEquip();
@@ -185,7 +190,13 @@ public class ShopScript : MonoBehaviour
         });
     }
 
-
+    private void QuitGame() {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+    }
 
     private void SetupEquip()
     {
