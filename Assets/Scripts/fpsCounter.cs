@@ -33,10 +33,22 @@ public class FPSCounter : MonoBehaviour
     {
         _fpsText = GetComponent<TextMeshProUGUI>();
         _timeLeft = updateInterval;
+        
+        // Apply saved visibility setting
+        UpdateVisibility();
+    }
+
+    private void Start()
+    {
+        // Ensure visibility is correct at start
+        UpdateVisibility();
     }
 
     private void Update()
     {
+        // Only update if visible
+        if (!_fpsText.enabled) return;
+        
         // Accumulate time and frame count
         _timeLeft       -= Time.unscaledDeltaTime;
         _accumulatedTime += Time.unscaledDeltaTime;
@@ -74,5 +86,16 @@ public class FPSCounter : MonoBehaviour
             _accumulatedTime = 0f;
             _frames          = 0;
         }
+    }
+
+    // Update visibility based on saved preference
+    public void UpdateVisibility()
+    {
+        // PlayerPrefs key matches MenuController's ShowFPSKey
+        bool showFPS = PlayerPrefs.GetInt("ShowFPS", 0) == 1;
+        
+        // Enable both the Text component and parent Canvas
+        _fpsText.enabled = showFPS;
+        GetComponent<Canvas>().enabled = showFPS;
     }
 }

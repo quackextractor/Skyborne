@@ -36,6 +36,11 @@
                         <ui:Label text="V-Sync" name="VSyncLabel" class="option-label" />
                         <ui:Toggle name="VSyncToggle" value="true" class="option-toggle" />
                     </ui:VisualElement>
+                    <!-- Added FPS Counter Toggle -->
+                    <ui:VisualElement name="FPSCounterGroup" class="option-group toggle-group">
+                        <ui:Label text="FPS Counter" name="FPSCounterLabel" class="option-label" />
+                        <ui:Toggle name="FPSCounterToggle" value="false" class="option-toggle" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="OptionsFooter" class="options-footer">

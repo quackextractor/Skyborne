@@ -454,7 +454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &220866482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,7 +1066,9 @@ MonoBehaviour:
   tutorialDocument: {fileID: 1961322066}
   optionsDocument: {fileID: 1264188433}
   creditsDocument: {fileID: 220866482}
-  tutorialSlides: []
+  tutorialData: {fileID: 11400000, guid: 7e2dfabea951fdb4583eb5d703d68dc0, type: 2}
+  maxW: 500
+  maxH: 300
 --- !u!4 &583347479
 Transform:
   m_ObjectHideFlags: 0
@@ -1412,7 +1414,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1264188433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1771,7 +1773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1664410647
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1898,7 +1900,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1961322066
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -69,7 +69,7 @@
 .primary-button:hover {
     background-color: rgba(37, 99, 235, 0.9);
     border-color: rgba(37, 99, 235, 1);
-    scale: 1.02;
+    /* scale: 1.02; */
 }
 
 .secondary-button {
@@ -82,7 +82,7 @@
 .secondary-button:hover {
     background-color: rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.8);
-    scale: 1.02;
+    /* scale: 1.02; */
 }
 
 .quit-button {
@@ -93,7 +93,7 @@
 }
 
 .quit-button:hover {
-    background-color: rgba(220, 38, 38, 0.4);
+    background-color: rgba(220, 38, 38, 0.8);
     border-color: rgba(220, 38, 38, 0.8);
     color: white;
 }
@@ -107,11 +107,12 @@
 /* ===== TUTORIAL STYLES ===== */
 .tutorial-card {
     width: 800px;
-    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark background */
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent dark background */
     border-radius: 12px;
     padding: 32px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.2);
+    flex-direction: column;
 }
 
 .tutorial-header {
@@ -129,42 +130,60 @@
 }
 
 .slide-counter {
-    font-size: 16px;
+    font-size: 20px;
     color: rgb(200, 200, 200);
     -unity-text-align: middle-center;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .tutorial-content {
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     margin-bottom: 32px;
+    justify-content: space-between;
+}
+
+.slide-image-container {
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 350px;
+}
+
+.slide-text-container {
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+    margin-left: 32px;
+    justify-content: flex-start;
 }
 
 .slide-image {
-    width: 500px;
+    width: 300px;
     height: 300px;
+    flex-shrink: 0;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    margin-bottom: 24px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.3);
 }
 
 .slide-title {
-    font-size: 24px;
+    font-size: 32px;
     -unity-font-style: bold;
     color: white;
-    -unity-text-align: middle-center;
+    -unity-text-align: upper-left;
     margin-bottom: 16px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .slide-description {
-    font-size: 16px;
+    font-size: 22px;
     color: rgb(220, 220, 220);
-    -unity-text-align: middle-center;
+    -unity-text-align: upper-left;
     white-space: normal;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    width: 100%;
 }
 
 .tutorial-navigation {
@@ -181,11 +200,23 @@
     border-radius: 6px;
     background-color: rgba(255, 255, 255, 0.2);
     border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.8);
     color: white;
     flex-direction: row;
     align-items: center;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.nav-button.next-button {
+    height: 60px;
+    min-width: 140px;
+    font-size: 20px;
+}
+
+.nav-button.previous-button {
+    height: 60px;
+    min-width: 140px;
+    font-size: 20px;
 }
 
 .nav-button:hover {
@@ -244,7 +275,7 @@
 /* ===== OPTIONS STYLES ===== */
 .options-card {
     width: 600px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 12px;
     padding: 32px;
     border-width: 1px;
@@ -334,7 +365,7 @@
 }
 
 .option-toggle {
-    scale: 1.2;
+    /* scale: 1.2; */
 }
 
 .options-footer {
@@ -344,7 +375,7 @@
 /* ===== CREDITS STYLES ===== */
 .credits-card {
     width: 600px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 12px;
     padding: 32px;
     max-height: 80%;
@@ -417,7 +448,7 @@
     background-color: rgba(59, 130, 246, 0.2);
     border-radius: 8px;
     border-width: 1px;
-    border-color: rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 0.8);
     align-items: center;
 }
 
