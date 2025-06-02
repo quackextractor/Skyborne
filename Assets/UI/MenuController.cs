@@ -24,6 +24,9 @@ namespace UI
         [Tooltip("Maximum display height in pixels")]
         public int maxH = 300;
 
+        // PlayerPrefs keys
+        private const string ShowFPSKey = "ShowFPS";
+
         // Track initialization status for each menu
         private bool isMainMenuInitialized = false;
         private bool isTutorialMenuInitialized = false;
@@ -151,6 +154,19 @@ namespace UI
             {
                 vsyncToggle.value = QualitySettings.vSyncCount > 0;
                 vsyncToggle.RegisterValueChangedCallback(evt => QualitySettings.vSyncCount = evt.newValue ? 1 : 0);
+            }
+
+            // FPS Counter Toggle
+            var fpsToggle = root.Q<Toggle>("FPSCounterToggle");
+            if (fpsToggle != null)
+            {
+                // Load saved setting (default to false)
+                fpsToggle.value = PlayerPrefs.GetInt(ShowFPSKey, 0) == 1;
+                fpsToggle.RegisterValueChangedCallback(evt =>
+                {
+                    PlayerPrefs.SetInt(ShowFPSKey, evt.newValue ? 1 : 0);
+                    PlayerPrefs.Save();
+                });
             }
 
             SetupButton(root, "BackToMainButton", ShowMainMenu);
