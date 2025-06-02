@@ -6,21 +6,21 @@
             <ui:VisualElement name="Grid" class="grid" style="flex-direction: row;">
                 <ui:VisualElement name="FireballItem" class="grid-item">
                     <ui:VisualElement class="item-cost-row" style="flex-direction: row; align-items: center;">
-                        <ui:Label text="Fireball - 3" class="item-label" style="color: rgb(255, 255, 255);" />
+                        <ui:Label text="Fireball - 5" class="item-label" style="color: rgb(255, 255, 255); margin-right: -3px;" />
                         <ui:Image image="Symbol Blue" class="coin-icon" style="border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 22px; border-top-right-radius: 22px; border-bottom-right-radius: 22px; border-bottom-left-radius: 22px;" />
                     </ui:VisualElement>
                     <ui:Button name="Fireball" text="Buy" class="shop-button" />
                 </ui:VisualElement>
                 <ui:VisualElement name="GustItem" class="grid-item">
                     <ui:VisualElement class="item-cost-row" style="flex-direction: row; align-items: center;">
-                        <ui:Label text="Gust - 2" class="item-label" style="color: rgb(255, 255, 255);" />
-                        <ui:Image image="Symbol Blue" class="coin-icon" />
+                        <ui:Label text="Gust - 8" class="item-label" style="color: rgb(255, 255, 255); margin-right: -3px;" />
+                        <ui:Image image="Symbol Blue" name="Image" class="coin-icon" />
                     </ui:VisualElement>
                     <ui:Button name="Gust" text="Buy" class="shop-button" />
                 </ui:VisualElement>
                 <ui:VisualElement name="BurstItem" class="grid-item">
                     <ui:VisualElement class="item-cost-row" style="flex-direction: row; align-items: center;">
-                        <ui:Label text="Burst - 2" class="item-label" style="color: rgb(255, 255, 255);" />
+                        <ui:Label text="Burst - 2" class="item-label" style="color: rgb(255, 255, 255); margin-right: -5px;" />
                         <ui:Image image="Symbol Blue" class="coin-icon" />
                     </ui:VisualElement>
                     <ui:Button name="Burst" text="Buy" class="shop-button" />
