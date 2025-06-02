@@ -16,10 +16,10 @@ MonoBehaviour:
   - title: Skyborne
     description: Ascend ancient towers floating in the heavens, where warriors battle
       among the clouds in a realm where only the strongest reach celestial heights.
-    slideImage: {fileID: 2800000, guid: eff94065a061cd04398d12b245878a5e, type: 3}
+    slideImage: {fileID: 2800000, guid: e35bc3d435ecee7469d8fb1257d49240, type: 3}
   - title: Death
     description: "One fall, one death\u2014the only way to perish is plummeting from
-      the tower into the endless sky below."
+      the tower into the endless clouds below."
     slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
   - title: 'Survival '
     description: "Every hit accumulated makes you more vulnerable\u2014damage builds

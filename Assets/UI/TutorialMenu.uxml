@@ -16,7 +16,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="TutorialNavigation" class="tutorial-navigation">
-                <ui:Button text="Previous" name="PreviousButton" class="nav-button previous-button" style="height: 40px; min-width: 100px;">
+                <ui:Button text="Previous" name="PreviousButton" class="nav-button previous-button">
                     <ui:VisualElement name="PrevIcon" class="nav-icon prev-icon" />
                 </ui:Button>
                 <ui:VisualElement name="SlideIndicators" class="slide-indicators">
@@ -26,7 +26,7 @@
                     <ui:VisualElement name="Indicator3" class="slide-indicator" />
                     <ui:VisualElement name="Indicator4" class="slide-indicator" />
                 </ui:VisualElement>
-                <ui:Button text="Next" name="NextButton" class="nav-button next-button" style="height: 40px; min-width: 100px;">
+                <ui:Button text="Next" name="NextButton" class="nav-button next-button">
                     <ui:VisualElement name="NextIcon" class="nav-icon next-icon" />
                 </ui:Button>
             </ui:VisualElement>
