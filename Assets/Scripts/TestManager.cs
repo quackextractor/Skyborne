@@ -1,6 +1,5 @@
 using ScriptObj;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TestManager : MonoBehaviour
 {
@@ -23,7 +22,8 @@ public class TestManager : MonoBehaviour
     
     private GameObject _player;
     private Target _targetComponent;
-    private bool _isGodMode = false;
+    private bool _isGodMode;
+    private bool _isCheating;
 
 
     private void Start()
@@ -40,6 +40,11 @@ public class TestManager : MonoBehaviour
 
     private void Update()
     {
+        if (!_isCheating)
+        {
+            return;
+        }
+        
         if (Input.GetKeyDown(KeyCode.T))
         {
             // Trigger the level transition
