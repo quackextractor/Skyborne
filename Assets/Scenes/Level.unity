@@ -6645,6 +6645,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1584712446}
     - target: {fileID: 2313280653444343401, guid: a270a32ad4f877445947a294168be9fb, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 1584712446}
+    - target: {fileID: 2313280653444343401, guid: a270a32ad4f877445947a294168be9fb, type: 3}
       propertyPath: MonsterSound
       value: 
       objectReference: {fileID: 8300000, guid: f0e8513683d45a54db616c99acf654f3, type: 3}
