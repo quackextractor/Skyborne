@@ -5,19 +5,30 @@
             <ui:Label text="Ability Shop" class="title" />
             <ui:VisualElement name="Grid" class="grid" style="flex-direction: row;">
                 <ui:VisualElement name="FireballItem" class="grid-item">
-                    <ui:Label text="Fireball - 3" class="item-label" style="color: rgb(255, 255, 255);" />
+                    <ui:VisualElement class="item-cost-row" style="flex-direction: row; align-items: center;">
+                        <ui:Label text="Fireball - 3" class="item-label" style="color: rgb(255, 255, 255);" />
+                        <ui:Image image="Symbol Blue" class="coin-icon" />
+                    </ui:VisualElement>
                     <ui:Button name="Fireball" text="Buy" class="shop-button" />
                 </ui:VisualElement>
                 <ui:VisualElement name="GustItem" class="grid-item">
-                    <ui:Label text="Gust - 2" class="item-label" style="color: rgb(255, 255, 255);" />
+                    <ui:VisualElement class="item-cost-row" style="flex-direction: row; align-items: center;">
+                        <ui:Label text="Gust - 2" class="item-label" style="color: rgb(255, 255, 255);" />
+                        <ui:Image image="Symbol Blue" class="coin-icon" />
+                    </ui:VisualElement>
                     <ui:Button name="Gust" text="Buy" class="shop-button" />
                 </ui:VisualElement>
                 <ui:VisualElement name="BurstItem" class="grid-item">
-                    <ui:Label text="Burst - 2" class="item-label" style="color: rgb(255, 255, 255);" />
+                    <ui:VisualElement class="item-cost-row" style="flex-direction: row; align-items: center;">
+                        <ui:Label text="Burst - 2" class="item-label" style="color: rgb(255, 255, 255);" />
+                        <ui:Image image="Symbol Blue" class="coin-icon" />
+                    </ui:VisualElement>
                     <ui:Button name="Burst" text="Buy" class="shop-button" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Button name="Inventory" text="Go to Inventory" class="inventory-button" />
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:Button name="QuitGame" text="Quit Game" class="quit-button" />
+    <ui:Button name="ReturnToMenu" text="Return to Menu" class="menu-button" />
 </ui:UXML>

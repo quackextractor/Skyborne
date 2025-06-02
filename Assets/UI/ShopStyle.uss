@@ -66,3 +66,22 @@
     color: white;
     border-radius: 8px;
 }
+.coin-icon {
+    width: 32px;
+    height: 32px;
+    background-image: url("project://database/Assets/UI/Images/Symbol Blue.png");
+    border: rgb(255,255,255) 1px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.menu-button {
+    margin-top: 10px;
+    background-color: #444;
+    color: white;
+}
+
+.quit-button {
+    margin-top: 5px;
+    background-color: darkred;
+    color: white;
+}
