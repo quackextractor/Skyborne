@@ -3,7 +3,7 @@
     <ui:VisualElement name="MainMenuContainer" class="main-menu-container">
         <ui:VisualElement name="TitleSection" class="title-section">
             <ui:Label text="SKYBORNE" name="GameTitle" class="game-title" />
-            <ui:Label text="Soar Beyond the Clouds" name="GameSubtitle" class="game-subtitle" />
+            <ui:Label text="Become... THE ONLY ONE" name="GameSubtitle" class="game-subtitle" />
         </ui:VisualElement>
         <ui:VisualElement name="ButtonContainer" class="button-container">
             <ui:Button text="Play" name="PlayButton" class="menu-button primary-button" />

@@ -2516,7 +2516,7 @@ GameObject:
   - component: {fileID: 846177975}
   - component: {fileID: 846177977}
   m_Layer: 0
-  m_Name: TestManager
+  m_Name: Scripts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
