@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/EquipUI.uss?fileID=7433441132597879392&amp;guid=1fcebf50826b8fc4e9e7cdf6b48ca197&amp;type=3#EquipUI" />
+    <ui:VisualElement name="root" class="equipment-root" style="background-color: rgba(30, 30, 30, 0); padding-top: -8px; margin-top: 30px;">
+        <ui:VisualElement name="columns" class="equipment-columns" style="background-color: rgba(44, 44, 44, 0.72); padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px;">
+            <ui:VisualElement name="slots" class="equipment-slot-column" style="padding-right: 104px;">
+                <ui:Label text="Keybinds" class="column-title" />
+                <ui:Button text="Q" name="Q" class="slot-button" />
+                <ui:Button text="E" name="E" class="slot-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="abilities" class="equipment-ability-column">
+                <ui:Label text="Abilities" class="column-title" />
+                <ui:Button text="Fireball" name="Fireball" class="ability-button" style="width: 75px; height: 75px;" />
+                <ui:Button text="Gust" name="Gust" class="ability-button" style="width: 75px; height: 75px;" />
+                <ui:Button text="Burst" name="Burst" class="ability-button" style="width: 75px; height: 75px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Button text="Shop" name="Shop" class="shop-button" />
+</ui:UXML>

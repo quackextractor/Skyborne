@@ -4,20 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
 public class ShopScript : MonoBehaviour
 {
-    /**
-     TO DO: MARK BUTTONS WHEN ARENT BOUGHT 
-            CASES FOR WHEN A ABILTY ISNT BOUGHT 
-            Debug.Log("ability is not selected"); replace with something that shows on the screen maybe make unresponsive
-              un hard code button make the instatiate 
-              
-     */
+    public UIDocument shopUI;
+    public UIDocument equipUI;
+
+    private VisualElement _shopRoot;
+    private VisualElement _equipRoot;
 
     private CurrencyManager _currencyManager;
-
-
+    private Ability[] Abilities;
+    private GameObject player;
+    private PlayerAttackScript playerAttackScript;
+    private bool b = false;
+    private bool gameOver = false;
+    private Ability ability;
 
     void OnEnable()
     {
@@ -34,41 +35,41 @@ public class ShopScript : MonoBehaviour
     private void HandleGameOver()
     {
         gameOver = true;
-        ShopUi.SetActive(false);
-        EquipUI.SetActive(false);
+        SetUIDisplay(_shopRoot, false);
+        SetUIDisplay(_equipRoot, false);
     }
 
-    public GameObject ShopUi;
-    public GameObject EquipUI;
-
-    public UIDocument shopUI;
-    public UIDocument equipUI;
-
-    Ability[] Abilities;
-    GameObject player;
-    PlayerAttackScript playerAttackScript;
-    bool b;
-    private bool gameOver = false;
-    // Start is called before the first frame update
     void Start()
     {
         _currencyManager = FindObjectOfType<CurrencyManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerAttackScript = player.GetComponent<PlayerAttackScript>();
         Abilities = playerAttackScript.GetComponentsInChildren<Ability>();
+
         foreach (Ability a in Abilities)
         {
-                a.gameObject.SetActive(!a.gameObject.activeSelf);
+            a.gameObject.SetActive(!a.gameObject.activeSelf);
         }
+
+        _shopRoot = shopUI.rootVisualElement;
+        _equipRoot = equipUI.rootVisualElement;
+
+        SetupShop();
+        SetupEquip();
+
+        SetUIDisplay(_shopRoot, false);
+        SetUIDisplay(_equipRoot, false);
+
         b = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (gameOver)
             return;
-        if (Input.GetKeyDown(KeyCode.Tab)) { 
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
             b = !b;
             if (b)
             {
@@ -76,115 +77,149 @@ public class ShopScript : MonoBehaviour
                 Time.timeScale = 0f;
                 player.GetComponent<PlayerController>().enabled = false;
             }
-            else {
+            else
+            {
                 UnityEngine.Cursor.lockState = CursorLockMode.Locked;
                 Time.timeScale = 1f;
                 player.GetComponent<PlayerController>().enabled = true;
-                EquipUI.SetActive(b);
             }
-            ShopUi.SetActive(b);
-        };
+
+            SetUIDisplay(_shopRoot, b);
+            SetUIDisplay(_equipRoot, false); // Equip UI only shown when triggered from button
+        }
     }
-   
-   public void EnableAbility(string AbilityName) {
+
+    public void EnableAbility(string AbilityName)
+    {
+        var root = shopUI.rootVisualElement;
 
         foreach (Ability a in Abilities)
         {
-            if (a.name == AbilityName && !a.Bought && _currencyManager.SpendMoney(a.Cost) )
+            if (a.name == AbilityName && !a.Bought && _currencyManager.SpendMoney(a.Cost))
             {
                 a.gameObject.SetActive(true);
                 a.Bought = true;
                 a.gameObject.SetActive(false);
+
+                var button = root.Q<Button>(AbilityName);
+                if (button != null)
+                {
+                    button.AddToClassList("bought");
+                    button.SetEnabled(false); // Optional: disable interaction
+                }
             }
         }
     }
-    public void DisableShop() { 
-        ShopUi.SetActive(!ShopUi.activeSelf);
-        EquipUI.SetActive(!EquipUI.activeSelf);
-    }
 
 
-    Ability ability;
-    public void SelectAbility(string AbilityName)
+    public void SelectAbility(string abilityName)
     {
         foreach (Ability a in Abilities)
         {
-            if (a.name == AbilityName && a.Bought)
+            if (a.name == abilityName && a.Bought)
             {
-                   ability = a;
+                ability = a;
             }
         }
     }
 
-    public void Equip(string input) {
-       
+    public void Equip(string input)
+    {
         if (ability == null)
         {
-            Debug.Log("ability is not selected");
+            Debug.Log("Ability is not selected");
             return;
         }
-        switch (input) {
-            case "Q": playerAttackScript.SelectQAbility(ability);   
-                break;
-            case "E": playerAttackScript.SelectEAbility(ability);
-                break;
-            default: break;
+
+        switch (input)
+        {
+            case "Q": playerAttackScript.SelectQAbility(ability); break;
+            case "E": playerAttackScript.SelectEAbility(ability); break;
         }
+    }
+
+    public void DisableShop()
+    {
+        SetUIDisplay(_shopRoot, false);
+        SetUIDisplay(_equipRoot, true);
     }
 
     private void SetupShop()
     {
         var root = shopUI.rootVisualElement;
-        Debug.Log("Setting up Main Menu...");
 
-        SetupButton(root, "Fireball", () => {
-            EnableAbility("Fireball");
-        });
+        foreach (Ability a in Abilities)
+        {
+            string abilityName = a.name;
+            Button button = root.Q<Button>(abilityName);
 
-        SetupButton(root, "Gust", () => {
-            EnableAbility("Gust");
+            if (button == null)
+            {
+                Debug.LogError($"Button for ability '{abilityName}' not found!");
+                continue;
+            }
 
-        });
+            button.text = $"{abilityName} (${a.Cost})";
+            button.clicked += () => EnableAbility(abilityName);
 
-        SetupButton(root, "Burst", () => {
-            EnableAbility("Burst");
+            if (a.Bought)
+            {
+                Debug.Log($"Graying out button for: {abilityName}");
+                button.AddToClassList("bought");
+                button.SetEnabled(false); // Optional: Disable click
+            }
+        }
 
-        });
-
+        // Setup Inventory button
         SetupButton(root, "Inventory", () => {
             DisableShop();
         });
     }
+
+
+
     private void SetupEquip()
     {
-        var root = shopUI.rootVisualElement;
-        Debug.Log("Setting up Main Menu...");
-
-        SetupButton(root, "Fireball", () => {
-            SelectAbility("Fireball");
+        SetupButton(_equipRoot, "Fireball", () => SelectAbility("Fireball"));
+        SetupButton(_equipRoot, "Gust", () => SelectAbility("Gust"));
+        SetupButton(_equipRoot, "Burst", () => SelectAbility("Burst"));
+        SetupButton(_equipRoot, "Q", () => Equip("Q"));
+        SetupButton(_equipRoot, "E", () => Equip("E"));
+        SetupButton(_equipRoot, "Shop", () => {
+            SetUIDisplay(_shopRoot, true);
+            SetUIDisplay(_equipRoot, false);
         });
+    }
+    private void SetupAbilityButton(VisualElement root, string abilityName, int cost)
+    {
+        var button = root.Q<Button>(abilityName);
+        var ability = GetAbilityByName(abilityName);
 
-        SetupButton(root, "Gust", () => {
-            SelectAbility("Gust");
+        if (button != null && ability != null)
+        {
+            button.text = ability.Bought ? "Bought" : "Buy";
+            button.SetEnabled(!ability.Bought);
 
-        });
+            button.clicked += () =>
+            {
+                if (!ability.Bought && _currencyManager.SpendMoney(ability.Cost))
+                {
+                    ability.Bought = true;
+                    button.text = "Bought";
+                    button.SetEnabled(false);
+                }
+            };
+        }
+    }
 
-        SetupButton(root, "Burst", () => {
-            SelectAbility("Burst");
-
-        });
-        SetupButton(root, "Q", () => {
-            Equip("Q");
-
-        });
-        SetupButton(root, "E", () => {
-            Equip("E");
-
-        });
-
-        SetupButton(root, "Shop", () => {
-            DisableShop();
-        });
+    private Ability GetAbilityByName(string name)
+    {
+        foreach (var a in Abilities)
+        {
+            if (a.name == name)
+                return a;
+        }
+        return null;
     }
     private void SetupButton(VisualElement root, string buttonName, System.Action callback)
     {
@@ -192,11 +227,15 @@ public class ShopScript : MonoBehaviour
         if (button != null)
         {
             button.clicked += callback;
-            // Debug.Log($"Successfully set up button: {buttonName}");
         }
         else
         {
             Debug.LogError($"Button '{buttonName}' not found in UI!");
         }
+    }
+
+    private void SetUIDisplay(VisualElement root, bool visible)
+    {
+        root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
     }
 }
