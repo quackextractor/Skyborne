@@ -41,6 +41,11 @@
                         <ui:Label text="FPS Counter" name="FPSCounterLabel" class="option-label" />
                         <ui:Toggle name="FPSCounterToggle" value="false" class="option-toggle" />
                     </ui:VisualElement>
+                    <!-- Graphics Quality Dropdown -->
+                    <ui:VisualElement name="QualityGroup" class="option-group">
+                        <ui:Label text="Graphics Quality" name="QualityLabel" class="option-label" />
+                        <ui:DropdownField name="QualityDropdown" class="quality-dropdown" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="OptionsFooter" class="options-footer">

@@ -1,6 +1,7 @@
 using Menu;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 namespace UI
 {
@@ -26,7 +27,8 @@ namespace UI
 
         // PlayerPrefs keys
         private const string ShowFPSKey = "ShowFPS";
-        private const string VSyncEnabledKey = "VSyncEnabled"; // New key for VSync
+        private const string VSyncEnabledKey = "VSyncEnabled";
+        private const string GraphicsQualityKey = "GraphicsQuality"; // New key for graphics quality
 
         // Track initialization status for each menu
         private bool isMainMenuInitialized = false;
@@ -61,6 +63,9 @@ namespace UI
         {
             // Load VSync setting at game start
             ApplyVSyncSetting(PlayerPrefs.GetInt(VSyncEnabledKey, 1) == 1);
+            
+            // Load graphics quality setting
+            ApplyGraphicsQuality(PlayerPrefs.GetInt(GraphicsQualityKey, QualitySettings.GetQualityLevel()));
 
             // Initialize all menus as inactive first
             HideAllMenus();
@@ -181,6 +186,32 @@ namespace UI
                 });
             }
 
+            // Graphics Quality Dropdown
+            var qualityDropdown = root.Q<DropdownField>("QualityDropdown");
+            if (qualityDropdown != null)
+            {
+                // Get available quality levels
+                string[] qualityLevels = QualitySettings.names;
+                qualityDropdown.choices = new List<string>(qualityLevels);
+                
+                // Load saved quality level or use current
+                int savedQuality = PlayerPrefs.GetInt(GraphicsQualityKey, QualitySettings.GetQualityLevel());
+                savedQuality = Mathf.Clamp(savedQuality, 0, qualityLevels.Length - 1);
+                qualityDropdown.index = savedQuality;
+                qualityDropdown.value = qualityLevels[savedQuality];
+                
+                qualityDropdown.RegisterValueChangedCallback(evt =>
+                {
+                    int newIndex = qualityDropdown.choices.IndexOf(evt.newValue);
+                    if (newIndex != -1)
+                    {
+                        ApplyGraphicsQuality(newIndex);
+                        PlayerPrefs.SetInt(GraphicsQualityKey, newIndex);
+                        PlayerPrefs.Save();
+                    }
+                });
+            }
+
             SetupButton(root, "BackToMainButton", ShowMainMenu);
         }
 
@@ -189,6 +220,13 @@ namespace UI
         {
             QualitySettings.vSyncCount = enabled ? 1 : 0;
             Debug.Log($"VSync set to: {(enabled ? "Enabled" : "Disabled")}");
+        }
+        
+        // Applies graphics quality setting
+        private void ApplyGraphicsQuality(int level)
+        {
+            QualitySettings.SetQualityLevel(level, true);
+            Debug.Log($"Graphics quality set to: {QualitySettings.names[level]}");
         }
 
         private void SetupCreditsMenu()
