@@ -24,12 +24,12 @@ MonoBehaviour:
   - title: 'Survival '
     description: "Every hit accumulated makes you more vulnerable\u2014damage builds
       knockback force, turning each strike into a potential death sentence."
-    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
+    slideImage: {fileID: 2800000, guid: 01e726b22c61a8249a0fc4ffb108e6de, type: 3}
   - title: Finance
     description: 'Victory pays: send enemies flying off the platform to earn currency
       for your ascension.'
-    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
+    slideImage: {fileID: 2800000, guid: 01e726b22c61a8249a0fc4ffb108e6de, type: 3}
   - title: Gear Up
     description: "Survival demands evolution\u2014spend your hard-earned currency
       on new abilities, weapons, and perks or face inevitable defeat on higher floors."
-    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
+    slideImage: {fileID: 2800000, guid: 558c70b7b61678541b840f45fbc08d6e, type: 3}
