@@ -24,7 +24,8 @@ public class Target : MonoBehaviour
 
     [FormerlySerializedAs("_accumulatedKnockback")]
     public float accumulatedKnockback = InitialAccumulatedKnockback;
-    public AudioSource AudioSource;
+    public AudioSource audioSource;
+
 
     [Header("Burning Effect")]
     private bool _isBurning;
@@ -232,15 +233,17 @@ public class Target : MonoBehaviour
 
         if (_isPlayer)
         {
-            AudioSource.Play();
+            audioSource.Play();
             var component = GetComponent<PlayerController>();
             if (component != null) component.enabled = false;
         }
         else
         {
+            
             // Notify GameMaster that this enemy has been defeated
             if (GameMaster.Instance != null)
             {
+                audioSource.PlayOneShot(_enemy.DeathAudioClip);
                 GameMaster.Instance.OnEnemyDefeated();
             }
 

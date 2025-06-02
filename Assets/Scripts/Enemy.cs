@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     private static readonly int IsWalking = Animator.StringToHash("IsWalking");
 
     [SerializeField] private EnemyStats stats;
+    [SerializeField] private AudioClip deathAudioClip;
     [SerializeField] private Weapon weapon;
     [SerializeField] private float spawnDelay = 1f; // Duration to disable movement/attack after spawn
 
@@ -26,6 +27,8 @@ public class Enemy : MonoBehaviour
 
     public Color BaseColor { get; private set; }
     public EnemyStats Stats => stats;
+
+    public AudioClip DeathAudioClip { get => deathAudioClip; set => deathAudioClip = value; }
 
     private void Awake()
     {
