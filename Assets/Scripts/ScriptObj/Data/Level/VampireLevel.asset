@@ -15,25 +15,4 @@ MonoBehaviour:
   enemyEntries:
   - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
     enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: 5, y: 0}
-  - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
-    enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: 0, y: 5}
-  - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
-    enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: 0, y: -5}
-  - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
-    enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: -5, y: -5}
-  - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
-    enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: -5, y: 0}
-  - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
-    enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: -5, y: 5}
-  - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
-    enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: 5, y: -5}
-  - enemyPrefab: {fileID: 6265333177349928930, guid: 0cb9486702b259b47a25e7e2cd69061c, type: 3}
-    enemyStats: {fileID: 11400000, guid: 6fd74d3d84313fd4ebe399550e907ff7, type: 2}
-    position: {x: 5, y: 5}
+    position: {x: 0, y: 10}
