@@ -64,7 +64,7 @@ public class ProgressionUI : MonoBehaviour
     private void UpdateBalance(int newBal)
     {
         if (balanceText != null)
-            balanceText.text = $"${newBal}";
+            balanceText.text = $"{newBal}<sprite=0>";
     }
 
     private void FlashGain(int amount) => StartCoroutine(FlashColor(gainColor));

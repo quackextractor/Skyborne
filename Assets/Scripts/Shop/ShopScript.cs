@@ -173,7 +173,7 @@ public class ShopScript : MonoBehaviour
                 continue;
             }
 
-            button.text = $"{abilityName} (${a.Cost})";
+            button.text = $"{abilityName}";
             button.clicked += () => EnableAbility(abilityName);
 
             if (a.Bought)
