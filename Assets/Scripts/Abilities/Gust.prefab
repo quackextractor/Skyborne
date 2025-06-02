@@ -70,11 +70,15 @@ MonoBehaviour:
   knockback: 15
   damage: 0
   windUpTime: 0
-  activationTime: 0
+  activationTime: 0.32
   cooldownTime: 10
   weaponCollider: {fileID: 6353708157919262845}
   isAttacking: 0
-  gameObject: {fileID: 2718277886037297129, guid: 66384542219f93f4d9135f0eba70a9cc, type: 3}
+  bought: 0
+  abilityImage: {fileID: 0}
+  cost: 0
+  GustParticlesGameObject: {fileID: 0}
+  emissionDuration: 1
 --- !u!1001 &3376843761305226519
 PrefabInstance:
   m_ObjectHideFlags: 0
