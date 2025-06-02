@@ -26,6 +26,7 @@ namespace UI
 
         // PlayerPrefs keys
         private const string ShowFPSKey = "ShowFPS";
+        private const string VSyncEnabledKey = "VSyncEnabled"; // New key for VSync
 
         // Track initialization status for each menu
         private bool isMainMenuInitialized = false;
@@ -58,6 +59,9 @@ namespace UI
 
         private void Start()
         {
+            // Load VSync setting at game start
+            ApplyVSyncSetting(PlayerPrefs.GetInt(VSyncEnabledKey, 1) == 1);
+
             // Initialize all menus as inactive first
             HideAllMenus();
             ShowMainMenu();
@@ -152,8 +156,16 @@ namespace UI
 
             if (vsyncToggle != null)
             {
-                vsyncToggle.value = QualitySettings.vSyncCount > 0;
-                vsyncToggle.RegisterValueChangedCallback(evt => QualitySettings.vSyncCount = evt.newValue ? 1 : 0);
+                // Load saved VSync setting (default to true)
+                bool vsyncEnabled = PlayerPrefs.GetInt(VSyncEnabledKey, 1) == 1;
+                vsyncToggle.value = vsyncEnabled;
+                
+                vsyncToggle.RegisterValueChangedCallback(evt => 
+                {
+                    ApplyVSyncSetting(evt.newValue);
+                    PlayerPrefs.SetInt(VSyncEnabledKey, evt.newValue ? 1 : 0);
+                    PlayerPrefs.Save();
+                });
             }
 
             // FPS Counter Toggle
@@ -172,6 +184,13 @@ namespace UI
             SetupButton(root, "BackToMainButton", ShowMainMenu);
         }
 
+        // Applies VSync setting and ensures it persists
+        private void ApplyVSyncSetting(bool enabled)
+        {
+            QualitySettings.vSyncCount = enabled ? 1 : 0;
+            Debug.Log($"VSync set to: {(enabled ? "Enabled" : "Disabled")}");
+        }
+
         private void SetupCreditsMenu()
         {
             var root = creditsDocument.rootVisualElement;
@@ -180,7 +199,7 @@ namespace UI
         }
 
         private void SetupButton(VisualElement root, string name, System.Action callback)
-        {   
+        {
             var btn = root.Q<Button>(name);
             if (btn != null) btn.clicked += callback;
             else Debug.LogError($"[MenuController] Button '{name}' not found on {root.name}");
