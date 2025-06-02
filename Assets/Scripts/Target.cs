@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -17,7 +18,6 @@ public class Target : MonoBehaviour
     public float KnockbackMultiplier { get; set; } = 1f;
 
     [SerializeField] private LayerMask platformEdgeLayer;
-    [SerializeField] private TextMeshProUGUI playerHealthText;
 
     [SerializeField] [Tooltip("Select exactly one layer here.")]
     private int ragdollLayerIndex = 6;
@@ -44,9 +44,9 @@ public class Target : MonoBehaviour
 
     private Rigidbody _rb;
     private Renderer _renderer;
-
-    // Root colliders/controllers
+    
     private CapsuleCollider _rootCapsule;
+    private TachometerHUD _tachometerHUD;
 
     public float AccumulatedKnockback
     {
@@ -63,17 +63,17 @@ public class Target : MonoBehaviour
     private void Awake()
     {
         // Core components
+        _tachometerHUD = FindObjectOfType<TachometerHUD>();
         _rb = GetComponent<Rigidbody>();
         _renderer = GetComponent<Renderer>();
         _enemy = GetComponent<Enemy>();
         _isPlayer = CompareTag("Player");
-        _hasHealthText = playerHealthText != null;
+        _hasHealthText = _tachometerHUD != null;
         _hasEnemyScript = _enemy != null;
         _currencyManager = FindObjectOfType<CurrencyManager>();
-
         if (_rb == null) Debug.LogError("Target requires a Rigidbody component!");
-        if (_isPlayer && playerHealthText == null)
-            Debug.LogWarning("Player Target has an unassigned playerHealthText!");
+        if (_isPlayer && _hasHealthText)
+            Debug.LogWarning("Player Target has an unassigned _tachometerHUD!");
 
         // Root collider/controller references
         _rootCapsule = GetComponent<CapsuleCollider>();
@@ -104,8 +104,8 @@ public class Target : MonoBehaviour
 
     private void Update()
     {
-        if (_isPlayer && playerHealthText)
-            playerHealthText.text = $"Current Knockback: {accumulatedKnockback*100}%";
+        if (_isPlayer && _hasHealthText)
+            _tachometerHUD.SetValue(accumulatedKnockback);
     }
 
     private void OnDestroy()
@@ -287,7 +287,7 @@ public class Target : MonoBehaviour
     {
         accumulatedKnockback = InitialAccumulatedKnockback;
         if (_isPlayer && _hasHealthText)
-            playerHealthText.text = "Current Knockback: " + accumulatedKnockback;
+            _tachometerHUD.SetValue(accumulatedKnockback);
     }
 
     public float GetAccumulatedKnockback()
