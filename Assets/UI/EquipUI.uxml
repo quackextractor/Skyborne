@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/EquipUI.uss?fileID=7433441132597879392&amp;guid=1fcebf50826b8fc4e9e7cdf6b48ca197&amp;type=3#EquipUI" />
     <ui:VisualElement name="root" class="equipment-root" style="background-color: rgba(30, 30, 30, 0); padding-top: 0; margin-top: -43px; translate: 0 280px;">
-        <ui:VisualElement name="columns" class="equipment-columns" style="background-color: rgba(44, 44, 44, 0.72); padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px;">
+        <ui:VisualElement name="columns" class="equipment-columns" style="background-color: rgba(44, 44, 44, 0.72); padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px; border-left-color: rgba(0, 0, 0, 0.75); border-right-color: rgba(0, 0, 0, 0.75); border-top-color: rgba(0, 0, 0, 0.75); border-bottom-color: rgba(0, 0, 0, 0.75); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px;">
             <ui:VisualElement name="slots" class="equipment-slot-column" style="padding-right: 104px;">
                 <ui:Label text="Keybinds" class="column-title" style="translate: 0 -18px;" />
                 <ui:Button text="Q" name="Q" class="slot-button" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
