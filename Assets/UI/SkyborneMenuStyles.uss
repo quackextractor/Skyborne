@@ -112,6 +112,7 @@
     padding: 32px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.2);
+    flex-direction: column;
 }
 
 .tutorial-header {
@@ -136,18 +137,33 @@
 }
 
 .tutorial-content {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    justify-content: space-between;
+}
+
+.slide-image-container {
     flex-direction: column;
     align-items: center;
-    margin-bottom: 32px;
+    flex-shrink: 0;
+    width: 350px;
+}
+
+.slide-text-container {
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+    margin-left: 32px;
+    justify-content: flex-start;
 }
 
 .slide-image {
-    width: 500px;
-    height: 500px;
-    flex-shrink: 0;           
+    width: 300px;
+    height: 300px;
+    flex-shrink: 0;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    margin-bottom: 24px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.3);
 }
@@ -156,17 +172,18 @@
     font-size: 32px;
     -unity-font-style: bold;
     color: white;
-    -unity-text-align: middle-center;
+    -unity-text-align: upper-left;
     margin-bottom: 16px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .slide-description {
-    font-size: 26px;
+    font-size: 22px;
     color: rgb(220, 220, 220);
-    -unity-text-align: middle-center;
+    -unity-text-align: upper-left;
     white-space: normal;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    width: 100%;
 }
 
 .tutorial-navigation {
