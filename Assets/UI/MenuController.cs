@@ -28,7 +28,14 @@ namespace UI
         // PlayerPrefs keys
         private const string ShowFPSKey = "ShowFPS";
         private const string VSyncEnabledKey = "VSyncEnabled";
-        private const string GraphicsQualityKey = "GraphicsQuality"; // New key for graphics quality
+        private const string GraphicsQualityKey = "GraphicsQuality";
+        
+        private const string MasterVolumeKey = "MasterVolume";
+        private const string SFXVolumeKey    = "SFXVolume";
+
+        // (Optional) If you have an AudioMixer for SFX/Master routing:
+        // [Header("Audio Mixer (for SFX/Master)")]
+        // public UnityEngine.Audio.AudioMixer gameMixer;
 
         // Track initialization status for each menu
         private bool isMainMenuInitialized = false;
@@ -61,11 +68,16 @@ namespace UI
 
         private void Start()
         {
-            // Load VSync setting at game start
             ApplyVSyncSetting(PlayerPrefs.GetInt(VSyncEnabledKey, 1) == 1);
             
-            // Load graphics quality setting
             ApplyGraphicsQuality(PlayerPrefs.GetInt(GraphicsQualityKey, QualitySettings.GetQualityLevel()));
+            
+            float savedMaster = PlayerPrefs.GetFloat(MasterVolumeKey, 75f);
+            savedMaster = Mathf.Clamp(savedMaster, 0f, 100f);
+            AudioListener.volume = savedMaster / 100f;
+            
+            float savedSFX = PlayerPrefs.GetFloat(SFXVolumeKey, 80f);
+            savedSFX = Mathf.Clamp(savedSFX, 0f, 100f);
 
             // Initialize all menus as inactive first
             HideAllMenus();
@@ -123,33 +135,57 @@ namespace UI
         {
             var root = optionsDocument.rootVisualElement;
             Debug.Log("Setting up Options Menu...");
-
-            // Volume sliders
+            
             var masterSlider = root.Q<Slider>("MasterVolumeSlider");
-            var sfxSlider    = root.Q<Slider>("SFXVolumeSlider");
             var masterLabel  = root.Q<Label>("MasterVolumeValue");
-            var sfxLabel     = root.Q<Label>("SFXVolumeValue");
-
             if (masterSlider != null && masterLabel != null)
             {
-                masterLabel.text = $"{masterSlider.value:F0}%";
+                // Read saved master volume (default to 75)
+                float savedMaster = PlayerPrefs.GetFloat(MasterVolumeKey, 75f);
+                savedMaster = Mathf.Clamp(savedMaster, 0f, 100f);
+
+                // Force slider & label to saved value
+                masterSlider.value = savedMaster;
+                masterLabel.text   = $"{savedMaster:F0}%";
+                AudioListener.volume = savedMaster / 100f;
+
+
+                // Register callback: when changed, update label, AudioListener, save
                 masterSlider.RegisterValueChangedCallback(evt =>
                 {
-                    masterLabel.text = $"{evt.newValue:F0}%";
-                    AudioListener.volume = evt.newValue / 100f;
+                    float newVal = evt.newValue;
+                    masterLabel.text = $"{newVal:F0}%";
+                    AudioListener.volume = newVal / 100f;
+
+
+                    PlayerPrefs.SetFloat(MasterVolumeKey, newVal);
+                    PlayerPrefs.Save();
                 });
             }
-
+            
+            var sfxSlider = root.Q<Slider>("SFXVolumeSlider");
+            var sfxLabel  = root.Q<Label>("SFXVolumeValue");
             if (sfxSlider != null && sfxLabel != null)
             {
-                sfxLabel.text = $"{sfxSlider.value:F0}%";
+                // Read saved SFX volume (default to 80)
+                float savedSFX = PlayerPrefs.GetFloat(SFXVolumeKey, 80f);
+                savedSFX = Mathf.Clamp(savedSFX, 0f, 100f);
+
+                // Force slider & label to saved value
+                sfxSlider.value = savedSFX;
+                sfxLabel.text   = $"{savedSFX:F0}%";
+
+                // Register callback: update label, save, apply mixer if used
                 sfxSlider.RegisterValueChangedCallback(evt =>
                 {
-                    sfxLabel.text = $"{evt.newValue:F0}%";
+                    float newValSfx = evt.newValue;
+                    sfxLabel.text   = $"{newValSfx:F0}%";
+
+                    PlayerPrefs.SetFloat(SFXVolumeKey, newValSfx);
+                    PlayerPrefs.Save();
                 });
             }
-
-            // Fullscreen & VSync toggles
+            
             var fsToggle    = root.Q<Toggle>("FullscreenToggle");
             var vsyncToggle = root.Q<Toggle>("VSyncToggle");
 
@@ -161,23 +197,20 @@ namespace UI
 
             if (vsyncToggle != null)
             {
-                // Load saved VSync setting (default to true)
                 bool vsyncEnabled = PlayerPrefs.GetInt(VSyncEnabledKey, 1) == 1;
                 vsyncToggle.value = vsyncEnabled;
-                
-                vsyncToggle.RegisterValueChangedCallback(evt => 
+
+                vsyncToggle.RegisterValueChangedCallback(evt =>
                 {
                     ApplyVSyncSetting(evt.newValue);
                     PlayerPrefs.SetInt(VSyncEnabledKey, evt.newValue ? 1 : 0);
                     PlayerPrefs.Save();
                 });
             }
-
-            // FPS Counter Toggle
+            
             var fpsToggle = root.Q<Toggle>("FPSCounterToggle");
             if (fpsToggle != null)
             {
-                // Load saved setting (default to false)
                 fpsToggle.value = PlayerPrefs.GetInt(ShowFPSKey, 0) == 1;
                 fpsToggle.RegisterValueChangedCallback(evt =>
                 {
@@ -185,21 +218,18 @@ namespace UI
                     PlayerPrefs.Save();
                 });
             }
-
-            // Graphics Quality Dropdown
+            
             var qualityDropdown = root.Q<DropdownField>("QualityDropdown");
             if (qualityDropdown != null)
             {
-                // Get available quality levels
                 string[] qualityLevels = QualitySettings.names;
                 qualityDropdown.choices = new List<string>(qualityLevels);
-                
-                // Load saved quality level or use current
+
                 int savedQuality = PlayerPrefs.GetInt(GraphicsQualityKey, QualitySettings.GetQualityLevel());
                 savedQuality = Mathf.Clamp(savedQuality, 0, qualityLevels.Length - 1);
                 qualityDropdown.index = savedQuality;
                 qualityDropdown.value = qualityLevels[savedQuality];
-                
+
                 qualityDropdown.RegisterValueChangedCallback(evt =>
                 {
                     int newIndex = qualityDropdown.choices.IndexOf(evt.newValue);
@@ -221,7 +251,7 @@ namespace UI
             QualitySettings.vSyncCount = enabled ? 1 : 0;
             Debug.Log($"VSync set to: {(enabled ? "Enabled" : "Disabled")}");
         }
-        
+
         // Applies graphics quality setting
         private void ApplyGraphicsQuality(int level)
         {
