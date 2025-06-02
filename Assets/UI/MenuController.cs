@@ -190,7 +190,7 @@ namespace UI
             {
                 Debug.LogError($"Button '{buttonName}' not found in {root.name} UI!");
             }
-        }   
+         
     
             var btn = root.Q<Button>(name);
             if (btn != null) btn.clicked += callback;
