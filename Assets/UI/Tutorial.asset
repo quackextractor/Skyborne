@@ -33,3 +33,35 @@ MonoBehaviour:
     description: "Survival demands evolution\u2014spend your hard-earned currency
       on new abilities, weapons, and perks or face inevitable defeat on higher floors."
     slideImage: {fileID: 2800000, guid: 558c70b7b61678541b840f45fbc08d6e, type: 3}
+  - title: Controls
+    description: 'WASD - Movement
+
+      Shift - Dash
+
+      LMB - Attack
+
+      Tab
+      - Shop
+
+      Q, E - Abilities'
+    slideImage: {fileID: 2800000, guid: 4fcfcb018679e9a48af7414095344af4, type: 3}
+  - title: Cheats
+    description: 'To toggle Input in serial: m+v+h
+
+      God Mode: G
+
+      Trigger
+      LevelTransition: T
+
+      Reset: R
+
+      Spawn Enemy: X
+
+      Kill all enemies:
+      C
+
+      Add money: L
+
+
+'
+    slideImage: {fileID: 2800000, guid: 4fcfcb018679e9a48af7414095344af4, type: 3}
