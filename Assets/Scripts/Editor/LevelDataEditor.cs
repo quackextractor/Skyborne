@@ -23,12 +23,10 @@ namespace Editor
 
         public override void OnInspectorGUI()
         {
-            // Draw default fields
+            // Draw default inspector for other fields
             DrawDefaultInspector();
 
-            // Fetch our target data
             LevelData data = (LevelData)target;
-
             var entries = data.enemyEntries;
             if (entries == null || entries.Count == 0)
             {
@@ -36,23 +34,23 @@ namespace Editor
                 return;
             }
 
-            // Collect positions for bounds calculation
+            // Gather positions for bounds calculation
             var positions = entries.Select(e => e.position).ToList();
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Spawn Positions Preview", EditorStyles.boldLabel);
 
-            // Compute symmetric world-bounds around (0,0)
+            // Compute symmetric world-bounds
             float maxX = positions.Max(p => Mathf.Abs(p.x));
             float maxY = positions.Max(p => Mathf.Abs(p.y));
             float maxExtent = Mathf.Max(maxX, maxY) * 1.05f;
             int gridExtent = Mathf.CeilToInt(maxExtent);
 
-            // Decide a square size (max 200px, fits view)
-            float availableWidth = EditorGUIUtility.currentViewWidth - 20f;
-            float size = Mathf.Min(availableWidth, 200f);
+            // Determine preview size
+            float availW = EditorGUIUtility.currentViewWidth - 20f;
+            float size = Mathf.Min(availW, 200f);
 
-            // Reserve and center a square rect
+            // Center the preview rect
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             Rect previewRect = GUILayoutUtility.GetRect(
@@ -62,21 +60,21 @@ namespace Editor
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
-            // Draw background box
+            // Draw background
             GUI.Box(previewRect, GUIContent.none);
 
-            // Draw grid
-            Color prev = GUI.color;
+            // Draw grid lines
+            Color old = GUI.color;
             GUI.color = new Color(.7f, .7f, .7f, 1f);
             for (int x = -gridExtent; x <= gridExtent; x++)
             {
-                float u = (x + maxExtent) / (2 * maxExtent);
+                float u = (x + maxExtent) / (2f * maxExtent);
                 float xPx = Mathf.Lerp(previewRect.xMin, previewRect.xMax, u);
                 GUI.DrawTexture(new Rect(xPx, previewRect.yMin, 1f, previewRect.height), _pixelTex);
             }
             for (int y = -gridExtent; y <= gridExtent; y++)
             {
-                float v = (y + maxExtent) / (2 * maxExtent);
+                float v = (y + maxExtent) / (2f * maxExtent);
                 float yPx = Mathf.Lerp(previewRect.yMax, previewRect.yMin, v);
                 GUI.DrawTexture(new Rect(previewRect.xMin, yPx, previewRect.width, 1f), _pixelTex);
             }
@@ -84,61 +82,102 @@ namespace Editor
             // Draw axes
             GUI.color = Color.black;
             {
-                float u0 = (0 + maxExtent) / (2 * maxExtent);
+                float u0 = (0 + maxExtent) / (2f * maxExtent);
                 float x0 = Mathf.Lerp(previewRect.xMin, previewRect.xMax, u0);
                 GUI.DrawTexture(new Rect(x0 - 1f, previewRect.yMin, 2f, previewRect.height), _pixelTex);
             }
             {
-                float v0 = (0 + maxExtent) / (2 * maxExtent);
+                float v0 = (0 + maxExtent) / (2f * maxExtent);
                 float y0 = Mathf.Lerp(previewRect.yMax, previewRect.yMin, v0);
                 GUI.DrawTexture(new Rect(previewRect.xMin, y0 - 1f, previewRect.width, 2f), _pixelTex);
             }
-            GUI.color = prev;
+            GUI.color = old;
 
             // Handle mouse events
             Event evt = Event.current;
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
 
-            // Mouse down: begin drag if over a dot
-            if (evt.type == EventType.MouseDown && evt.button == 0 && previewRect.Contains(evt.mousePosition))
+            // Right-click: delete entry
+            if (evt.type == EventType.MouseDown && evt.button == 1 && previewRect.Contains(evt.mousePosition))
             {
                 for (int i = 0; i < positions.Count; i++)
                 {
-                    Rect dotRect = GetDotRect(previewRect, positions[i], maxExtent);
-                    if (dotRect.Contains(evt.mousePosition))
+                    if (GetDotRect(previewRect, positions[i], maxExtent).Contains(evt.mousePosition))
+                    {
+                        Undo.RecordObject(data, "Delete Spawn Point");
+                        entries.RemoveAt(i);
+                        EditorUtility.SetDirty(data);
+                        evt.Use();
+                        return;
+                    }
+                }
+            }
+            // Left-click: drag existing or add new
+            if (evt.type == EventType.MouseDown && evt.button == 0 && previewRect.Contains(evt.mousePosition))
+            {
+                bool clickedDot = false;
+                for (int i = 0; i < positions.Count; i++)
+                {
+                    if (GetDotRect(previewRect, positions[i], maxExtent).Contains(evt.mousePosition))
                     {
                         _dragIndex = i;
                         GUIUtility.hotControl = controlID;
                         evt.Use();
+                        clickedDot = true;
                         break;
                     }
                 }
+
+                if (!clickedDot)
+                {
+                    // Add new entry at nearest integer grid
+                    Vector2 local = evt.mousePosition - new Vector2(previewRect.xMin, previewRect.yMin);
+                    float u = Mathf.Clamp01(local.x / previewRect.width);
+                    float v = Mathf.Clamp01(1f - local.y / previewRect.height);
+                    float worldX = Mathf.Lerp(-maxExtent, maxExtent, u);
+                    float worldY = Mathf.Lerp(-maxExtent, maxExtent, v);
+
+                    float intX = Mathf.Round(worldX);
+                    float intY = Mathf.Round(worldY);
+
+                    // Clone last entry's prefab and stats
+                    var last = entries[entries.Count - 1];
+                    var newEntry = new EnemyEntry
+                    {
+                        enemyPrefab = last.enemyPrefab,
+                        enemyStats  = last.enemyStats,
+                        position    = new Vector2(intX, intY)
+                    };
+
+                    Undo.RecordObject(data, "Add Spawn Point");
+                    entries.Add(newEntry);
+                    EditorUtility.SetDirty(data);
+                    Repaint();
+                    evt.Use();
+                }
             }
-            // Mouse drag: update position (with optional shift-snapping)
+            // Drag to move (with optional Shift-snapping)
             else if (evt.type == EventType.MouseDrag && _dragIndex >= 0)
             {
                 Vector2 local = evt.mousePosition - new Vector2(previewRect.xMin, previewRect.yMin);
                 float u = Mathf.Clamp01(local.x / previewRect.width);
-                float v = Mathf.Clamp01(1f - (local.y / previewRect.height));
+                float v = Mathf.Clamp01(1f - local.y / previewRect.height);
                 float worldX = Mathf.Lerp(-maxExtent, maxExtent, u);
                 float worldY = Mathf.Lerp(-maxExtent, maxExtent, v);
 
-                // Snap to whole values if shift is held
                 if (evt.shift)
                 {
                     worldX = Mathf.Round(worldX);
                     worldY = Mathf.Round(worldY);
                 }
 
-                // Commit back to data
                 Undo.RecordObject(data, "Move Spawn Point");
                 entries[_dragIndex].position = new Vector2(worldX, worldY);
                 EditorUtility.SetDirty(data);
-
                 Repaint();
                 evt.Use();
             }
-            // Mouse up: end drag
+            // End drag
             else if (evt.type == EventType.MouseUp && evt.button == 0 && _dragIndex >= 0)
             {
                 _dragIndex = -1;
@@ -146,30 +185,25 @@ namespace Editor
                 evt.Use();
             }
 
-            // Finally draw each point (so dragged one draws last)
-            for (int i = 0; i < positions.Count; i++)
+            // Draw all points (dragged last)
+            for (int i = 0; i < entries.Count; i++)
             {
-                Vector2 pos = entries[i].position;
-                Rect dotRect = GetDotRect(previewRect, pos, maxExtent);
-
-                Color saved = GUI.color;
+                Rect r = GetDotRect(previewRect, entries[i].position, maxExtent);
+                Color save = GUI.color;
                 GUI.color = Color.red;
-                GUI.DrawTexture(dotRect, _pixelTex);
-                GUI.color = saved;
+                GUI.DrawTexture(r, _pixelTex);
+                GUI.color = save;
 
-                // Change cursor when hovering
-                if (evt.type == EventType.Repaint && dotRect.Contains(evt.mousePosition))
-                {
-                    EditorGUIUtility.AddCursorRect(dotRect, MouseCursor.MoveArrow);
-                }
+                if (evt.type == EventType.Repaint && r.Contains(evt.mousePosition))
+                    EditorGUIUtility.AddCursorRect(r, MouseCursor.MoveArrow);
             }
         }
 
-        // Helper: get the on-screen rect for a world position
+        // Calculates the on-screen rect for a world-space position
         private Rect GetDotRect(Rect previewRect, Vector2 pos, float maxExtent)
         {
-            float u = (pos.x + maxExtent) / (2 * maxExtent);
-            float v = (pos.y + maxExtent) / (2 * maxExtent);
+            float u = (pos.x + maxExtent) / (2f * maxExtent);
+            float v = (pos.y + maxExtent) / (2f * maxExtent);
 
             float xPix = Mathf.Lerp(previewRect.xMin, previewRect.xMax, u) - DotSize / 2f;
             float yPix = Mathf.Lerp(previewRect.yMax, previewRect.yMin, v) - DotSize / 2f;
