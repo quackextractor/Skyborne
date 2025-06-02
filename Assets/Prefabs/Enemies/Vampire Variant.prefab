@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1945164103634202565, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
+      propertyPath: PlayerSound
+      value: 
+      objectReference: {fileID: 874468601496971156}
     - target: {fileID: 2401978911597124556, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7
@@ -64,6 +68,10 @@ PrefabInstance:
       propertyPath: spawnDelay
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4730293328926982561, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
+      propertyPath: deathAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f0e8513683d45a54db616c99acf654f3, type: 3}
     - target: {fileID: 6934429786858040219, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -130,6 +138,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tauntCooldown: 10
   velocityDamping: 0.1
+--- !u!82 &874468601496971156 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1978544112769110487, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
+  m_PrefabInstance: {fileID: 1681971229914740291}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3891678474402229647 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2401978911597124556, guid: 55ba83026372cae4eb7a02ab952cc8cb, type: 3}
