@@ -93,7 +93,7 @@
 }
 
 .quit-button:hover {
-    background-color: rgba(220, 38, 38, 0.4);
+    background-color: rgba(220, 38, 38, 0.8);
     border-color: rgba(220, 38, 38, 0.8);
     color: white;
 }
@@ -107,7 +107,7 @@
 /* ===== TUTORIAL STYLES ===== */
 .tutorial-card {
     width: 800px;
-    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark background */
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent dark background */
     border-radius: 12px;
     padding: 32px;
     border-width: 1px;
@@ -200,7 +200,7 @@
     border-radius: 6px;
     background-color: rgba(255, 255, 255, 0.2);
     border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.8);
     color: white;
     flex-direction: row;
     align-items: center;
@@ -275,7 +275,7 @@
 /* ===== OPTIONS STYLES ===== */
 .options-card {
     width: 600px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 12px;
     padding: 32px;
     border-width: 1px;
@@ -375,7 +375,7 @@
 /* ===== CREDITS STYLES ===== */
 .credits-card {
     width: 600px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 12px;
     padding: 32px;
     max-height: 80%;
@@ -448,7 +448,7 @@
     background-color: rgba(59, 130, 246, 0.2);
     border-radius: 8px;
     border-width: 1px;
-    border-color: rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 0.8);
     align-items: center;
 }
 
