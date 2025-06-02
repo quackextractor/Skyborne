@@ -26,7 +26,7 @@ MonoBehaviour:
       knockback force, turning each strike into a potential death sentence."
     slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
   - title: Finance
-    description: 'Victory pays: send enemies tumbling off the platform to earn currency
+    description: 'Victory pays: send enemies flying off the platform to earn currency
       for your ascension.'
     slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
   - title: Gear Up
