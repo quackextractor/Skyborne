@@ -2572,10 +2572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelDataList:
   - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
-  - {fileID: 11400000, guid: 4924b1dd7aa02e24490a8337ea4990dd, type: 2}
-  - {fileID: 11400000, guid: 7413e0654c332804899ec9a509405078, type: 2}
-  - {fileID: 11400000, guid: 45dc5b6d0df59ce4fb664fa14bbd888b, type: 2}
-  - {fileID: 11400000, guid: 5c06340ea04a63148852d762c640ae0b, type: 2}
+  - {fileID: 11400000, guid: 7723a06f7e5740349b535372bce791c2, type: 2}
   currentLevelIndex: -1
   enemyParent: {fileID: 1875653033}
   spawnHeight: 0
