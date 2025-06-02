@@ -5815,15 +5815,15 @@ RectTransform:
   - {fileID: 891011052}
   - {fileID: 1000917795}
   - {fileID: 1589582324}
-  - {fileID: 230709538}
   - {fileID: 1245392791}
   - {fileID: 1453682955}
-  - {fileID: 1070909024}
-  - {fileID: 709488564}
-  - {fileID: 1462007619}
   - {fileID: 876702309}
   - {fileID: 343617542}
   - {fileID: 1992905360}
+  - {fileID: 230709538}
+  - {fileID: 1070909024}
+  - {fileID: 709488564}
+  - {fileID: 1462007619}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6074,7 +6074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0.19482279, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
