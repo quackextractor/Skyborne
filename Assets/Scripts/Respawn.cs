@@ -25,9 +25,11 @@ public class Respawn : MonoBehaviour
     {
         if (transform.position.y <= -15f && _spawnPoint)
         {
+            
             // Attempt to charge the player
             if (!CurrencyManager.Instance.SpendMoney(respawnCost))
             {
+               
                 GameMaster.Instance.TriggerGameOver();
                 enabled = false; 
                 return;

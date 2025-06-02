@@ -24,6 +24,7 @@ public class Target : MonoBehaviour
 
     [FormerlySerializedAs("_accumulatedKnockback")]
     public float accumulatedKnockback = InitialAccumulatedKnockback;
+    public AudioSource AudioSource;
 
     [Header("Burning Effect")]
     private bool _isBurning;
@@ -231,6 +232,7 @@ public class Target : MonoBehaviour
 
         if (_isPlayer)
         {
+            AudioSource.Play();
             var component = GetComponent<PlayerController>();
             if (component != null) component.enabled = false;
         }
