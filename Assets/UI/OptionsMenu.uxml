@@ -30,16 +30,6 @@
                             <ui:Label text="75%" name="MasterVolumeValue" class="volume-value" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-
-                    <ui:VisualElement name="SFXGroup" class="option-group">
-                        <ui:Label text="SFX Volume" name="SFXVolumeLabel" class="option-label">
-                            <ui:VisualElement name="SFXIcon" class="option-icon sfx-icon" />
-                        </ui:Label>
-                        <ui:VisualElement name="SFXSliderContainer" class="slider-container" style="margin-right: 30px;">
-                            <ui:Slider name="SFXVolumeSlider" low-value="0" high-value="100" value="80" class="volume-slider" />
-                            <ui:Label text="80%" name="SFXVolumeValue" class="volume-value" />
-                        </ui:VisualElement>
-                    </ui:VisualElement>
                 </ui:VisualElement>
 
                 <!-- Graphics Section -->
