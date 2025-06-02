@@ -114,7 +114,7 @@ namespace Editor
                     }
                 }
             }
-            // Mouse drag: update position
+            // Mouse drag: update position (with optional shift-snapping)
             else if (evt.type == EventType.MouseDrag && _dragIndex >= 0)
             {
                 Vector2 local = evt.mousePosition - new Vector2(previewRect.xMin, previewRect.yMin);
@@ -122,6 +122,13 @@ namespace Editor
                 float v = Mathf.Clamp01(1f - (local.y / previewRect.height));
                 float worldX = Mathf.Lerp(-maxExtent, maxExtent, u);
                 float worldY = Mathf.Lerp(-maxExtent, maxExtent, v);
+
+                // Snap to whole values if shift is held
+                if (evt.shift)
+                {
+                    worldX = Mathf.Round(worldX);
+                    worldY = Mathf.Round(worldY);
+                }
 
                 // Commit back to data
                 Undo.RecordObject(data, "Move Spawn Point");
