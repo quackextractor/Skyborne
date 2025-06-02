@@ -96,6 +96,7 @@ public class PlayerAttackScript : MonoBehaviour
         Transform slider = sliders[0].transform;
 
         sliders[0].gameObject.SetActive(true);
+       
         sliders[0].maxValue= a.CooldownTime + a.WindUpTime + a.ActivationTime;
         Image backgroundImage = slider.Find("Background").GetComponent<Image>();
         Image fillAreaImage = slider.Find("FillArea").GetComponent<Image>();
@@ -110,6 +111,7 @@ public class PlayerAttackScript : MonoBehaviour
                 abilities[0].gameObject.SetActive(false);
             }
             abilities[0] = a;
+            abilities[0].isAttacking = false;
             abilities[0].gameObject.SetActive(true);
         }
     }
@@ -132,6 +134,7 @@ public class PlayerAttackScript : MonoBehaviour
                 abilities[1].gameObject.SetActive(false);
             }
             abilities[1] = a;
+            abilities[1].isAttacking = false;
             abilities[1].gameObject.SetActive(true);
         }
     }

@@ -8,37 +8,17 @@
             </ui:VisualElement>
             <ui:ScrollView name="CreditsContent" class="credits-content">
                 <ui:VisualElement name="TeamSection" class="team-section">
-                    <ui:VisualElement name="CreditItem1" class="credit-item">
-                        <ui:Label text="Game Director" name="Role1" class="credit-role" />
-                        <ui:Label text="Alex Chen" name="Name1" class="credit-name" />
-                    </ui:VisualElement>
                     <ui:VisualElement name="CreditItem2" class="credit-item">
                         <ui:Label text="Lead Developer" name="Role2" class="credit-role" />
-                        <ui:Label text="Sarah Johnson" name="Name2" class="credit-name" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="CreditItem3" class="credit-item">
-                        <ui:Label text="Art Director" name="Role3" class="credit-role" />
-                        <ui:Label text="Marcus Rodriguez" name="Name3" class="credit-name" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="CreditItem4" class="credit-item">
-                        <ui:Label text="Sound Designer" name="Role4" class="credit-role" />
-                        <ui:Label text="Emily Watson" name="Name4" class="credit-name" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="CreditItem5" class="credit-item">
-                        <ui:Label text="Level Designer" name="Role5" class="credit-role" />
-                        <ui:Label text="David Kim" name="Name5" class="credit-name" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="CreditItem6" class="credit-item">
-                        <ui:Label text="UI/UX Designer" name="Role6" class="credit-role" />
-                        <ui:Label text="Lisa Thompson" name="Name6" class="credit-name" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="CreditItem7" class="credit-item">
-                        <ui:Label text="Music Composer" name="Role7" class="credit-role" />
-                        <ui:Label text="James Miller" name="Name7" class="credit-name" />
+                        <ui:Label text="Anh Vu, Miro Slezák" name="Name2" class="credit-name" />
                     </ui:VisualElement>
                     <ui:VisualElement name="CreditItem8" class="credit-item">
-                        <ui:Label text="Quality Assurance" name="Role8" class="credit-role" />
-                        <ui:Label text="Michael Brown" name="Name8" class="credit-name" />
+                        <ui:Label text="Models" name="Role8" class="credit-role" />
+                        <ui:Label text="https://www.mixamo.com/" name="Name8" class="credit-name" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="CreditItem3" class="credit-item">
+                        <ui:Label text="Sounds from freesound.org" name="Role2" enable-rich-text="true" class="credit-role" />
+                        <ui:Label text="qubodup, Mafon2, Huminaatio" name="Name2" class="credit-name" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="SpecialThanks" class="special-thanks">
