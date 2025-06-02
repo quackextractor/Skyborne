@@ -180,18 +180,7 @@ namespace UI
         }
 
         private void SetupButton(VisualElement root, string name, System.Action callback)
-        {
-            var button = root.Q<Button>(buttonName);
-            if (button != null)
-            {
-                button.clicked += callback;
-            }
-            else
-            {
-                Debug.LogError($"Button '{buttonName}' not found in {root.name} UI!");
-            }
-         
-    
+        {   
             var btn = root.Q<Button>(name);
             if (btn != null) btn.clicked += callback;
             else Debug.LogError($"[MenuController] Button '{name}' not found on {root.name}");
