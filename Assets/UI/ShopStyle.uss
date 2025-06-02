@@ -4,13 +4,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    flex-direction: row-reverse;
+    left: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    scale: 2 2;
+    translate: 0 136px;
 }
 
 .shop-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #2c2c2c;
+    background-color: rgb(44, 44, 44);
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -19,13 +29,13 @@
 .title {
     font-size: 32px;
     font-weight: bold;
-    color: #FFD700;
+    color: rgb(255, 215, 0);
     margin-bottom: 20px;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: ;
     grid-gap: 20px;
     margin-bottom: 20px;
 }
@@ -39,28 +49,28 @@
 .item-label {
     font-size: 16px;
     margin-bottom: 8px;
-    color: #FFF;
+    color: rgb(255, 255, 255);
 }
 
 .shop-button {
     width: 100px;
     height: 40px;
     font-size: 14px;
-    background-color: #4CAF50;
+    background-color: rgb(76, 175, 80);
     color: white;
     border-radius: 8px;
 }
 
 .shop-button:disabled {
-    background-color: #888;
-    color: #ccc;
+    background-color: rgb(136, 136, 136);
+    color: rgb(204, 204, 204);
 }
 
 .inventory-button {
     width: 200px;
     height: 50px;
     font-size: 16px;
-    background-color: #555;
+    background-color: rgb(85, 85, 85);
     color: white;
     border-radius: 8px;
 }
