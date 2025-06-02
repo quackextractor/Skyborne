@@ -74,14 +74,23 @@
     background-size: contain;
     background-repeat: no-repeat;
 }
+.bottom-buttons {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    flex-direction: column;
+    gap: 6px;
+}
+
 .menu-button {
-    margin-top: 10px;
     background-color: #444;
     color: white;
+    padding: 6px 12px;
 }
 
 .quit-button {
-    margin-top: 5px;
     background-color: darkred;
     color: white;
+    padding: 6px 12px;
 }
+
