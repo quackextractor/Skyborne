@@ -1,4 +1,4 @@
-using Abilities;
+﻿using Abilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -101,15 +101,24 @@ public class ShopScript : MonoBehaviour
                 a.Bought = true;
                 a.gameObject.SetActive(false);
 
-                var button = root.Q<Button>(AbilityName);
-                if (button != null)
+                var shopButton = root.Q<Button>(AbilityName);
+                if (shopButton != null)
                 {
-                    button.AddToClassList("bought");
-                    button.SetEnabled(false); // Optional: disable interaction
+                    shopButton.AddToClassList("bought");
+                    shopButton.SetEnabled(false);
+                }
+
+                // ✅ Update equip UI button color
+                var equipButton = _equipRoot.Q<Button>(AbilityName);
+                if (equipButton != null)
+                {
+                    equipButton.RemoveFromClassList("ability-locked");
+                    equipButton.AddToClassList("ability-unlocked");
                 }
             }
         }
     }
+
 
 
     public void SelectAbility(string abilityName)
@@ -180,9 +189,22 @@ public class ShopScript : MonoBehaviour
 
     private void SetupEquip()
     {
-        SetupButton(_equipRoot, "Fireball", () => SelectAbility("Fireball"));
-        SetupButton(_equipRoot, "Gust", () => SelectAbility("Gust"));
-        SetupButton(_equipRoot, "Burst", () => SelectAbility("Burst"));
+        foreach (var ability in Abilities)
+        {
+            var button = _equipRoot.Q<Button>(ability.name);
+            if (button != null)
+            {
+                button.text = ability.name;
+
+                if (ability.Bought)
+                    button.AddToClassList("ability-unlocked");
+                else
+                    button.AddToClassList("ability-locked");
+
+                button.clicked += () => SelectAbility(ability.name);
+            }
+        }
+
         SetupButton(_equipRoot, "Q", () => Equip("Q"));
         SetupButton(_equipRoot, "E", () => Equip("E"));
         SetupButton(_equipRoot, "Shop", () => {
@@ -190,6 +212,7 @@ public class ShopScript : MonoBehaviour
             SetUIDisplay(_equipRoot, false);
         });
     }
+
     private void SetupAbilityButton(VisualElement root, string abilityName, int cost)
     {
         var button = root.Q<Button>(abilityName);

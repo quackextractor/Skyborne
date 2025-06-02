@@ -4,8 +4,8 @@
         <ui:VisualElement name="columns" class="equipment-columns" style="background-color: rgba(44, 44, 44, 0.72); padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px;">
             <ui:VisualElement name="slots" class="equipment-slot-column" style="padding-right: 104px;">
                 <ui:Label text="Keybinds" class="column-title" style="translate: 0 -18px;" />
-                <ui:Button text="Q" name="Q" class="slot-button" />
-                <ui:Button text="E" name="E" class="slot-button" />
+                <ui:Button text="Q" name="Q" class="slot-button" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="E" name="E" class="slot-button" style="margin-top: 18px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
             </ui:VisualElement>
             <ui:VisualElement name="abilities" class="equipment-ability-column">
                 <ui:Label text="Abilities" class="column-title" />
@@ -14,6 +14,6 @@
                 <ui:Button text="Burst" name="Burst" class="ability-button" style="width: 75px; height: 75px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button text="Shop" name="Shop" class="shop-button" style="translate: 0 -34px;" />
+        <ui:Button text="Shop" name="Shop" class="shop-button" style="translate: 0 -3px;" />
     </ui:VisualElement>
 </ui:UXML>
