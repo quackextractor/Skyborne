@@ -11,7 +11,6 @@ namespace Menu
         [SerializeField] private CameraFadeController cameraFadeController;
         [SerializeField] private ParticleSystem motionLinesParticleSystem;
         [SerializeField] private GameObject cameraGameObject;
-        [SerializeField] private GameObject uiComponentsToHide;
 
         [Header("Animation Settings")]
         [Tooltip("The point the camera will look at, then travel to.")]
@@ -47,8 +46,6 @@ namespace Menu
                 Debug.LogError("LevelLoad: targetPoint is not assigned!");
                 yield break;
             }
-            
-            uiComponentsToHide.SetActive(false);
 
             // Start fade after a delay
             StartCoroutine(DelayedFade());

@@ -5,33 +5,35 @@ using System.Collections.Generic;
 public class TestManager : MonoBehaviour
 {
     [Header("Enemy Prefab & Stats")]
-    [Tooltip("Drag in your Enemy prefab (the one with the Enemy component).")]
-    [SerializeField]
-    private Enemy enemyPrefab;
-
-    [Tooltip("Default stats to apply to each spawned enemy.")]
-    [SerializeField]
-    private EnemyStats defaultStats;
+    [SerializeField] private Enemy enemyPrefab;
+    [SerializeField] private EnemyStats defaultStats;
 
     [Header("Spawn Settings")]
     [SerializeField] private int initialEnemies = 3;
     [SerializeField] private Vector3 spawnArea = new(5, 0, 5);
 
     [Header("Level Transition")]
-    [Tooltip("Reference to the LevelTransitionController in the scene.")]
     [SerializeField] private LevelTransitionController levelTransitionController;
+
+    [Header("Cheat Settings")]
+    [Tooltip("UI element or indicator to show cheats are enabled.")]
+    [SerializeField] private GameObject cheatIndicator;
 
     private GameObject _player;
     private Target _targetComponent;
     private bool _isGodMode;
     private bool _isCheating;
-    
+
     private readonly Queue<char> _inputBuffer = new();
     private const string CheatCode = "mvh";
     private const int MaxBufferSize = 10;
+    private const string CheatPrefKey = "IsCheating";
 
     private void Start()
     {
+        _isCheating = PlayerPrefs.GetInt(CheatPrefKey, 0) == 1;
+        UpdateCheatIndicator();
+
         SpawnEnemies(initialEnemies);
         levelTransitionController.levelLoader.LoadNextLevel();
 
@@ -44,26 +46,17 @@ public class TestManager : MonoBehaviour
 
     private void Update()
     {
+        HandleCheatToggleInput();
 
-        if (!_isCheating)
-        {
-            HandleCheatsEnable();
-            return;
-        }
+        if (!_isCheating) return;
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            if (levelTransitionController != null)
-            {
-                levelTransitionController.StartTransition();
-            }
-            else
-            {
-                Debug.LogWarning("LevelTransitionController reference is missing on TestManager.");
-            }
+            levelTransitionController?.StartTransition();
         }
 
-        if (Input.GetKeyDown(KeyCode.R)){
+        if (Input.GetKeyDown(KeyCode.R))
+        {
             ResetScene();
         }
 
@@ -89,27 +82,37 @@ public class TestManager : MonoBehaviour
             Debug.Log("God Mode: " + (_isGodMode ? "ON" : "OFF"));
         }
     }
-    
-    private void HandleCheatsEnable()
+
+    private void HandleCheatToggleInput()
     {
         foreach (char c in Input.inputString.ToLower())
         {
-            if (char.IsLetter(c))
+            if (!char.IsLetter(c)) continue;
+
+            _inputBuffer.Enqueue(c);
+            if (_inputBuffer.Count > MaxBufferSize)
+                _inputBuffer.Dequeue();
+
+            string currentInput = new string(_inputBuffer.ToArray());
+
+            if (currentInput.EndsWith(CheatCode))
             {
-                _inputBuffer.Enqueue(c);
-                if (_inputBuffer.Count > MaxBufferSize)
-                {
-                    _inputBuffer.Dequeue();
-                }
+                _isCheating = !_isCheating;
+                PlayerPrefs.SetInt(CheatPrefKey, _isCheating ? 1 : 0);
+                PlayerPrefs.Save();
 
-                string currentInput = new string(_inputBuffer.ToArray());
-
-                if (currentInput.EndsWith(CheatCode))
-                {
-                    Debug.Log("Cheats enabled");
-                    _isCheating = true;
-                }
+                Debug.Log("Cheats " + (_isCheating ? "ENABLED" : "DISABLED"));
+                UpdateCheatIndicator();
+                _inputBuffer.Clear();
             }
+        }
+    }
+
+    private void UpdateCheatIndicator()
+    {
+        if (cheatIndicator != null)
+        {
+            cheatIndicator.SetActive(_isCheating);
         }
     }
 
