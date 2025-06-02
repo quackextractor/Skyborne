@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/ShopStyle.uss?fileID=7433441132597879392&amp;guid=10eebdd84622a394c80e822bc64bae1b&amp;type=3#ShopStyle" />
     <ui:VisualElement name="Root" class="root" style="padding-top: 59px; position: relative;">
-        <ui:VisualElement name="ShopContainer" class="shop-container" style="flex-direction: column; opacity: 1; visibility: visible; overflow: visible; display: flex; background-color: rgba(44, 44, 44, 0.66);">
+        <ui:VisualElement name="ShopContainer" class="shop-container" style="flex-direction: column; opacity: 1; visibility: visible; overflow: visible; display: flex; background-color: rgba(44, 44, 44, 0.66); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgba(0, 0, 0, 0.74); border-right-color: rgba(0, 0, 0, 0.74); border-top-color: rgba(0, 0, 0, 0.74); border-bottom-color: rgba(0, 0, 0, 0.74); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;">
             <ui:Label text="Ability Shop" class="title" />
             <ui:VisualElement name="Grid" class="grid" style="flex-direction: row;">
                 <ui:VisualElement name="FireballItem" class="grid-item">
