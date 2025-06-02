@@ -273,6 +273,12 @@
 }
 
 /* ===== OPTIONS STYLES ===== */
+.options-container {
+    /* ensure the container can shrink/grow, if needed */
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 .options-card {
     width: 600px;
     background-color: rgba(0, 0, 0, 0.8);
@@ -280,6 +286,9 @@
     padding: 32px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.2);
+    /* constrain height so content will scroll when too big */
+    max-height: 600px;
+    flex-direction: column;
 }
 
 .options-header {
@@ -303,7 +312,11 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
+/* make the content area a scrollable region */
 .options-content {
+    flex-grow: 1;
+    max-height: 400px;      /* adjust as needed */
+    padding-right: 8px;     /* give space for scrollbar */
     margin-bottom: 32px;
 }
 
@@ -348,7 +361,7 @@
 .slider-container {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 100px;
+    margin-bottom: 10px;
     padding-right: 30px;
 }
 
