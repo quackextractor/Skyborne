@@ -1,6 +1,6 @@
 using ScriptObj;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class TestManager : MonoBehaviour
 {
@@ -20,17 +20,21 @@ public class TestManager : MonoBehaviour
     [Header("Level Transition")]
     [Tooltip("Reference to the LevelTransitionController in the scene.")]
     [SerializeField] private LevelTransitionController levelTransitionController;
-    
+
     private GameObject _player;
     private Target _targetComponent;
-    private bool _isGodMode = false;
-
+    private bool _isGodMode;
+    private bool _isCheating;
+    
+    private readonly Queue<char> _inputBuffer = new();
+    private const string CheatCode = "mvh";
+    private const int MaxBufferSize = 10;
 
     private void Start()
     {
         SpawnEnemies(initialEnemies);
         levelTransitionController.levelLoader.LoadNextLevel();
-        
+
         _player = GameObject.FindGameObjectWithTag("Player");
         if (_player != null)
         {
@@ -40,9 +44,15 @@ public class TestManager : MonoBehaviour
 
     private void Update()
     {
+
+        if (!_isCheating)
+        {
+            HandleCheatsEnable();
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.T))
         {
-            // Trigger the level transition
             if (levelTransitionController != null)
             {
                 levelTransitionController.StartTransition();
@@ -57,12 +67,11 @@ public class TestManager : MonoBehaviour
             ResetScene();
         }
 
-        // Optional: keep spawning on another key if needed
         if (Input.GetKeyDown(KeyCode.X))
         {
             SpawnEnemies(1);
         }
-        
+
         if (Input.GetKeyDown(KeyCode.C))
         {
             GameMaster.Instance.ClearLevel();
@@ -72,12 +81,35 @@ public class TestManager : MonoBehaviour
         {
             CurrencyManager.Instance.AddMoney(10);
         }
-        
+
         if (Input.GetKeyDown(KeyCode.G) && _targetComponent != null)
         {
             _isGodMode = !_isGodMode;
             _targetComponent.KnockbackMultiplier = (_isGodMode ? 0 : 1);
             Debug.Log("God Mode: " + (_isGodMode ? "ON" : "OFF"));
+        }
+    }
+    
+    private void HandleCheatsEnable()
+    {
+        foreach (char c in Input.inputString.ToLower())
+        {
+            if (char.IsLetter(c))
+            {
+                _inputBuffer.Enqueue(c);
+                if (_inputBuffer.Count > MaxBufferSize)
+                {
+                    _inputBuffer.Dequeue();
+                }
+
+                string currentInput = new string(_inputBuffer.ToArray());
+
+                if (currentInput.EndsWith(CheatCode))
+                {
+                    Debug.Log("Cheats enabled");
+                    _isCheating = true;
+                }
+            }
         }
     }
 
