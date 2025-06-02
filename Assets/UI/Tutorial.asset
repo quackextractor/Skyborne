@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dae8e020d5db46c4fa691178f960e684, type: 3}
+  m_Name: Tutorial
+  m_EditorClassIdentifier: 
+  slides:
+  - title: Skyborne
+    description: Ascend ancient towers floating in the heavens, where warriors battle
+      among the clouds in a realm where only the strongest reach celestial heights.
+    slideImage: {fileID: 2800000, guid: eff94065a061cd04398d12b245878a5e, type: 3}
+  - title: Death
+    description: "One fall, one death\u2014the only way to perish is plummeting from
+      the tower into the endless sky below."
+    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
+  - title: 'Survival '
+    description: "Every hit accumulated makes you more vulnerable\u2014damage builds
+      knockback force, turning each strike into a potential death sentence."
+    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
+  - title: Finance
+    description: 'Victory pays: send enemies tumbling off the platform to earn currency
+      for your ascension.'
+    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
+  - title: Gear Up
+    description: "Survival demands evolution\u2014spend your hard-earned currency
+      on new abilities, weapons, and perks or face inevitable defeat on higher floors."
+    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}

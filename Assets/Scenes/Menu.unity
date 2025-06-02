@@ -1066,11 +1066,9 @@ MonoBehaviour:
   tutorialDocument: {fileID: 1961322066}
   optionsDocument: {fileID: 1264188433}
   creditsDocument: {fileID: 220866482}
-  tutorialSlides:
-  - title: Avoiding Death
-    description: In Skyborne, anything that falls off the pillar will die, except
-      for you. You can survive a fall for a small fee.
-    slideImage: {fileID: 2800000, guid: 38845a4b895e7314ba637a2233539a98, type: 3}
+  tutorialData: {fileID: 11400000, guid: 7e2dfabea951fdb4583eb5d703d68dc0, type: 2}
+  maxW: 500
+  maxH: 300
 --- !u!4 &583347479
 Transform:
   m_ObjectHideFlags: 0
@@ -1775,7 +1773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1664410647
 RectTransform:
   m_ObjectHideFlags: 0

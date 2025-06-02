@@ -69,7 +69,7 @@
 .primary-button:hover {
     background-color: rgba(37, 99, 235, 0.9);
     border-color: rgba(37, 99, 235, 1);
-    scale: 1.02;
+    /* scale: 1.02; */
 }
 
 .secondary-button {
@@ -82,7 +82,7 @@
 .secondary-button:hover {
     background-color: rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.8);
-    scale: 1.02;
+    /* scale: 1.02; */
 }
 
 .quit-button {
@@ -129,7 +129,7 @@
 }
 
 .slide-counter {
-    font-size: 16px;
+    font-size: 20px;
     color: rgb(200, 200, 200);
     -unity-text-align: middle-center;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
@@ -153,7 +153,7 @@
 }
 
 .slide-title {
-    font-size: 24px;
+    font-size: 32px;
     -unity-font-style: bold;
     color: white;
     -unity-text-align: middle-center;
@@ -162,7 +162,7 @@
 }
 
 .slide-description {
-    font-size: 16px;
+    font-size: 26px;
     color: rgb(220, 220, 220);
     -unity-text-align: middle-center;
     white-space: normal;
@@ -336,7 +336,7 @@
 }
 
 .option-toggle {
-    scale: 1.2;
+    /* scale: 1.2; */
 }
 
 .options-footer {

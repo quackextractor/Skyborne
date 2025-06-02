@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Menu;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,18 +10,18 @@ namespace UI
 
         [Header("UI Documents - Auto-assigned if left empty")]
         public UIDocument mainMenuDocument;
-
         public UIDocument tutorialDocument;
         public UIDocument optionsDocument;
         public UIDocument creditsDocument;
 
-        [Header("Tutorial Data")] public List<TutorialSlide> tutorialSlides = new List<TutorialSlide>();
+        [Header("Tutorial Data (SO)")]
+        [Tooltip("Drag in your TutorialSlidesData ScriptableObject asset here.")]
+        public TutorialSlidesData tutorialData;
 
-        private VisualElement currentMenu;
-        private int currentSlideIndex = 0;
-        
-        [Header("Slideshow Image constraints")] 
+        [Header("Slideshow Image Constraints")]
+        [Tooltip("Maximum display width in pixels")]
         public int maxW = 500;
+        [Tooltip("Maximum display height in pixels")]
         public int maxH = 300;
 
         // Track initialization status for each menu
@@ -31,14 +30,10 @@ namespace UI
         private bool isOptionsMenuInitialized = false;
         private bool isCreditsMenuInitialized = false;
 
-        // Tutorial slide data structure
-        [System.Serializable]
-        public class TutorialSlide
-        {
-            public string title = "Tutorial Slide";
-            [TextArea(3, 5)] public string description = "This is a tutorial slide description.";
-            public Texture2D slideImage;
-        }
+        // Current slide index
+        private int currentSlideIndex = 0;
+
+        private VisualElement currentMenu;
 
         private void Awake()
         {
@@ -49,10 +44,10 @@ namespace UI
                 AutoAssignUIDocuments();
             }
 
-            // Create default tutorial slides if none exist
-            if (tutorialSlides.Count == 0)
+            // Ensure TutorialSlidesData is assigned
+            if (tutorialDocument != null && tutorialData == null)
             {
-                CreateDefaultTutorialSlides();
+                Debug.LogError("[MenuController] TutorialSlidesData asset not assigned! Please assign in the Inspector.");
             }
 
             _levelLoad = FindObjectOfType<LevelLoad>();
@@ -67,32 +62,21 @@ namespace UI
 
         private void AutoAssignUIDocuments()
         {
-            UIDocument[] allUIDocuments = FindObjectsOfType<UIDocument>();
-
-            foreach (UIDocument doc in allUIDocuments)
+            var allUIDocs = FindObjectsOfType<UIDocument>();
+            foreach (var doc in allUIDocs)
             {
-                string docName = doc.name.ToLower();
-                if (docName.Contains("main") && mainMenuDocument == null)
+                var nameLower = doc.name.ToLower();
+                if (nameLower.Contains("main") && mainMenuDocument == null)
                     mainMenuDocument = doc;
-                else if (docName.Contains("tutorial") && tutorialDocument == null)
+                else if (nameLower.Contains("tutorial") && tutorialDocument == null)
                     tutorialDocument = doc;
-                else if (docName.Contains("options") && optionsDocument == null)
+                else if (nameLower.Contains("options") && optionsDocument == null)
                     optionsDocument = doc;
-                else if (docName.Contains("credits") && creditsDocument == null)
+                else if (nameLower.Contains("credits") && creditsDocument == null)
                     creditsDocument = doc;
             }
 
-            Debug.Log(
-                $"Auto-assigned UI Documents: Main={mainMenuDocument?.name}, Tutorial={tutorialDocument?.name}, Options={optionsDocument?.name}, Credits={creditsDocument?.name}");
-        }
-
-        private void CreateDefaultTutorialSlides()
-        {
-            tutorialSlides.Add(new TutorialSlide
-            {
-                title = "Dev forgot to setup the tutorial in the editor",
-                description = "or an error occured while loading the tutorial."
-            });
+            Debug.Log($"Auto-assigned UI Documents: Main={mainMenuDocument?.name}, Tutorial={tutorialDocument?.name}, Options={optionsDocument?.name}, Credits={creditsDocument?.name}");
         }
 
         private void SetupMainMenu()
@@ -107,29 +91,10 @@ namespace UI
                 _levelLoad.LoadLevel();
             });
 
-            SetupButton(root, "TutorialButton", () =>
-            {
-                Debug.Log("Tutorial button clicked");
-                ShowTutorialMenu();
-            });
-
-            SetupButton(root, "OptionsButton", () =>
-            {
-                Debug.Log("Options button clicked");
-                ShowOptionsMenu();
-            });
-
-            SetupButton(root, "CreditsButton", () =>
-            {
-                Debug.Log("Credits button clicked");
-                ShowCreditsMenu();
-            });
-
-            SetupButton(root, "QuitButton", () =>
-            {
-                Debug.Log("Quit button clicked");
-                QuitGame();
-            });
+            SetupButton(root, "TutorialButton", ShowTutorialMenu);
+            SetupButton(root, "OptionsButton", ShowOptionsMenu);
+            SetupButton(root, "CreditsButton", ShowCreditsMenu);
+            SetupButton(root, "QuitButton", QuitGame);
         }
 
         private void SetupTutorialMenu()
@@ -147,51 +112,45 @@ namespace UI
             var root = optionsDocument.rootVisualElement;
             Debug.Log("Setting up Options Menu...");
 
-            // Setup volume sliders
-            var masterVolumeSlider = root.Q<Slider>("MasterVolumeSlider");
-            var sfxVolumeSlider = root.Q<Slider>("SFXVolumeSlider");
-            var masterVolumeValue = root.Q<Label>("MasterVolumeValue");
-            var sfxVolumeValue = root.Q<Label>("SFXVolumeValue");
+            // Volume sliders
+            var masterSlider = root.Q<Slider>("MasterVolumeSlider");
+            var sfxSlider    = root.Q<Slider>("SFXVolumeSlider");
+            var masterLabel  = root.Q<Label>("MasterVolumeValue");
+            var sfxLabel     = root.Q<Label>("SFXVolumeValue");
 
-            if (masterVolumeSlider != null)
+            if (masterSlider != null && masterLabel != null)
             {
-                if (masterVolumeValue != null)
-                    masterVolumeValue.text = $"{masterVolumeSlider.value:F0}%";
-
-                masterVolumeSlider.RegisterValueChangedCallback(evt =>
+                masterLabel.text = $"{masterSlider.value:F0}%";
+                masterSlider.RegisterValueChangedCallback(evt =>
                 {
-                    if (masterVolumeValue != null)
-                        masterVolumeValue.text = $"{evt.newValue:F0}%";
+                    masterLabel.text = $"{evt.newValue:F0}%";
                     AudioListener.volume = evt.newValue / 100f;
                 });
             }
 
-            if (sfxVolumeSlider != null)
+            if (sfxSlider != null && sfxLabel != null)
             {
-                if (sfxVolumeValue != null)
-                    sfxVolumeValue.text = $"{sfxVolumeSlider.value:F0}%";
-
-                sfxVolumeSlider.RegisterValueChangedCallback(evt =>
+                sfxLabel.text = $"{sfxSlider.value:F0}%";
+                sfxSlider.RegisterValueChangedCallback(evt =>
                 {
-                    if (sfxVolumeValue != null)
-                        sfxVolumeValue.text = $"{evt.newValue:F0}%";
+                    sfxLabel.text = $"{evt.newValue:F0}%";
                 });
             }
 
-            // Setup toggles
-            var fullscreenToggle = root.Q<Toggle>("FullscreenToggle");
+            // Fullscreen & VSync toggles
+            var fsToggle    = root.Q<Toggle>("FullscreenToggle");
             var vsyncToggle = root.Q<Toggle>("VSyncToggle");
 
-            if (fullscreenToggle != null)
+            if (fsToggle != null)
             {
-                fullscreenToggle.value = Screen.fullScreen;
-                fullscreenToggle.RegisterValueChangedCallback(evt => { Screen.fullScreen = evt.newValue; });
+                fsToggle.value = Screen.fullScreen;
+                fsToggle.RegisterValueChangedCallback(evt => Screen.fullScreen = evt.newValue);
             }
 
             if (vsyncToggle != null)
             {
                 vsyncToggle.value = QualitySettings.vSyncCount > 0;
-                vsyncToggle.RegisterValueChangedCallback(evt => { QualitySettings.vSyncCount = evt.newValue ? 1 : 0; });
+                vsyncToggle.RegisterValueChangedCallback(evt => QualitySettings.vSyncCount = evt.newValue ? 1 : 0);
             }
 
             SetupButton(root, "BackToMainButton", ShowMainMenu);
@@ -201,21 +160,14 @@ namespace UI
         {
             var root = creditsDocument.rootVisualElement;
             Debug.Log("Setting up Credits Menu...");
-
             SetupButton(root, "BackToMainButton", ShowMainMenu);
         }
 
-        private void SetupButton(VisualElement root, string buttonName, System.Action callback)
+        private void SetupButton(VisualElement root, string name, System.Action callback)
         {
-            var button = root.Q<Button>(buttonName);
-            if (button != null)
-            {
-                button.clicked += callback;
-            }
-            else
-            {
-                Debug.LogError($"Button '{buttonName}' not found in {root.name} UI!");
-            }
+            var btn = root.Q<Button>(name);
+            if (btn != null) btn.clicked += callback;
+            else Debug.LogError($"[MenuController] Button '{name}' not found on {root.name}");
         }
 
         public void ShowMainMenu()
@@ -223,16 +175,13 @@ namespace UI
             Debug.Log("Showing Main Menu");
             HideAllMenus();
 
-            if (mainMenuDocument != null)
-            {
-                mainMenuDocument.gameObject.SetActive(true);
-                currentMenu = mainMenuDocument.rootVisualElement;
+            mainMenuDocument.gameObject.SetActive(true);
+            currentMenu = mainMenuDocument.rootVisualElement;
 
-                if (!isMainMenuInitialized)
-                {
-                    SetupMainMenu();
-                    isMainMenuInitialized = true;
-                }
+            if (!isMainMenuInitialized)
+            {
+                SetupMainMenu();
+                isMainMenuInitialized = true;
             }
         }
 
@@ -241,20 +190,17 @@ namespace UI
             Debug.Log("Showing Tutorial Menu");
             HideAllMenus();
 
-            if (tutorialDocument != null)
+            tutorialDocument.gameObject.SetActive(true);
+            currentMenu = tutorialDocument.rootVisualElement;
+
+            if (!isTutorialMenuInitialized)
             {
-                tutorialDocument.gameObject.SetActive(true);
-                currentMenu = tutorialDocument.rootVisualElement;
-
-                if (!isTutorialMenuInitialized)
-                {
-                    SetupTutorialMenu();
-                    isTutorialMenuInitialized = true;
-                }
-
-                currentSlideIndex = 0;
-                UpdateTutorialSlide();
+                SetupTutorialMenu();
+                isTutorialMenuInitialized = true;
             }
+
+            currentSlideIndex = 0;
+            UpdateTutorialSlide();
         }
 
         public void ShowOptionsMenu()
@@ -262,16 +208,13 @@ namespace UI
             Debug.Log("Showing Options Menu");
             HideAllMenus();
 
-            if (optionsDocument != null)
-            {
-                optionsDocument.gameObject.SetActive(true);
-                currentMenu = optionsDocument.rootVisualElement;
+            optionsDocument.gameObject.SetActive(true);
+            currentMenu = optionsDocument.rootVisualElement;
 
-                if (!isOptionsMenuInitialized)
-                {
-                    SetupOptionsMenu();
-                    isOptionsMenuInitialized = true;
-                }
+            if (!isOptionsMenuInitialized)
+            {
+                SetupOptionsMenu();
+                isOptionsMenuInitialized = true;
             }
         }
 
@@ -280,16 +223,13 @@ namespace UI
             Debug.Log("Showing Credits Menu");
             HideAllMenus();
 
-            if (creditsDocument != null)
-            {
-                creditsDocument.gameObject.SetActive(true);
-                currentMenu = creditsDocument.rootVisualElement;
+            creditsDocument.gameObject.SetActive(true);
+            currentMenu = creditsDocument.rootVisualElement;
 
-                if (!isCreditsMenuInitialized)
-                {
-                    SetupCreditsMenu();
-                    isCreditsMenuInitialized = true;
-                }
+            if (!isCreditsMenuInitialized)
+            {
+                SetupCreditsMenu();
+                isCreditsMenuInitialized = true;
             }
         }
 
@@ -331,7 +271,10 @@ namespace UI
 
         private void NextSlide()
         {
-            if (currentSlideIndex < tutorialSlides.Count - 1)
+            var slides = tutorialData?.slides;
+            if (slides == null) return;
+
+            if (currentSlideIndex < slides.Count - 1)
             {
                 currentSlideIndex++;
                 UpdateTutorialSlide();
@@ -340,86 +283,78 @@ namespace UI
 
         private void UpdateTutorialSlide()
         {
-            if (tutorialDocument == null || !tutorialDocument.gameObject.activeInHierarchy || tutorialSlides.Count == 0)
+            if (tutorialDocument == null || !tutorialDocument.gameObject.activeInHierarchy)
                 return;
+
+            var slides = tutorialData?.slides;
+            if (slides == null || slides.Count == 0)
+                return;
+
+            // Clamp index
+            currentSlideIndex = Mathf.Clamp(currentSlideIndex, 0, slides.Count - 1);
+            var slide = slides[currentSlideIndex];
 
             var root = tutorialDocument.rootVisualElement;
 
-            if (currentSlideIndex < tutorialSlides.Count)
+            // Assign title/description/counter via .text
+            var titleLabel = root.Q<Label>("SlideTitle");
+            if (titleLabel != null)
+                titleLabel.text = slide.title;
+
+            var descLabel = root.Q<Label>("SlideDescription");
+            if (descLabel != null)
+                descLabel.text = slide.description;
+
+            var counterLabel = root.Q<Label>("SlideCounter");
+            if (counterLabel != null)
+                counterLabel.text = $"Slide {currentSlideIndex + 1} of {slides.Count}";
+
+            // Slide image
+            var imgVE = root.Q<VisualElement>("SlideImage");
+            if (imgVE != null)
             {
-                var slide = tutorialSlides[currentSlideIndex];
-
-                var slideTitle = root.Q<Label>("SlideTitle");
-                var slideDescription = root.Q<Label>("SlideDescription");
-                var slideCounter = root.Q<Label>("SlideCounter");
-
-                if (slideTitle != null) slideTitle.text = slide.title;
-                if (slideDescription != null) slideDescription.text = slide.description;
-                if (slideCounter != null)
-                    slideCounter.text = $"Slide {currentSlideIndex + 1} of {tutorialSlides.Count}";
-
-                // Update slide image
-                var slideImageVE = root.Q<VisualElement>("SlideImage");
-                if (slideImageVE != null)
+                if (slide.slideImage != null)
                 {
-                    if (slide.slideImage != null)
-                    {
-                        int texW = slide.slideImage.width;
-                        int texH = slide.slideImage.height;
-
-                        float scale = Mathf.Min(
-                            1f,
-                            (float)maxW / texW,
-                            (float)maxH / texH
-                        );
-
-                        int dispW = Mathf.RoundToInt(texW * scale);
-                        int dispH = Mathf.RoundToInt(texH * scale);
-
-                        slideImageVE.style.width = new StyleLength(new Length(dispW, LengthUnit.Pixel));
-                        slideImageVE.style.height = new StyleLength(new Length(dispH, LengthUnit.Pixel));
-
-                        slideImageVE.style.backgroundImage = new StyleBackground(slide.slideImage);
-                    }
-                    else
-                    {
-                        slideImageVE.style.backgroundImage = StyleKeyword.Null;
-                        slideImageVE.style.width = StyleKeyword.Null;
-                        slideImageVE.style.height = StyleKeyword.Null;
-                        slideImageVE.ClearClassList();
-                        slideImageVE.AddToClassList("slide-image");
-                    }
+                    int texW = slide.slideImage.width;
+                    int texH = slide.slideImage.height;
+                    float scale = Mathf.Min(1f, (float)maxW / texW, (float)maxH / texH);
+                    imgVE.style.width  = new StyleLength(new Length(Mathf.RoundToInt(texW * scale), LengthUnit.Pixel));
+                    imgVE.style.height = new StyleLength(new Length(Mathf.RoundToInt(texH * scale), LengthUnit.Pixel));
+                    imgVE.style.backgroundImage = new StyleBackground(slide.slideImage);
                 }
-
-                // Update navigation buttons
-                var prevButton = root.Q<Button>("PreviousButton");
-                var nextButton = root.Q<Button>("NextButton");
-
-                if (prevButton != null) prevButton.SetEnabled(currentSlideIndex > 0);
-                if (nextButton != null) nextButton.SetEnabled(currentSlideIndex < tutorialSlides.Count - 1);
-
-                // Update slide indicators
-                for (int i = 0; i < 5; i++)
+                else
                 {
-                    var indicator = root.Q<VisualElement>($"Indicator{i}");
-                    if (indicator != null)
-                    {
-                        if (i == currentSlideIndex)
-                            indicator.AddToClassList("active");
-                        else
-                            indicator.RemoveFromClassList("active");
-                    }
+                    imgVE.style.backgroundImage = StyleKeyword.Null;
+                    imgVE.style.width  = StyleKeyword.Null;
+                    imgVE.style.height = StyleKeyword.Null;
+                    imgVE.ClearClassList();
+                    imgVE.AddToClassList("slide-image");
+                }
+            }
+
+            // Nav buttons
+            root.Q<Button>("PreviousButton")?.SetEnabled(currentSlideIndex > 0);
+            root.Q<Button>("NextButton")?.SetEnabled(currentSlideIndex < slides.Count - 1);
+
+            // Indicators (if you have fixed count)
+            for (int i = 0; i < 5; i++)
+            {
+                var indicator = root.Q<VisualElement>($"Indicator{i}");
+                if (indicator != null)
+                {
+                    if (i == currentSlideIndex) indicator.AddToClassList("active");
+                    else                         indicator.RemoveFromClassList("active");
                 }
             }
         }
 
         private void QuitGame()
         {
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-#else
+    #else
             Application.Quit();
-#endif
+    #endif
         }
     }
 }
